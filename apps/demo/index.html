@@ -21,17 +21,28 @@
 
       main {
         display: grid;
-        gap: 12px;
+        gap: 8px;
         justify-items: center;
         padding: 16px;
+        /* Both canvases (1280 by 720 and 1280 by 288) fit on the screen. */
+        width: min(
+          1280px,
+          calc(100vw - 32px),
+          calc((100vh - 96px) * 1280 / 1008)
+        );
       }
 
       canvas {
         display: block;
-        max-width: 100%;
+        width: 100%;
         height: auto;
         image-rendering: pixelated;
         border: 1px solid #2a2540;
+      }
+
+      #hud {
+        /* Not one of the palette colors, so every swatch stands out. */
+        background: #221e33;
       }
 
       p {
@@ -42,9 +53,10 @@
   </head>
   <body>
     <main>
-      <canvas id="screen" width="1280" height="720">
+      <canvas id="street" width="1280" height="720">
         This demo needs a browser that supports canvas and WebGL.
       </canvas>
+      <canvas id="hud" width="1280" height="288"></canvas>
       <p>16 colors × 8 shades · 4px pixels · 8×8 sprites</p>
     </main>
     <script type="module" src="./src/main.ts"></script>

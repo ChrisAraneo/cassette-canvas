@@ -258,19 +258,46 @@ libs/
     ├── crt/           the WebGL monitor shader
     └── display/       draws to the canvas
 apps/
-└── demo/              a Vite page: the palette, a day/night cycle, a lantern,
-                       a glowing heart and pillars that cast shadows
+└── demo/src/
+    ├── main.ts        the animation loop for both canvases
+    ├── art/           text art: sky, buildings, street, people, cars, font
+    ├── tiles/         cuts large art into sprites and places it
+    ├── day/           the time of day and how dark it is
+    ├── street/        the city street, composed from scratch every frame
+    ├── hud/           the palette swatches, the frame rate and the clock
+    └── fps/           measures the frame rate
 ```
+
+## Demo
+
+Run `npm run dev` and open the page Vite prints. The demo draws two canvases,
+each with its own display:
+
+- **The street.** A city street with houses, trees, street lamps, people,
+  cars, clouds and a distant skyline. A day and night pass every 48 seconds.
+  The ambient light darkens at dusk, and the sun and then the moon cross the
+  sky behind the buildings. At night the stars come out, the lamps and
+  headlights light up, and people and cars cast shadows. Windows light up one
+  by one and go dark again later in the night.
+- **The HUD.** A swatch for each of the 128 sprite colors (16 colors × 8
+  shades), the frame rate, and the time of day on the street. It has no
+  ambient light, so the swatches always show their exact colors, even when it
+  is night on the street.
+
+The street does not keep sprites from one frame to the next. Every frame,
+`composeStreetScreen` builds a new screen for that moment from the scenery
+that never moves (built once) and from everything that does.
 
 ## Performance
 
-Measured on the demo scene at 1280×720 (320×180 logical pixels, 182 sprites,
-2 lights), in a Vite bundle run with Node 24:
+Measured on the demo street at 1280×720 (320×180 logical pixels), in a
+Rolldown bundle run with Node 24. By day the street has 856 sprites and 1
+light; at night it has 1,013 sprites and 11 lights:
 
-| Step           | Time per frame |
-| -------------- | -------------- |
-| `computeFrame` | ~1.3 ms        |
-| `toFrameBytes` | ~0.3 ms        |
+| Step           | By day  | At night |
+| -------------- | ------- | -------- |
+| `computeFrame` | ~2.0 ms | ~4.6 ms  |
+| `toFrameBytes` | ~0.4 ms | ~0.3 ms  |
 
 ## License
 

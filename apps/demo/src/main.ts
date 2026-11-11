@@ -1,35 +1,67 @@
-import {
-  type Display,
-  drawScreen,
-  type Screen,
-  tryCreateDisplay,
-} from '@cassette-canvas/engine';
+import { drawScreen, tryCreateDisplay } from '@cassette-canvas/engine';
 import { noop } from 'lodash-es';
 import { pipe } from 'remeda';
 import { match, P } from 'ts-pattern';
-import { DEMO_SETTINGS } from './scene/consts';
-import { createDemoScreen } from './scene/create-demo-screen';
-import { patchDemoScreen } from './scene/patch-demo-screen';
+import { DEMO_SETTINGS } from './consts';
+import { createFpsMeter } from './fps/create-fps-meter';
+import { patchFpsMeter } from './fps/patch-fps-meter';
+import { composeHudScreen } from './hud/compose-hud-screen';
+import { createHudScenery } from './hud/create-hud-scenery';
+import { composeStreetScreen } from './street/compose-street-screen';
+import { createStreetScenery } from './street/create-street-scenery';
+import type { Demo } from './types/demo';
 
 const { instanceOf, nonNullable } = P;
 
-const handleFrame = (display: Display, screen: Screen, time: number): number =>
+const drawDemo = (demo: Demo, time: number): Demo => ({
+  ...demo,
+  street: drawScreen(
+    demo.street,
+    composeStreetScreen(demo.streetScenery, time),
+    time,
+  ),
+  hud: drawScreen(
+    demo.hud,
+    composeHudScreen(demo.hudScenery, demo.meter.fps, time),
+    time,
+  ),
+});
+
+const handleFrame = (demo: Demo, time: number): number =>
   pipe(
-    patchDemoScreen(screen, time),
-    (frameScreen) => drawScreen(display, frameScreen, time),
+    { ...demo, meter: patchFpsMeter(demo.meter, time) },
+    (measured) => drawDemo(measured, time),
     (drawn) =>
-      requestAnimationFrame((nextTime) => handleFrame(drawn, screen, nextTime)),
+      requestAnimationFrame((nextTime) => handleFrame(drawn, nextTime)),
   );
 
-const startDemo = (canvas: HTMLCanvasElement): number | undefined =>
-  match(tryCreateDisplay(canvas, DEMO_SETTINGS))
-    .with(nonNullable, (display) =>
+const startDemo = (
+  streetCanvas: HTMLCanvasElement,
+  hudCanvas: HTMLCanvasElement,
+): number | undefined =>
+  match({
+    street: tryCreateDisplay(streetCanvas, DEMO_SETTINGS),
+    hud: tryCreateDisplay(hudCanvas, DEMO_SETTINGS),
+  })
+    .with({ street: nonNullable, hud: nonNullable }, ({ street, hud }) =>
       requestAnimationFrame((time) =>
-        handleFrame(display, createDemoScreen(), time),
+        handleFrame(
+          {
+            street,
+            hud,
+            streetScenery: createStreetScenery(),
+            hudScenery: createHudScenery(),
+            meter: createFpsMeter(time),
+          },
+          time,
+        ),
       ),
     )
     .otherwise(() => undefined);
 
-match(document.getElementById('screen'))
-  .with(instanceOf(HTMLCanvasElement), startDemo)
+match([document.getElementById('street'), document.getElementById('hud')])
+  .with(
+    [instanceOf(HTMLCanvasElement), instanceOf(HTMLCanvasElement)],
+    ([street, hud]) => startDemo(street, hud),
+  )
   .otherwise(noop);

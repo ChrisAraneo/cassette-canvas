@@ -1,0 +1,120 @@
+import { type SpriteLegend, toPixel } from '@cassette-canvas/engine';
+import {
+  BLUE,
+  BROWN,
+  GRAY,
+  GREEN,
+  INDIGO,
+  ORANGE,
+  PINK,
+  PURPLE,
+  RED,
+  SAND,
+  TEAL,
+  YELLOW,
+} from '../consts';
+
+/**
+ * A walk cycle of 4 frames, facing right. `h` hair, `s` skin, `c` and `C`
+ * top, `p` and `P` legs, `o` shoes.
+ */
+export const WALK_CYCLE: readonly (readonly string[])[] = Object.freeze([
+  [
+    '........',
+    '...hhh..',
+    '..hhhhh.',
+    '..hhsss.',
+    '..hssss.',
+    '...sss..',
+    '...ss...',
+    '..cccc..',
+    '.Ccccccs',
+    '.Cccccc.',
+    's.cccc..',
+    '..pppp..',
+    '..Pp.pp.',
+    '.PP...p.',
+    '.P....pp',
+    'oo....oo',
+  ],
+  [
+    '........',
+    '...hhh..',
+    '..hhhhh.',
+    '..hhsss.',
+    '..hssss.',
+    '...sss..',
+    '...ss...',
+    '..cccc..',
+    '..cCccc.',
+    '..cCccc.',
+    '..cscc..',
+    '..pppp..',
+    '...pP...',
+    '...pP...',
+    '...pP...',
+    '...ooo..',
+  ],
+  [
+    '........',
+    '...hhh..',
+    '..hhhhh.',
+    '..hhsss.',
+    '..hssss.',
+    '...sss..',
+    '...ss...',
+    '..cccc..',
+    '.cccccCs',
+    '.ccccCC.',
+    's.cccC..',
+    '..pppp..',
+    '..pP.PP.',
+    '.pp...P.',
+    '.p....PP',
+    'oo....oo',
+  ],
+  [
+    '........',
+    '...hhh..',
+    '..hhhhh.',
+    '..hhsss.',
+    '..hssss.',
+    '...sss..',
+    '...ss...',
+    '..cccc..',
+    '..ccCc..',
+    '..ccCc..',
+    '..ccsc..',
+    '..pppp..',
+    '...Pp...',
+    '...Pp...',
+    '...Pp...',
+    '...ooo..',
+  ],
+]);
+
+const toLookLegend = (
+  hair: number,
+  skin: number,
+  top: number,
+  legs: number,
+): SpriteLegend =>
+  Object.freeze({
+    h: hair,
+    s: skin,
+    c: toPixel(top, 5),
+    C: toPixel(top, 3),
+    p: toPixel(legs, 3),
+    P: toPixel(legs, 2),
+    o: toPixel(GRAY, 0),
+  });
+
+/** How each person looks: hair and skin pixels, then top and legs colors. */
+export const LOOKS = Object.freeze({
+  jogger: toLookLegend(toPixel(BROWN, 1), toPixel(SAND, 5), RED, BLUE),
+  student: toLookLegend(toPixel(YELLOW, 5), toPixel(SAND, 6), TEAL, GRAY),
+  courier: toLookLegend(toPixel(GRAY, 1), toPixel(BROWN, 4), YELLOW, INDIGO),
+  artist: toLookLegend(toPixel(ORANGE, 3), toPixel(SAND, 5), PURPLE, BROWN),
+  gardener: toLookLegend(toPixel(BROWN, 2), toPixel(SAND, 4), GREEN, GRAY),
+  grandma: toLookLegend(toPixel(GRAY, 6), toPixel(SAND, 6), PINK, BLUE),
+});
