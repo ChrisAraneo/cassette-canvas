@@ -1,6 +1,16 @@
-# Cassette Canvas
+<h1 align="center">Cassette Canvas</h1>
 
-Retro rendering engine for the HTML canvas.
+<p align="center">
+  <img src="cassette.png" width="512px" height="256px"/>
+  <br>
+  <a href="https://github.com/ChrisAraneo/cassette-canvas/blob/master/package.json"><img src="https://img.shields.io/badge/version-v0.1.0-blue" alt="version"></a>
+  <a href="https://github.com/ChrisAraneo/cassette-canvas/blob/master/LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="@chris.araneo/cassette-canvas is released under the MIT license."></a>
+  <a href="https://github.com/ChrisAraneo/cassette-canvas/actions/workflows/ci.yml"><img alt="GitHub CI Status" src="https://img.shields.io/github/actions/workflow/status/ChrisAraneo/cassette-canvas/ci.yml?label=CI&logo=GitHub"></a>
+  <br>
+  <br>
+  <em>Retro rendering engine for the HTML canvas.</em>
+  <br>
+</p>
 
 - Sprites use 16 colors with 8 shades each (128 colors).
 - Pixels are large, and every sprite has the same size.
