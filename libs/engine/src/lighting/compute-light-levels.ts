@@ -1,17 +1,9 @@
-import { map, sumBy, times } from 'lodash-es';
+import { map } from 'lodash-es';
+import { computeFieldLevels } from './internal/compute-field-levels';
 import { computeLightField } from './internal/compute-light-field';
 import type { Lighting } from './types/lighting';
 
-const computeFieldLevels = (
-  { ambient, width, height }: Lighting,
-  fields: readonly Float32Array[],
-): number[] =>
-  times(
-    width * height,
-    (index) => ambient + sumBy(fields, (field) => field[index] ?? 0),
-  );
-
-export const computeLightLevels = (lighting: Lighting): number[] =>
+export const computeLightLevels = (lighting: Lighting): Float64Array =>
   computeFieldLevels(
     lighting,
     map(lighting.lights, (light) => computeLightField(lighting, light)),

@@ -1,7 +1,7 @@
 <h1 align="center">Cassette Canvas</h1>
 
 <p align="center">
-  <img src="cassette.png" width="512px" height="256px"/>
+  <img src="https://raw.githubusercontent.com/ChrisAraneo/cassette-canvas/master/cassette.png" width="512px" height="256px"/>
   <br>
   <a href="https://github.com/ChrisAraneo/cassette-canvas/blob/master/package.json"><img src="https://img.shields.io/badge/version-v0.1.0-blue" alt="version"></a>
   <a href="https://github.com/ChrisAraneo/cassette-canvas/blob/master/LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="@chris.araneo/cassette-canvas is released under the MIT license."></a>
@@ -17,6 +17,15 @@
 - Pixels are large, and every sprite has the same size.
 - Ambient light and point lights use a scale of 32 shades per color. Sprites can cast shadows.
 - Retro monitor effect is always on: a soft glow around bright pixels, scanlines, film grain and a surface texture.
+
+## Installation
+
+```sh
+npm install @chris.araneo/cassette-canvas
+```
+
+The package is an ES module with TypeScript types included. It runs in the
+browser and needs WebGL.
 
 ## Concepts
 
@@ -51,7 +60,7 @@ import {
   toPixel,
   toSprite,
   tryCreateDisplay,
-} from '@cassette-canvas/engine';
+} from '@chris.araneo/cassette-canvas';
 import { constant, noop, times } from 'lodash-es';
 import { pipe } from 'remeda';
 import { match, P } from 'ts-pattern';
@@ -118,7 +127,8 @@ requestAnimationFrame((time) =>
 - `pixelSize` or `spriteSize` is not a positive whole number,
 - the canvas is smaller than one logical pixel.
 
-See `apps/demo/src/main.ts` for a full animation loop.
+See [`apps/demo/src/main.ts`](https://github.com/ChrisAraneo/cassette-canvas/blob/master/apps/demo/src/main.ts)
+for a full animation loop.
 
 ### Lights and shadows
 
@@ -259,15 +269,8 @@ Measured on the demo scene at 1280×720 (320×180 logical pixels, 182 sprites,
 
 | Step           | Time per frame |
 | -------------- | -------------- |
-| `computeFrame` | ~17 ms         |
-| `toFrameBytes` | ~15 ms         |
-
-That is about 30 frames per second. `toFrameBytes` is the easiest step to
-speed up. The monitor effect runs on the GPU; on the CPU it only uploads a
-320×180 texture.
-
-Measure performance in a bundled build, not in Vitest. Vitest loads
-`lodash-es` file by file, which makes each lodash call about 30× slower.
+| `computeFrame` | ~1.3 ms        |
+| `toFrameBytes` | ~0.3 ms        |
 
 ## License
 

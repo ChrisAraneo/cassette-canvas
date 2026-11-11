@@ -1,4 +1,4 @@
-import { chunk, join, map, toArray } from 'lodash-es';
+import { chunk, includes, join, map, times, toArray } from 'lodash-es';
 import { match } from 'ts-pattern';
 import { describe, expect, it } from 'vitest';
 
@@ -25,8 +25,20 @@ const SUN: Light = Object.freeze({
 const createLighting = (
   width: number,
   height: number,
-  occluders: Record<number, boolean>,
-): Lighting => ({ ambient: 0, lights: [], width, height, occluders });
+  casters: readonly number[],
+): Lighting => ({
+  ambient: 0,
+  lights: [],
+  width,
+  height,
+  occluders: Uint8Array.from(
+    times(width * height, (place) =>
+      match(includes(casters, place))
+        .with(true, () => 1)
+        .otherwise(() => 0),
+    ),
+  ),
+});
 
 const formatLit = (field: Float32Array, width: number): string[] =>
   map(chunk(toArray(field), width), (row) =>
@@ -42,7 +54,7 @@ const formatLit = (field: Float32Array, width: number): string[] =>
 
 describe('computeLightField', () => {
   it('should fade the light in a straight line out to its reach', () => {
-    expect(toArray(computeLightField(createLighting(5, 1, {}), TORCH))).toEqual(
+    expect(toArray(computeLightField(createLighting(5, 1, []), TORCH))).toEqual(
       [4, 2, 0, 0, 0],
     );
   });
@@ -50,7 +62,7 @@ describe('computeLightField', () => {
   it('should leave the places beyond its reach dark', () => {
     expect(
       toArray(
-        computeLightField(createLighting(5, 1, {}), { ...TORCH, radius: 1 }),
+        computeLightField(createLighting(5, 1, []), { ...TORCH, radius: 1 }),
       ),
     ).toEqual([4, 0, 0, 0, 0]);
   });
@@ -58,7 +70,7 @@ describe('computeLightField', () => {
   it('should give no light behind a shadow caster', () => {
     expect(
       toArray(
-        computeLightField(createLighting(5, 1, { 1: true }), {
+        computeLightField(createLighting(5, 1, [1]), {
           ...TORCH,
           radius: 4,
         }),
@@ -68,7 +80,7 @@ describe('computeLightField', () => {
 
   it('should light the side of a shadow caster that faces the light', () => {
     expect(
-      computeLightField(createLighting(5, 1, { 2: true }), {
+      computeLightField(createLighting(5, 1, [2]), {
         ...TORCH,
         radius: 4,
       })[2],
@@ -77,7 +89,7 @@ describe('computeLightField', () => {
 
   it('should let the light out when the light sits inside a shadow caster', () => {
     expect(
-      computeLightField(createLighting(5, 1, { 0: true }), {
+      computeLightField(createLighting(5, 1, [0]), {
         ...TORCH,
         radius: 4,
       })[1],
@@ -85,16 +97,13 @@ describe('computeLightField', () => {
   });
 
   it('should throw a wedge of shadow behind a wall when the light shines across the screen', () => {
-    const field = computeLightField(
-      createLighting(7, 3, { 3: true, 10: true, 17: true }),
-      SUN,
-    );
+    const field = computeLightField(createLighting(7, 3, [3, 10, 17]), SUN);
 
     expect(formatLit(field, 7)).toEqual(['####...', '####...', '####...']);
   });
 
   it('should light the screen when the light stands off the screen', () => {
-    const field = computeLightField(createLighting(4, 2, {}), {
+    const field = computeLightField(createLighting(4, 2, []), {
       ...SUN,
       row: -500,
       column: 2,
@@ -105,7 +114,7 @@ describe('computeLightField', () => {
 
   it('should darken instead when the light has a negative intensity', () => {
     expect(
-      computeLightField(createLighting(5, 1, {}), {
+      computeLightField(createLighting(5, 1, []), {
         ...TORCH,
         intensity: -4,
       })[1],
@@ -115,12 +124,12 @@ describe('computeLightField', () => {
   it('should give no light when the light has no reach', () => {
     expect(
       toArray(
-        computeLightField(createLighting(3, 1, {}), { ...TORCH, radius: 0 }),
+        computeLightField(createLighting(3, 1, []), { ...TORCH, radius: 0 }),
       ),
     ).toEqual([0, 0, 0]);
   });
 
   it('should give an empty field when the screen has no places', () => {
-    expect(computeLightField(createLighting(0, 0, {}), TORCH)).toHaveLength(0);
+    expect(computeLightField(createLighting(0, 0, []), TORCH)).toHaveLength(0);
   });
 });

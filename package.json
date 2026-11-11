@@ -1,20 +1,61 @@
 {
   "name": "@chris.araneo/cassette-canvas",
   "version": "0.1.0",
-  "private": true,
   "description": "Retro rendering engine for the HTML canvas.",
+  "keywords": [
+    "canvas",
+    "webgl",
+    "retro",
+    "pixel-art",
+    "sprites",
+    "lighting",
+    "shadows",
+    "crt",
+    "rendering",
+    "engine"
+  ],
+  "homepage": "https://github.com/ChrisAraneo/cassette-canvas#readme",
+  "bugs": {
+    "url": "https://github.com/ChrisAraneo/cassette-canvas/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ChrisAraneo/cassette-canvas.git"
+  },
+  "license": "MIT",
   "author": "Krzysztof Pająk (Chris Araneo) <chris.araneo@gmail.com>",
   "type": "module",
+  "sideEffects": false,
+  "exports": {
+    ".": {
+      "types": "./dist/lib/index.d.ts",
+      "default": "./dist/lib/index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "main": "./dist/lib/index.js",
+  "module": "./dist/lib/index.js",
+  "types": "./dist/lib/index.d.ts",
+  "files": [
+    "dist/lib"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "build": "npm run build:lib && npm run build:demo",
+    "build:lib": "tsdown",
+    "build:demo": "vite build",
     "preview": "vite preview",
     "typecheck": "tsc --noEmit",
     "lint": "eslint .",
     "test": "vitest run",
     "test:watch": "vitest",
     "format": "prettier --write .",
-    "check": "npm run typecheck && npm run lint && npm run test"
+    "check": "npm run typecheck && npm run lint && npm run test",
+    "prepack": "npm run build:lib",
+    "prepublishOnly": "npm run check"
   },
   "dependencies": {
     "lodash-es": "^4.18.1",
@@ -28,6 +69,7 @@
     "@types/ramda": "^0.32.0",
     "eslint": "^10.14.0",
     "prettier": "^3.10.0",
+    "tsdown": "^0.23.7",
     "typescript": "^6.0.3",
     "typescript-eslint": "^8.72.2",
     "vite": "^8.3.8",

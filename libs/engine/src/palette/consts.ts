@@ -23,6 +23,10 @@ export const EXTENDED_SHADES_PER_SHADE = EXTENDED_SHADE_COUNT / SHADE_COUNT;
 
 export const EXTENDED_SHADE_OFFSET = 1;
 
+export const DARKEST_EXTENDED_SHADE = 0;
+
+export const LIGHTEST_EXTENDED_SHADE = EXTENDED_SHADE_COUNT - 1;
+
 export const COLOR_STRIDE = 0x10;
 
 /** The pixel value that draws nothing. Whatever is below shows through. */

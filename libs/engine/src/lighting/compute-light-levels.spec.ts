@@ -23,25 +23,31 @@ const LANTERN: Light = Object.freeze({
 const createLighting = (
   ambient: number,
   lights: readonly Light[],
-): Lighting => ({ ambient, lights, width: 5, height: 1, occluders: {} });
+): Lighting => ({
+  ambient,
+  lights,
+  width: 5,
+  height: 1,
+  occluders: new Uint8Array(5),
+});
 
 describe('computeLightLevels', () => {
   it('should give every place the ambient light when there are no lights', () => {
-    expect(computeLightLevels(createLighting(-3, []))).toEqual([
-      -3, -3, -3, -3, -3,
-    ]);
+    expect(computeLightLevels(createLighting(-3, []))).toEqual(
+      Float64Array.from([-3, -3, -3, -3, -3]),
+    );
   });
 
   it('should add the light to the ambient light when one light shines', () => {
-    expect(computeLightLevels(createLighting(-3, [TORCH]))).toEqual([
-      1, 0, -1, -2, -3,
-    ]);
+    expect(computeLightLevels(createLighting(-3, [TORCH]))).toEqual(
+      Float64Array.from([1, 0, -1, -2, -3]),
+    );
   });
 
   it('should add the lights together when they overlap', () => {
-    expect(computeLightLevels(createLighting(0, [TORCH, LANTERN]))).toEqual([
-      4, 3.5, 3, 2.5, 2,
-    ]);
+    expect(computeLightLevels(createLighting(0, [TORCH, LANTERN]))).toEqual(
+      Float64Array.from([4, 3.5, 3, 2.5, 2]),
+    );
   });
 
   it('should give no levels when the screen has no places', () => {
@@ -51,6 +57,6 @@ describe('computeLightLevels', () => {
         width: 0,
         height: 0,
       }),
-    ).toEqual([]);
+    ).toHaveLength(0);
   });
 });

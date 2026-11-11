@@ -2,9 +2,6 @@ import { pipe } from 'remeda';
 import type { Screen } from '../screen/types/screen';
 import { computeFrameLight } from './internal/compute-frame-light';
 import { computeFramePixels } from './internal/compute-frame-pixels';
-import { createFrameEdits } from './internal/create-frame-edits';
-import { filterFramePixels } from './internal/filter-frame-pixels';
-import { patchFrame } from './internal/patch-frame';
 import { patchFrameShades } from './internal/patch-frame-shades';
 import type { Frame } from './types/frame';
 
@@ -29,9 +26,6 @@ export const computeFrame = (
   pipe(
     { screen, spriteSize, width, height },
     computeFramePixels,
-    filterFramePixels,
-    createFrameEdits,
-    patchFrame,
     computeFrameLight,
     patchFrameShades,
   );

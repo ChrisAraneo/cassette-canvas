@@ -7,7 +7,10 @@ import { patchFrameShades } from './patch-frame-shades';
 describe('patchFrameShades', () => {
   it('should move each pixel along its extended shade ramp by its light level', () => {
     expect(
-      patchFrameShades({ pixels: [0x34, 0x34, 0x94], levels: [2, -3, 0] }),
+      patchFrameShades({
+        pixels: Int16Array.from([0x34, 0x34, 0x94]),
+        levels: Float64Array.from([2, -3, 0]),
+      }),
     ).toEqual([
       toExtendedPixel(3, 19),
       toExtendedPixel(3, 14),
@@ -16,26 +19,37 @@ describe('patchFrameShades', () => {
   });
 
   it('should leave transparent places transparent when they are lit', () => {
-    expect(patchFrameShades({ pixels: [TRANSPARENT], levels: [3] })).toEqual([
-      TRANSPARENT,
-    ]);
+    expect(
+      patchFrameShades({
+        pixels: Int16Array.from([TRANSPARENT]),
+        levels: Float64Array.from([3]),
+      }),
+    ).toEqual([TRANSPARENT]);
   });
 
   it('should make places transparent when they hold values that are not pixels', () => {
-    expect(patchFrameShades({ pixels: [0x0a], levels: [0] })).toEqual([
-      TRANSPARENT,
-    ]);
+    expect(
+      patchFrameShades({
+        pixels: Int16Array.from([0x0a]),
+        levels: Float64Array.from([0]),
+      }),
+    ).toEqual([TRANSPARENT]);
   });
 
   it('should give an empty frame when the frame is empty', () => {
-    expect(patchFrameShades({ pixels: [], levels: [] })).toEqual([]);
+    expect(
+      patchFrameShades({
+        pixels: new Int16Array(0),
+        levels: new Float64Array(0),
+      }),
+    ).toEqual([]);
   });
 
   it('should not change the composed pixels when it shades them', () => {
-    const pixels = [0x34, 0x94];
+    const pixels = Int16Array.from([0x34, 0x94]);
 
-    patchFrameShades({ pixels, levels: [2, 2] });
+    patchFrameShades({ pixels, levels: Float64Array.from([2, 2]) });
 
-    expect(pixels).toEqual([0x34, 0x94]);
+    expect(pixels).toEqual(Int16Array.from([0x34, 0x94]));
   });
 });

@@ -5,5 +5,5 @@ export interface Lighting {
   readonly lights: readonly Light[];
   readonly width: number;
   readonly height: number;
-  readonly occluders: Readonly<Record<number, boolean>>;
+  readonly occluders: Uint8Array;
 }

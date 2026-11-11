@@ -1,4 +1,4 @@
 export interface FrameLight {
-  readonly pixels: readonly number[];
-  readonly levels: readonly number[];
+  readonly pixels: Int16Array;
+  readonly levels: Float64Array;
 }
