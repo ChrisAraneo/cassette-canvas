@@ -10,6 +10,7 @@
   <br>
   <em>Retro rendering engine for the HTML canvas.</em>
   <br>
+  <br>
 </p>
 
 - Sprites use 16 colors with 8 shades each (128 colors).
