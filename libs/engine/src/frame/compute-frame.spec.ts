@@ -1,0 +1,206 @@
+﻿import { chunk, invert, join, map, times } from 'lodash-es';
+import { describe, expect, it } from 'vitest';
+
+import { TRANSPARENT } from '../palette/consts';
+import { toExtendedPixel } from '../palette/to-extended-pixel';
+import { toLitPixel } from '../palette/to-lit-pixel';
+import { toSprite } from '../screen/to-sprite';
+import type { Light } from '../screen/types/light';
+import type { Screen } from '../screen/types/screen';
+import type { SpritePlacement } from '../screen/types/sprite-placement';
+import { computeFrame } from './compute-frame';
+import type { Frame } from './types/frame';
+
+const BACKGROUND = 0x94;
+
+const SPRITE_PIXELS: Readonly<Record<string, number>> = Object.freeze({
+  r: 0x14,
+  g: 0x54,
+  w: 0x34,
+});
+
+const LIT_PIXELS: Readonly<Record<string, number>> = Object.freeze({
+  '.': TRANSPARENT,
+  r: toLitPixel(0x14, 0),
+  g: toLitPixel(0x54, 0),
+  b: toLitPixel(BACKGROUND, 0),
+  L: toLitPixel(0x00, 4),
+  D: toLitPixel(0x00, 0),
+  W: toLitPixel(0x34, 4),
+});
+
+const SYMBOLS = invert(LIT_PIXELS);
+
+const RED_CORNER = toSprite(['rr', 'r.'], SPRITE_PIXELS);
+
+const GREEN_BLOCK = toSprite(['gg', 'gg'], SPRITE_PIXELS);
+
+const WALL = toSprite(['.w.', '.w.', '.w.'], SPRITE_PIXELS);
+
+const SUN: Light = Object.freeze({
+  id: 'sun',
+  row: 1,
+  column: 0,
+  radius: 1000,
+  intensity: 4,
+});
+
+const formatFrame = (frame: Frame, width: number): string[] =>
+  map(chunk(frame, width), (row) =>
+    join(
+      map(row, (pixel) => SYMBOLS[pixel] ?? '?'),
+      '',
+    ),
+  );
+
+const placeSprite = (
+  id: string,
+  sprite: readonly number[],
+  row: number,
+  column: number,
+): SpritePlacement => ({ id, sprite, row, column, castsShadow: false });
+
+const createLayeredScreen = (): Screen => ({
+  background: BACKGROUND,
+  ambient: 0,
+  sprites: [
+    placeSprite('corner', RED_CORNER, 0, 0),
+    placeSprite('block', GREEN_BLOCK, 1, 1),
+  ],
+  lights: [],
+});
+
+const createWallScreen = (castsShadow: boolean): Screen => ({
+  background: 0x00,
+  ambient: 0,
+  sprites: [{ ...placeSprite('wall', WALL, 0, 2), castsShadow }],
+  lights: [SUN],
+});
+
+const createGrayScreen = (ambient: number): Screen => ({
+  background: 0x04,
+  ambient,
+  sprites: [],
+  lights: [],
+});
+
+describe('computeFrame', () => {
+  it('should draw the later sprite over the earlier one when they overlap', () => {
+    const frame = computeFrame(createLayeredScreen(), 2, 4, 3);
+
+    expect(formatFrame(frame, 4)).toEqual(['rrbb', 'rggb', 'bggb']);
+  });
+
+  it('should let the sprite below show through when a pixel is transparent', () => {
+    const frame = computeFrame(
+      {
+        ...createLayeredScreen(),
+        sprites: [
+          placeSprite('block', GREEN_BLOCK, 0, 0),
+          placeSprite('corner', RED_CORNER, 0, 0),
+        ],
+      },
+      2,
+      2,
+      2,
+    );
+
+    expect(formatFrame(frame, 2)).toEqual(['rr', 'rg']);
+  });
+
+  it('should clip the sprites when they hang over the edges', () => {
+    const frame = computeFrame(
+      {
+        ...createLayeredScreen(),
+        sprites: [
+          placeSprite('top-left', GREEN_BLOCK, -1, -1),
+          placeSprite('bottom-right', RED_CORNER, 2, 3),
+        ],
+      },
+      2,
+      4,
+      3,
+    );
+
+    expect(formatFrame(frame, 4)).toEqual(['gbbb', 'bbbb', 'bbbr']);
+  });
+
+  it('should show only the background when the screen holds no sprites', () => {
+    const frame = computeFrame(
+      { ...createLayeredScreen(), sprites: [] },
+      2,
+      3,
+      2,
+    );
+
+    expect(formatFrame(frame, 3)).toEqual(['bbb', 'bbb']);
+  });
+
+  it('should land on a darker sprite shade when the ambient light takes away four extended shades per shade', () => {
+    expect(computeFrame(createGrayScreen(-8), 1, 3, 1)).toEqual(
+      times(3, () => toLitPixel(0x02, 0)),
+    );
+  });
+
+  it('should darken in steps finer than a sprite shade when the ambient light is not a multiple of four', () => {
+    expect(computeFrame(createGrayScreen(-2), 1, 3, 1)).toEqual(
+      times(3, () => toExtendedPixel(0, 15)),
+    );
+  });
+
+  it('should fade the light one extended shade at a time when a light shines', () => {
+    const frame = computeFrame(
+      {
+        background: 0x00,
+        ambient: 0,
+        sprites: [],
+        lights: [{ id: 'torch', row: 0, column: 0, radius: 4, intensity: 4 }],
+      },
+      1,
+      5,
+      1,
+    );
+
+    expect(frame).toEqual(
+      map([5, 4, 3, 2, 1], (extendedShade) =>
+        toExtendedPixel(0, extendedShade),
+      ),
+    );
+  });
+
+  it('should cast a shadow behind a sprite when the sprite casts shadows', () => {
+    const frame = computeFrame(createWallScreen(true), 3, 7, 3);
+
+    expect(formatFrame(frame, 7)).toEqual(['LLLWDDD', 'LLLWDDD', 'LLLWDDD']);
+  });
+
+  it('should let the light through when the sprite casts no shadow', () => {
+    const frame = computeFrame(createWallScreen(false), 3, 7, 3);
+
+    expect(formatFrame(frame, 7)).toEqual(['LLLWLLL', 'LLLWLLL', 'LLLWLLL']);
+  });
+
+  it('should keep the transparent background transparent when it is lit', () => {
+    const frame = computeFrame(
+      {
+        background: TRANSPARENT,
+        ambient: 2,
+        sprites: [],
+        lights: [SUN],
+      },
+      1,
+      2,
+      1,
+    );
+
+    expect(frame).toEqual([TRANSPARENT, TRANSPARENT]);
+  });
+
+  it('should not change the old screen when it composes the frame', () => {
+    const screen = createWallScreen(true);
+
+    computeFrame(screen, 3, 7, 3);
+
+    expect(screen).toEqual(createWallScreen(true));
+  });
+});

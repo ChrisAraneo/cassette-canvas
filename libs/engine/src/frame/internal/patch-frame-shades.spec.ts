@@ -1,0 +1,41 @@
+import { describe, expect, it } from 'vitest';
+
+import { TRANSPARENT } from '../../palette/consts';
+import { toExtendedPixel } from '../../palette/to-extended-pixel';
+import { patchFrameShades } from './patch-frame-shades';
+
+describe('patchFrameShades', () => {
+  it('should move each pixel along its extended shade ramp by its light level', () => {
+    expect(
+      patchFrameShades({ pixels: [0x34, 0x34, 0x94], levels: [2, -3, 0] }),
+    ).toEqual([
+      toExtendedPixel(3, 19),
+      toExtendedPixel(3, 14),
+      toExtendedPixel(9, 17),
+    ]);
+  });
+
+  it('should leave transparent places transparent when they are lit', () => {
+    expect(patchFrameShades({ pixels: [TRANSPARENT], levels: [3] })).toEqual([
+      TRANSPARENT,
+    ]);
+  });
+
+  it('should make places transparent when they hold values that are not pixels', () => {
+    expect(patchFrameShades({ pixels: [0x0a], levels: [0] })).toEqual([
+      TRANSPARENT,
+    ]);
+  });
+
+  it('should give an empty frame when the frame is empty', () => {
+    expect(patchFrameShades({ pixels: [], levels: [] })).toEqual([]);
+  });
+
+  it('should not change the composed pixels when it shades them', () => {
+    const pixels = [0x34, 0x94];
+
+    patchFrameShades({ pixels, levels: [2, 2] });
+
+    expect(pixels).toEqual([0x34, 0x94]);
+  });
+});
