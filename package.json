@@ -64,6 +64,8 @@
     "ts-pattern": "^5.9.2"
   },
   "devDependencies": {
+    "@emnapi/core": "2.0.0-beta.2",
+    "@emnapi/runtime": "2.0.0-beta.2",
     "@eslint/js": "^10.0.1",
     "@types/lodash-es": "^4.17.12",
     "@types/ramda": "^0.32.0",
