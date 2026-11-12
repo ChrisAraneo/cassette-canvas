@@ -1,7 +1,7 @@
-﻿import { chunk, invert, join, map, times } from 'lodash-es';
+﻿import { chunk, includes, invert, join, map, times, uniq } from 'lodash-es';
 import { describe, expect, it } from 'vitest';
 
-import { TRANSPARENT } from '../palette/consts';
+import { LIGHTEST_EXTENDED_SHADE, TRANSPARENT } from '../palette/consts';
 import { toExtendedPixel } from '../palette/to-extended-pixel';
 import { toLitPixel } from '../palette/to-lit-pixel';
 import { toSprite } from '../screen/to-sprite';
@@ -84,6 +84,21 @@ const createGrayScreen = (ambient: number): Screen => ({
   lights: [],
 });
 
+const GRAY_RAMP = toSprite(['abcd'], {
+  a: 0x00,
+  b: 0x01,
+  c: 0x02,
+  d: 0x03,
+});
+
+/** The four darkest gray shades under one even light across the frame. */
+const createRampScreen = (ambient: number, intensity: number): Screen => ({
+  background: TRANSPARENT,
+  ambient,
+  sprites: [placeSprite('ramp', GRAY_RAMP, 0, 0)],
+  lights: [{ id: 'lamp', row: 0, column: 2, radius: 1000, intensity }],
+});
+
 describe('computeFrame', () => {
   it('should draw the later sprite over the earlier one when they overlap', () => {
     const frame = computeFrame(createLayeredScreen(), 2, 4, 3);
@@ -148,7 +163,7 @@ describe('computeFrame', () => {
     );
   });
 
-  it('should fade the light one extended shade at a time when a light shines', () => {
+  it('should fade the light from a bright core when a light shines', () => {
     const frame = computeFrame(
       {
         background: 0x00,
@@ -162,9 +177,23 @@ describe('computeFrame', () => {
     );
 
     expect(frame).toEqual(
-      map([5, 4, 3, 2, 1], (extendedShade) =>
+      map([5, 4, 2, 1, 1], (extendedShade) =>
         toExtendedPixel(0, extendedShade),
       ),
+    );
+  });
+
+  it('should keep the sprite shades apart when a lamp shines on a bright scene', () => {
+    const frame = computeFrame(createRampScreen(8, 16), 4, 4, 1);
+
+    expect(uniq(frame)).toHaveLength(4);
+  });
+
+  it('should leave the lightest extended shade for light brighter than this when a lamp shines on a bright scene', () => {
+    const frame = computeFrame(createRampScreen(8, 16), 4, 4, 1);
+
+    expect(includes(frame, toExtendedPixel(0, LIGHTEST_EXTENDED_SHADE))).toBe(
+      false,
     );
   });
 

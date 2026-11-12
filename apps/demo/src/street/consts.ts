@@ -61,9 +61,14 @@ export const SUN_ID = 'sun';
 
 export const MOON_ID = 'moon';
 
+/**
+ * The glow around the sun and the moon. An intensity is how many extended
+ * shades the light lifts a pixel that daylight already lights, so a light
+ * that only has to stand out at night needs a small one.
+ */
 export const SUN_GLOW = Object.freeze({ radius: 28, intensity: 8 });
 
-export const MOON_GLOW = Object.freeze({ radius: 16, intensity: 14 });
+export const MOON_GLOW = Object.freeze({ radius: 16, intensity: 3 });
 
 /** Lamps and headlights go on between these levels of darkness. */
 export const LAMPS_ON = Object.freeze({ from: 0.3, to: 0.5 });
@@ -77,9 +82,9 @@ export const LAMP_ROW = 112;
 /** Where the lamp light is, from the top-left pixel of the lamp post. */
 export const LAMP_BULB = Object.freeze({ row: 4, column: 4 });
 
-export const LAMP_LIGHT = Object.freeze({ radius: 40, intensity: 19 });
+export const LAMP_LIGHT = Object.freeze({ radius: 40, intensity: 5 });
 
-export const HEADLIGHT = Object.freeze({ radius: 28, intensity: 20 });
+export const HEADLIGHT = Object.freeze({ radius: 28, intensity: 6 });
 
 export const TREE_COLUMNS: readonly number[] = Object.freeze([
   49, 113, 177, 241,

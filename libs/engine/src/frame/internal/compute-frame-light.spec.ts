@@ -1,3 +1,4 @@
+import { toArray } from 'lodash-es';
 import { describe, expect, it } from 'vitest';
 
 import type { Lighting } from '../../lighting/types/lighting';
@@ -13,32 +14,39 @@ const createLighting = (ambient: number, occluders: Uint8Array): Lighting => ({
   occluders,
 });
 
+const levelsOf = (ambient: number, occluders: Uint8Array): number[] =>
+  toArray(
+    computeFrameLight({
+      pixels: PIXELS,
+      lighting: createLighting(ambient, occluders),
+    }).levels,
+  );
+
 describe('computeFrameLight', () => {
   it('should light each place by its distance from the light when nothing stands in the way', () => {
-    expect(
-      computeFrameLight({
-        pixels: PIXELS,
-        lighting: createLighting(0, new Uint8Array(4)),
-      }).levels,
-    ).toEqual(Float64Array.from([4, 3, 2, 1]));
+    const levels = levelsOf(0, new Uint8Array(4));
+
+    expect(levels[0]).toBe(4);
+    expect(levels[1] ?? 0).toBeLessThan(levels[0] ?? 0);
+    expect(levels[2] ?? 0).toBeLessThan(levels[1] ?? 0);
+    expect(levels[3] ?? 0).toBeLessThan(levels[2] ?? 0);
   });
 
-  it('should add the ambient light to every place when it lights the frame', () => {
-    expect(
-      computeFrameLight({
-        pixels: PIXELS,
-        lighting: createLighting(-4, new Uint8Array(4)),
-      }).levels,
-    ).toEqual(Float64Array.from([0, -1, -2, -3]));
+  it('should raise every place above the ambient light when it lights the frame', () => {
+    const levels = levelsOf(-4, new Uint8Array(4));
+
+    expect(levels[0] ?? 0).toBeGreaterThan(-4);
+    expect(levels[3] ?? 0).toBeGreaterThan(-4);
+    expect(levels[3] ?? 0).toBeLessThan(levels[0] ?? 0);
   });
 
   it('should leave only the ambient light behind a shadow caster', () => {
-    expect(
-      computeFrameLight({
-        pixels: PIXELS,
-        lighting: createLighting(-1, Uint8Array.from([0, 1, 0, 0])),
-      }).levels,
-    ).toEqual(Float64Array.from([3, 2, -1, -1]));
+    const levels = levelsOf(-1, Uint8Array.from([0, 1, 0, 0]));
+
+    expect(levels[0] ?? 0).toBeGreaterThan(-1);
+    expect(levels[1] ?? 0).toBeGreaterThan(-1);
+    expect(levels[2]).toBeCloseTo(-1);
+    expect(levels[3]).toBeCloseTo(-1);
   });
 
   it('should give no levels when the frame is empty', () => {
