@@ -8,16 +8,16 @@ import type { HudChange } from './types/hud-change';
 import type { HudEvent } from './types/hud-event';
 
 /**
- * Answers one thing the person did, and returns the HUD as it now is
- * together with what came of it.
+ * Handles one event and returns the HUD as it now is, together with the
+ * actions it caused.
  *
  * - `press` finds the window under the pointer, brings it to the top, and
- *   takes hold of a title bar, a button or a close box, gives the keys to a
- *   field, or opens a tab.
+ *   grabs a title bar, a button, or a close box, sets the focus on a field,
+ *   or opens a tab.
  * - `move` drags a window that is held by its title bar.
- * - `release` lets go, and gives a `click` or a `close` when the pointer is
- *   still over what it took hold of.
- * - `key` types into the field that has the keys.
+ * - `release` drops the grab, and returns a `click` or a `close` when the
+ *   pointer is still over what it grabbed.
+ * - `key` types into the focused field.
  *
  * Nothing about the HUD changes unless the event asks for it, and the HUD
  * you pass in is never changed.

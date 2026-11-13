@@ -7,7 +7,7 @@ import type { HudWindow } from '../types/hud-window';
 import { computeWidgetRect } from './compute-widget-rect';
 import { toWindowTheme } from './to-window-theme';
 
-/** A label: dark text on the window, and nothing else. */
+/** Returns the paint steps for a label: dark text on the window. */
 export const paintHudLabel = (
   hud: Hud,
   window: HudWindow,

@@ -20,8 +20,9 @@ import { toFieldText } from './to-field-text';
 import { toWindowTheme } from './to-window-theme';
 
 /**
- * A field: paper carved into the window, with the end of its text on it. The
- * field that takes the keys also shows a caret after the text.
+ * Returns the paint steps for a field: a light surface sunk into the window,
+ * with the end of its text on it. The focused field also shows a caret after
+ * the text.
  */
 export const paintHudInput = (
   hud: Hud,

@@ -14,8 +14,8 @@ const toTitle = (text: string): string =>
 
 /**
  * Writes what was typed in the title bar of the note window, and empties the
- * field so the next line starts clean. An empty line gives the window its
- * own name back.
+ * field so the next line starts empty. An empty line puts the window's own
+ * name back.
  */
 export const renameNoteWindow = (hud: Hud, text: string): Hud =>
   patchHudWindow(

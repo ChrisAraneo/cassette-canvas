@@ -51,9 +51,9 @@ const pressHudPart = (
     .otherwise(() => toIdleChange(hud));
 
 /**
- * The pointer went down at a logical pixel. The window it finds comes to the
- * top, and then the part under the pointer answers. A press over no window
- * at all lets go of everything.
+ * Handles a pointer press at a logical pixel. The window it finds comes to
+ * the top, and then the part under the pointer handles the press. A press
+ * over no window at all drops the grab and the focus.
  */
 export const pressHud = (hud: Hud, row: number, column: number): HudChange =>
   match(findHudHit(hud, row, column))

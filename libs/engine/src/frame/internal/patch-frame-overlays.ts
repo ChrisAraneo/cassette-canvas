@@ -45,7 +45,7 @@ const paintPlacement = (
 /**
  * Paints the overlays over a lit frame, in order, so later overlays cover
  * earlier ones. Each overlay pixel shows its authored color: no ambient
- * light, no light and no shadow reaches it. Parts outside the frame are cut
+ * light, no light, and no shadow reaches it. Parts outside the frame are cut
  * off, and transparent pixels leave the lit frame below.
  */
 export const patchFrameOverlays = (

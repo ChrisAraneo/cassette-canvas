@@ -11,8 +11,9 @@ import { paintCloseBox } from './paint-close-box';
 import { toWindowTheme } from './to-window-theme';
 
 /**
- * A window without its widgets: a dark line around a raised frame, the title
- * bar with the title in it, the groove under the bar, and the close box.
+ * Returns the paint steps for a window without its widgets: a dark line
+ * around a raised frame, the title bar with the title in it, the groove
+ * under the bar, and the close box.
  */
 export const paintHudWindow = (
   hud: Hud,

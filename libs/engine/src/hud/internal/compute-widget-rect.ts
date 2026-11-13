@@ -19,9 +19,9 @@ const toTop = (widget: HudWidget): number => HUD_CONTENT_TOP + widget.row;
 const toLeft = (widget: HudWidget): number => HUD_CONTENT_LEFT + widget.column;
 
 /**
- * Where a widget sits, measured from the window's top-left pixel. A button
- * of width 0 is as wide as its text needs, a label is as wide and as tall as
- * its letters, and a tab strip is as wide as its tabs together.
+ * Returns where a widget sits, measured from the window's top-left pixel. A
+ * button of width 0 is as wide as its text needs, a label is as wide and as
+ * tall as its letters, and a tab strip is as wide as its tabs together.
  */
 export const computeWidgetRect = (widget: HudWidget): HudRect =>
   match(widget)

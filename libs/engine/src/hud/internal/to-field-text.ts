@@ -3,9 +3,9 @@ import { match } from 'ts-pattern';
 import { measureText } from '../../text/measure-text';
 
 /**
- * The end of a text that fits in `room` pixels. A field shows the end of
- * what was typed, so the caret stays in sight, and drops characters off the
- * front until the rest fits.
+ * Returns the end of a text that fits in `room` pixels. A field shows the
+ * end of what was typed, so the caret stays visible, and drops characters
+ * off the front until the rest fits.
  */
 export const toFieldText = (text: string, room: number): string =>
   match(isEmpty(text) || measureText(text) <= room)

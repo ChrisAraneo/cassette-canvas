@@ -3,8 +3,8 @@ import { TEXT_ASCENT } from './consts';
 import { toTextOverlay } from './to-text-overlay';
 
 /**
- * A paint step that draws a line of text in one pixel value, with the top of
- * a capital at `row` and its first character at `column`. Use it with
+ * Returns a paint step that draws a line of text in one pixel value, with
+ * the top of a capital at `row` and its first character at `column`. Use it with
  * `composeOverlay`.
  */
 export const toTextPaint = (

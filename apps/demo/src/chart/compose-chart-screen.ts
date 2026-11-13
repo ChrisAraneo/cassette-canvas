@@ -14,7 +14,7 @@ import { centerText } from './internal/center-text';
 
 /**
  * Composes the chart screen: the color chart in the middle, the frame rate
- * on the left and the time of day on the street on the right. It has no
+ * on the left, and the time of day on the street on the right. It has no
  * ambient light and no lights, so the swatches always show their exact
  * colors.
  */

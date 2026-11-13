@@ -3,7 +3,7 @@ import type { InputMailbox } from './types/input-mailbox';
 
 /**
  * Posts the pointer on a canvas to the mailbox, as HUD events in logical
- * pixels. The canvas takes hold of the pointer while a button is down, so a
+ * pixels. The canvas captures the pointer while a button is down, so a
  * window that is being dragged keeps following the pointer when it leaves
  * the canvas. The listeners stay for as long as the page lives.
  */

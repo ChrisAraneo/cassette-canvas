@@ -11,18 +11,19 @@ npm whoami        # must print chris.araneo, the owner of the @chris.araneo scop
 If it prints an error, run `npm login` first. npm asks for a 2FA code, or
 opens a browser, when you publish.
 
-tsdown needs Node 22.18+, 24.11+ or 26+. It runs on older versions too, but
+tsdown needs Node 22.18+, 24.11+, or 26+. It runs on older versions too, but
 prints an `EBADENGINE` warning.
 
 ## What `npm publish` does
 
 It runs two scripts from `package.json` before it uploads anything:
 
-1. `prepublishOnly` runs `npm run check` (typecheck, lint and tests).
+1. `prepublishOnly` runs `npm run check` (typecheck, lint, and tests).
 2. `prepack` runs `npm run build:lib`, which builds `dist/lib` with tsdown.
 
-The package holds only `dist/lib` (`index.js`, `index.js.map`, `index.d.ts`),
-plus `package.json`, `README.md` and `LICENSE`, which npm always includes.
+The package holds `dist/lib` (`index.js`, `index.js.map`, `index.d.ts`) and
+`docs` (every page of the documentation), plus `package.json`, `README.md`,
+and `LICENSE`, which npm always includes.
 `publishConfig.access` is `public`, so you don't need `--access public`.
 
 The build reads the files on disk, not the last commit, so always publish from
@@ -52,8 +53,9 @@ a clean working tree.
    npm pack --dry-run
    ```
 
-   The file list should show `LICENSE`, `README.md`, `package.json` and the
-   three files in `dist/lib`. Review `dependencies` in `package.json` too:
+   The file list should show `LICENSE`, `README.md`, `package.json`, the
+   three files in `dist/lib`, and the pages in `docs`. Review `dependencies` in
+   `package.json` too:
    everyone who installs the package downloads them.
 
 3. Update the version badge at the top of `README.md`
@@ -69,7 +71,7 @@ a clean working tree.
    npm version patch -m "chore(release): %s"    # or minor / major
    ```
 
-   This updates `package.json` and `package-lock.json`, commits them and
+   This updates `package.json` and `package-lock.json`, commits them, and
    creates the tag `v<version>`. It refuses to run if the working tree is
    dirty.
 
@@ -82,7 +84,7 @@ a clean working tree.
 6. Publish.
 
    ```sh
-   npm publish --dry-run   # last look
+   npm publish --dry-run   # last check
    npm publish
    ```
 
@@ -116,9 +118,8 @@ Without `--tag beta`, the pre-release becomes `latest`. Users install it with
 
 ## If something goes wrong
 
-- A published version number is used up for good. Even after an unpublish,
-  that number can't be published again. Fix the problem in a new patch
-  release.
+- A published version number stays taken. Even after an unpublish, that
+  number can't be published again. Fix the problem in a new patch release.
 - `npm unpublish @chris.araneo/cassette-canvas@<version>` only works within
   72 hours, and only if no other package depends on that version. After that,
   use `npm deprecate @chris.araneo/cassette-canvas@<version> "reason"`.

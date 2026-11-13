@@ -44,8 +44,8 @@ const openHudTab = (
     .otherwise((): HudChange => ({ hud, actions: [] }));
 
 /**
- * The pointer went down on a widget. A button is taken hold of, a field
- * takes the keys, a tab opens its page, and a label does nothing. `row` and
+ * Handles a pointer press on a widget: it grabs a button, sets the focus on
+ * a field, opens a tab's page, and does nothing for a label. `row` and
  * `column` are measured from the window's top-left pixel.
  */
 export const pressHudWidget = (

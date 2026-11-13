@@ -14,8 +14,8 @@ const applyChange = (
   applyHudActions({ ...state, hud: change.hud }, change.actions, time);
 
 /**
- * Hands one event to the HUD, then answers whatever came of it. Returns a
- * new state.
+ * Passes one event to the HUD, then handles the actions it returned.
+ * Returns a new state.
  */
 export const applyHudEvent = (
   state: HudState,

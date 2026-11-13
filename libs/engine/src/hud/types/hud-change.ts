@@ -2,8 +2,8 @@ import type { Hud } from './hud';
 import type { HudAction } from './hud-action';
 
 /**
- * What an event did: the HUD as it now is, and what the person did to it.
- * `actions` is empty when nothing came of the event.
+ * What an event did: the HUD as it now is, and the actions it caused.
+ * `actions` is empty when the event caused none.
  */
 export interface HudChange {
   readonly hud: Hud;

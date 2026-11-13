@@ -15,7 +15,10 @@ const NAMED_KEYS: readonly string[] = Object.freeze([
   HUD_ESCAPE_KEY,
 ]);
 
-/** One character to type, or a key a HUD answers by name. */
+/**
+ * Returns `true` for one character to type, or for a key a HUD handles by
+ * name.
+ */
 const isHudKey = (key: string): boolean =>
   size(key) === 1 || includes(NAMED_KEYS, key);
 

@@ -64,7 +64,7 @@ export const MOON_ID = 'moon';
 /**
  * The glow around the sun and the moon. An intensity is how many extended
  * shades the light lifts a pixel that daylight already lights, so a light
- * that only has to stand out at night needs a small one.
+ * that only has to be seen at night needs a small one.
  */
 export const SUN_GLOW = Object.freeze({ radius: 28, intensity: 8 });
 

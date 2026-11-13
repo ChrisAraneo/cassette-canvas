@@ -26,10 +26,13 @@ import type { Demo } from './types/demo';
 
 const { instanceOf, nonNullable } = P;
 
-/** The scene runs `clock` milliseconds ahead of the animation. */
+/**
+ * Returns the scene's time: the scene runs `clock` milliseconds ahead of the
+ * animation.
+ */
 const toSceneTime = (demo: Demo, time: number): number => time + demo.clock;
 
-/** The HUD goes on the street screen, where no light reaches it. */
+/** Draws the street with the HUD on it, where no light reaches the HUD. */
 const drawStreet = (demo: Demo, time: number): Display =>
   drawScreen(
     demo.street,

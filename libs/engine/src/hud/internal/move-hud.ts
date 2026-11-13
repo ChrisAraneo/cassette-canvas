@@ -4,9 +4,9 @@ import type { Hud } from '../types/hud';
 import type { HudChange } from '../types/hud-change';
 
 /**
- * The pointer moved to a logical pixel. A window held by its title bar
- * follows, keeping the spot the pointer took hold of under the pointer.
- * Nothing else answers a move.
+ * Handles a pointer move to a logical pixel. A window held by its title bar
+ * follows, keeping the spot the pointer grabbed under the pointer. Nothing
+ * else handles a move.
  */
 export const moveHud = (hud: Hud, row: number, column: number): HudChange =>
   match(hud.grab)

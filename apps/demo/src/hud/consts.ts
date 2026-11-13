@@ -83,17 +83,20 @@ export const DUSK_HOUR = 20;
 
 export const NOON_HOUR = 12;
 
-/** A button or a tab is as wide as its text, with air on both sides. */
+/**
+ * Returns how wide a button or a tab is: its text, with padding on both
+ * sides.
+ */
 const toControlWidth = (text: string): number =>
   measureText(text) + 2 * HUD_LABEL_PADDING;
 
 /** The gap between two controls that sit side by side. */
 const CONTROL_GAP = 3;
 
-/** The rows one line of text takes, with air below it. */
+/** The rows one line of text takes, with a blank row below it. */
 const LINE_ROWS = TEXT_HEIGHT + 3;
 
-/** The frame and the air inside it: the margin left, right and below. */
+/** The frame and the padding inside it: the margin left, right, and below. */
 const MARGIN = HUD_FRAME + HUD_PADDING;
 
 /**
@@ -235,7 +238,7 @@ const STREET_WIDGETS: readonly HudWidget[] = Object.freeze([
   },
 ]);
 
-/** What the note window holds: a hint, and a field that takes the keys. */
+/** What the note window holds: a hint, and a field that reads the keys. */
 const NOTE_WIDGETS: readonly HudWidget[] = Object.freeze([
   {
     kind: 'label',

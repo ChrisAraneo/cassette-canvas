@@ -9,12 +9,12 @@ import { toShadeOffset } from './to-shade-offset';
  *
  * The amounts of light are added, not the shades. Two lamps on one spot are
  * twice the light, which is one shade step more than one lamp, not twice as
- * many shade steps, and a lamp in daylight hardly tells at all. That is why
- * a lit scene keeps its shading instead of washing out to white.
+ * many shade steps, and a lamp in daylight barely shows. That is why a lit
+ * scene keeps its shading instead of washing out to white.
  */
 // Style guide - Appendix B exception 1 (hot numeric kernel).
-// As a pipeline (times, with a sumBy over the lights for every place), the
-// demo screen at night (320x180, 11 lights) took 6.8 ms per frame (Vite
+// As a pipeline (`times`, with a `sumBy` over the lights for every place),
+// the demo screen at night (320x180, 11 lights) took 6.8 ms per frame (Vite
 // bundle, Node 24). This loop takes 1.2 ms, and 0.28 ms at noon, where one
 // light covers a small part of the screen. Places that no light reaches skip
 // the shade scale: the ambient light on its own always reads back as itself,

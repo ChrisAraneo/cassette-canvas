@@ -46,10 +46,10 @@ const toWindowHit = (window: HudWindow, row: number, column: number): HudHit =>
     .otherwise((): HudHit => ({ window: window.id, part: 'body', widget: '' }));
 
 /**
- * What the logical pixel at `row` and `column` is over, or `undefined` when
- * it is over no window at all. Windows on top are tried first, and within a
- * window the close box comes before the widgets and the widgets before the
- * title bar.
+ * Returns what the logical pixel at `row` and `column` is over, or
+ * `undefined` when it is over no window at all. Windows on top are tried
+ * first, and within a window the close box comes before the widgets and the
+ * widgets before the title bar.
  */
 export const findHudHit = (
   hud: Hud,

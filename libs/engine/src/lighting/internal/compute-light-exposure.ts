@@ -20,9 +20,9 @@ const SHARE_AHEAD = 1 - 2 * SHADOW_SOFTNESS;
 // Style guide - Appendix B exception 1 (hot numeric kernel).
 // As a pipeline, this ring sweep took 8.84 ms per frame for two lights
 // (7,919 cells) on a 192x128 screen (Vite bundle, Node 24); as a loop,
-// 0.43 ms. Reading the shadow casters from a Uint8Array instead of a record
-// cut it further. It compares squared distances, so it needs no square root
-// and the falloff comes for free: on the demo screen at night (320x180, 11
+// 0.43 ms. Reading the shadow casters from a `Uint8Array` instead of a
+// record cut it further. It compares squared distances, so it needs no square
+// root and the falloff costs nothing: on the demo screen at night (320x180, 11
 // lights) it takes 1.4 ms per frame, where the straight-line falloff and the
 // hard shadow edges it replaces took 1.26 ms. Reading the two pixels beside
 // the one ahead, rather than carrying a soft share outward from the light,

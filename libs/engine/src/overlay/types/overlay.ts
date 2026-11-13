@@ -4,7 +4,7 @@
  * shade 5) or `TRANSPARENT`.
  *
  * Unlike a sprite, an overlay is not tied to the sprite size, and light
- * never touches it. Overlays are for a HUD, text and anything else that
+ * never touches it. Overlays are for a HUD, text, and anything else that
  * belongs over the scene rather than in it.
  */
 export interface Overlay {

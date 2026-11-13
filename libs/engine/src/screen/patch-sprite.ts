@@ -4,7 +4,7 @@ import type { Screen } from './types/screen';
 import type { SpriteChanges } from './types/sprite-changes';
 
 /**
- * Changes a sprite's `sprite` (for animation), `row`, `column` or
+ * Changes a sprite's `sprite` (for animation), `row`, `column`, or
  * `castsShadow`. Fields you leave out keep their values. The sprite keeps its
  * place in the drawing order. Returns a new screen. If no sprite has the id,
  * nothing changes.

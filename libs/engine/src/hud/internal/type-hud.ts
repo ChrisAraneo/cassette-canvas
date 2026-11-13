@@ -53,9 +53,9 @@ const applyKey = (
     .otherwise((): HudChange => ({ hud, actions: [] }));
 
 /**
- * A key went down. Only the field that takes the keys reads it: one
- * character is typed into it, Backspace takes one off, Enter gives a
- * `submit`, and Escape gives up the keys. Every other key is left alone.
+ * Handles a key that went down. Only the focused field reads it: it types
+ * one character into the field, Backspace takes one off, Enter returns a
+ * `submit`, and Escape clears the focus. Every other key is ignored.
  */
 export const typeHud = (hud: Hud, key: string): HudChange =>
   match(hud.focus)

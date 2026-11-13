@@ -8,7 +8,7 @@ import { paintHudInput } from './paint-hud-input';
 import { paintHudLabel } from './paint-hud-label';
 import { paintHudTabs } from './paint-hud-tabs';
 
-/** One widget, drawn the way its kind asks for. */
+/** Returns the paint steps for one widget, by its kind. */
 export const paintHudWidget = (
   hud: Hud,
   window: HudWindow,

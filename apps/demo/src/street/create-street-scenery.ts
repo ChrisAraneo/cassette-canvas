@@ -46,7 +46,7 @@ const toScenery = (
 
 /**
  * Builds the parts of the street that do not move: the skyline by day and
- * by night, the buildings and their windows, the sidewalk and the road.
+ * by night, the buildings and their windows, the sidewalk, and the road.
  * Build it once and pass it to `composeStreetScreen` on every frame.
  */
 export const createStreetScenery = (): StreetScenery =>

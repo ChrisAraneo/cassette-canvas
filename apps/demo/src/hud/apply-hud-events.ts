@@ -4,7 +4,7 @@ import { applyHudEvent } from './internal/apply-hud-event';
 import type { HudState } from './types/hud-state';
 
 /**
- * Answers everything the person did since the last frame, in the order it
+ * Handles everything the person did since the last frame, in the order it
  * happened. `time` is the time of the frame, which the street clock is
  * measured from. Returns a new state.
  */

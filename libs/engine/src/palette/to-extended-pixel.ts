@@ -7,7 +7,7 @@ import { isIndex } from './internal/is-index';
  * (0 to 31): `color * 32 + extendedShade`. Lit frames hold extended pixels,
  * and the palette is keyed by them.
  *
- * Sprite shade `s` is extended shade `4 * s + 1`. Extended shades 0, 30 and
+ * Sprite shade `s` is extended shade `4 * s + 1`. Extended shades 0, 30, and
  * 31 are outside the sprite shades; only light reaches them. Returns
  * `TRANSPARENT` for out-of-range input.
  */

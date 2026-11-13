@@ -2,7 +2,7 @@ import { type SpriteLegend, toPixel } from '@cassette-canvas/engine';
 import { BLUE, GRAY, GREEN, PURPLE, RED, SKY, YELLOW } from '../consts';
 
 /**
- * A car facing right, with its wheels turning over 2 frames. `b`, `B` and
+ * A car facing right, with its wheels turning over 2 frames. `b`, `B`, and
  * `q` paint, `g` and `G` glass, `k` tires, `o` hubcaps, `h` headlight, `t`
  * taillight, `m` bumpers.
  */

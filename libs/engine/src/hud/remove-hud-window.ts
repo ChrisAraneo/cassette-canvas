@@ -15,8 +15,8 @@ const dropFocus = (hud: Hud, window: string): HudFocus | undefined =>
     .otherwise(() => hud.focus);
 
 /**
- * Removes the window with the id, and lets go of it if the pointer or the
- * keyboard was busy with it. Returns a new HUD.
+ * Removes the window with the id, and drops any grab or focus on it.
+ * Returns a new HUD.
  */
 export const removeHudWindow = (hud: Hud, id: string): Hud => ({
   ...hud,

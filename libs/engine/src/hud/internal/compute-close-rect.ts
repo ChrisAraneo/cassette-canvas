@@ -3,7 +3,7 @@ import type { HudRect } from '../types/hud-rect';
 import type { HudWindow } from '../types/hud-window';
 
 /**
- * The close box at the right end of the title bar, measured from the
+ * Returns the close box at the right end of the title bar, measured from the
  * window's top-left pixel.
  */
 export const computeCloseRect = ({ width }: HudWindow): HudRect => ({

@@ -11,7 +11,7 @@ import {
 import type { HudTheme } from './types/hud-theme';
 
 /**
- * The shades a HUD is drawn in, on one base color. The default color is
+ * Returns the shades a HUD is drawn in, on one base color. The default is
  * `DEFAULT_HUD_COLOR`. Pass another palette color to move the whole HUD onto
  * it, or change single shades afterwards:
  * `{ ...createHudTheme(), text: 0 }`.

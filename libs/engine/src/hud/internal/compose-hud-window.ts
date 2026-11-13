@@ -10,7 +10,7 @@ import { paintHudWindow } from './paint-hud-window';
 
 /**
  * Paints one window, frame first and then the widgets of its open page, into
- * an overlay of its own size. Its id is the overlay prefix, a dash and the
+ * an overlay of its own size. Its id is the overlay prefix, a dash, and the
  * window id.
  */
 export const composeHudWindow = (

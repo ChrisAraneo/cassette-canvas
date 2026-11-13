@@ -7,7 +7,7 @@ const toCount = (value: number): number => Math.max(0, floor(value));
 /**
  * Creates an overlay of `width` by `height` logical pixels, filled with one
  * pixel value. The default is `TRANSPARENT`, which draws nothing. A width or
- * height below 1 gives an empty overlay.
+ * height below 1 returns an empty overlay.
  */
 export const createOverlay = (
   width: number,

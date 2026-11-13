@@ -6,7 +6,7 @@ import { computeFirstPage } from './compute-first-page';
 
 const NO_WIDGETS: readonly HudWidget[] = Object.freeze([]);
 
-/** Fills in what the settings leave out. */
+/** Returns a window, with defaults for the fields the settings leave out. */
 export const toHudWindow = (
   hud: Hud,
   settings: HudWindowSettings,

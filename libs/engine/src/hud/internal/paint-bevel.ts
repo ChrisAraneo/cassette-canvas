@@ -2,10 +2,10 @@ import type { OverlayPaint } from '../../overlay/types/overlay-paint';
 import type { HudRect } from '../types/hud-rect';
 
 /**
- * The four lines that make a rectangle look raised: `light` along the top
- * and the left, `shadow` along the bottom and the right. Swap the two to
- * make it look pressed in. The corners where the two meet go to `shadow`,
- * the way a light from the top left leaves them.
+ * Returns the four lines that make a rectangle look raised: `light` along
+ * the top and the left, `shadow` along the bottom and the right. Swap the
+ * two to make it look pressed in. The corners where the two meet go to
+ * `shadow`, the way a light from the top left leaves them.
  */
 export const paintBevel = (
   { row, column, width, height }: HudRect,

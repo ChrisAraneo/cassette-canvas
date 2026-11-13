@@ -27,7 +27,7 @@ interface Spot {
 
 const createState = (): HudState => ({ hud: createDemoHud(), clock: 0 });
 
-/** The top-left pixel of a widget on the screen, plus a pixel of air. */
+/** The top-left pixel of a widget on the screen, plus a pixel of padding. */
 const toSpot = (hud: Hud, window: string, widget: string): Spot => {
   const placed = findHudWindow(hud, window);
   const control = findHudWidget(hud, window, widget);

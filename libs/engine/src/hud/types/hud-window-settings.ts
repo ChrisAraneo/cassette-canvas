@@ -1,7 +1,8 @@
 import type { HudWindow } from './hud-window';
 
 /**
- * A window to add. `color` defaults to the HUD's color, `closable` to true,
+ * A window to add. `color` defaults to the HUD's color, `closable` to
+ * `true`,
  * `widgets` to none, and `page` to the first tab of the first tab strip.
  */
 export type HudWindowSettings = Pick<

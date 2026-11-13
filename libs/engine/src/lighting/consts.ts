@@ -30,14 +30,14 @@ export const MAX_EXPOSURE = 2 ** (MAX_SHADE_OFFSET / EXTENDED_SHADES_PER_STOP);
 /**
  * How much of the light at a pixel comes from each side of the pixel ahead
  * of it, toward the light, rather than all of it from that one pixel. It
- * gives every shadow a penumbra: its edge ramps from full light to full
+ * adds a penumbra to every shadow: its edge ramps from full light to full
  * shadow over two pixels instead of stepping down in one, the way an edge
  * looks under a light that is not a single point.
  *
- * Only the edge softens. What blocks a light still blocks it, so the heart
- * of a shadow stays as dark as ever, and a shadow never fades out with
- * distance. 0 gives the hard edges of a point source, and 0.25 spreads the
- * ramp evenly, which is as soft as three pixels go.
+ * Only the edge softens. What blocks a light still blocks it, so the middle
+ * of a shadow stays as dark as before, and a shadow never fades out with
+ * distance. At `0` the edges are as hard as under a point source, and
+ * `0.25` spreads the ramp evenly, which is as soft as three pixels go.
  */
 export const SHADOW_SOFTNESS = 0.25;
 

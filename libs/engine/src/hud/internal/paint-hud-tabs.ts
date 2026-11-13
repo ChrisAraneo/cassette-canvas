@@ -37,7 +37,10 @@ const paintTabText = (
     rect.column + HUD_LABEL_PADDING,
   );
 
-/** A tab that is not open sits lower and takes the window's own shade. */
+/**
+ * Returns the paint steps for a tab that is not open: it sits lower and takes
+ * the window's own shade.
+ */
 const paintClosedTab = (
   tab: HudTab,
   rect: HudRect,
@@ -64,8 +67,8 @@ const paintClosedTab = (
 ];
 
 /**
- * The open tab. It has no bevel along its bottom, so it runs into the page
- * below it the way a tab should.
+ * Returns the paint steps for the open tab. It has no bevel along its
+ * bottom, so it joins the page below it.
  */
 const paintOpenTab = (
   tab: HudTab,
@@ -98,9 +101,10 @@ const paintOpenTab = (
 ];
 
 /**
- * A strip of tabs, with a line across the window that joins the open tab to
- * the page below it. The closed tabs are painted first and the open one
- * last, so it covers that line and reads as the front tab.
+ * Returns the paint steps for a strip of tabs, with a line across the window
+ * that joins the open tab to the page below it. The closed tabs are painted
+ * first and the open one last, so it covers that line and looks like the
+ * front tab.
  */
 export const paintHudTabs = (
   hud: Hud,

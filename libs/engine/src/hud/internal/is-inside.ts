@@ -1,6 +1,9 @@
 import type { HudRect } from '../types/hud-rect';
 
-/** Returns true when the logical pixel at `row` and `column` is in the rectangle. */
+/**
+ * Returns `true` when the logical pixel at `row` and `column` is in the
+ * rectangle.
+ */
 export const isInside = (
   { row, column, width, height }: HudRect,
   pixelRow: number,

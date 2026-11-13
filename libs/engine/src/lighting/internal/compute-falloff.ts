@@ -12,7 +12,8 @@ const computeWindow = (squaredReach: number): number =>
  * The share thins out with distance the way light spreads out in the world,
  * and a window closes it off smoothly at the radius, so a light leaves a
  * bright core and a long dim halo instead of a flat disc with a visible rim.
- * Callers keep to the center and the radius; a share past 1 means nothing.
+ * Callers stay between the center and the radius; a share past 1 means
+ * nothing.
  */
 export const computeFalloff = (squaredReach: number): number =>
   computeWindow(squaredReach) ** 2 / (1 + LIGHT_CORE_SHARPNESS * squaredReach);

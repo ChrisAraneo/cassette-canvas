@@ -32,8 +32,8 @@ const addTabRect = (
 ];
 
 /**
- * Where each tab of a strip sits, measured from the window's top-left pixel.
- * Tabs sit side by side, each as wide as its own text.
+ * Returns where each tab of a strip sits, measured from the window's
+ * top-left pixel. Tabs sit side by side, each as wide as its own text.
  */
 export const computeTabRects = (widget: HudTabs): readonly HudRect[] =>
   reduce(

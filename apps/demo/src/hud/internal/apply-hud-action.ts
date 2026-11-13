@@ -18,10 +18,10 @@ import { openNoteWindow } from './open-note-window';
 import { renameNoteWindow } from './rename-note-window';
 
 /**
- * Answers one thing the person did to the HUD: the buttons move the street
- * clock or bring the note window back, and a line typed into the field
- * becomes the title of the note window. Anything else, such as opening a
- * tab or dragging a window, the HUD has already answered by itself.
+ * Handles one action the person caused: the buttons move the street clock or
+ * bring the note window back, and a line typed into the field becomes the
+ * title of the note window. Anything else, such as opening a tab or dragging
+ * a window, the HUD has already handled by itself.
  */
 export const applyHudAction = (
   state: HudState,

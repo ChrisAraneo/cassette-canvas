@@ -37,9 +37,10 @@ const paintFace = (
     );
 
 /**
- * A button: a light raised face with dark text in the middle of it. While
- * the pointer holds it, the bevel turns around and the text moves one pixel
- * down and right, so it looks pressed in.
+ * Returns the paint steps for a button: a light raised face with dark text
+ * in the middle of it. While the pointer holds it, the bevel swaps its light
+ * and shadow sides and the text moves one pixel down and right, so it looks
+ * pressed in.
  */
 export const paintHudButton = (
   hud: Hud,

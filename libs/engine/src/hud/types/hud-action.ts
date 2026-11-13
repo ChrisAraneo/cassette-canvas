@@ -1,5 +1,5 @@
 /**
- * Something the person did to a HUD that the app may want to answer:
+ * Something the person did to a HUD that the app may want to handle:
  *
  * - `click` a button was pressed and released. `value` is empty.
  * - `close` a window was closed with its close box, and is gone. `widget`

@@ -76,7 +76,7 @@ const composeCycleScreen = (
 
 /**
  * Composes the street `time` milliseconds after the animation started. The
- * sky darkens through the ambient light as night falls. Windows, lamps and
+ * sky darkens through the ambient light as night falls. Windows, lamps, and
  * headlights light up, the stars come out, and people and cars keep moving.
  */
 export const composeStreetScreen = (

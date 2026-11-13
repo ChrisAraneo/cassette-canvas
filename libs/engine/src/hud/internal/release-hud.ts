@@ -44,9 +44,9 @@ const releaseClose = (
     .otherwise((): HudChange => ({ hud: letGo(hud), actions: [] }));
 
 /**
- * The pointer came up at a logical pixel. A button that is still under the
- * pointer gives a `click`, and a close box that is still under it closes its
- * window and gives a `close`. Either way the HUD lets go.
+ * Handles a pointer release at a logical pixel. A button that is still under
+ * the pointer returns a `click`, and a close box that is still under it
+ * closes its window and returns a `close`. Either way the HUD drops the grab.
  */
 export const releaseHud = (hud: Hud, row: number, column: number): HudChange =>
   match(hud.grab)

@@ -4,7 +4,7 @@ import type { Hud } from './types/hud';
 import type { HudWidgetChanges } from './types/hud-widget-changes';
 
 /**
- * Changes a widget of a window: the text of a label, a button or a field,
+ * Changes a widget of a window: the text of a label, a button, or a field,
  * the width of a button or a field, or the tabs of a strip. Use it to show
  * numbers that move, such as a frame rate, without rebuilding the window.
  * Returns a new HUD. If neither the window nor the widget is there, nothing

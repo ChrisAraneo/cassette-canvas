@@ -35,7 +35,7 @@ const GLYPHS: Readonly<Record<string, readonly string[]>> = Object.freeze({
 const toFont = (ink: SpriteLegend): Font =>
   Object.freeze(mapValues(GLYPHS, (glyph) => toTiles(glyph, ink)));
 
-/** Labels are gray, the frame rate is green and the clock is yellow. */
+/** Labels are gray, the frame rate is green, and the clock is yellow. */
 export const LABEL_FONT: Font = toFont({ '#': toPixel(GRAY, 5) });
 
 export const FPS_FONT: Font = toFont({ '#': toPixel(LIME, 6) });

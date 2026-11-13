@@ -42,8 +42,9 @@ const paintFace = (
     );
 
 /**
- * The close box: a raised square with an X in it, pressed in while the
- * pointer holds it. Nothing at all when the window cannot be closed.
+ * Returns the paint steps for the close box: a raised square with an X in
+ * it, pressed in while the pointer holds it. Returns no steps when the
+ * window cannot be closed.
  */
 export const paintCloseBox = (
   hud: Hud,

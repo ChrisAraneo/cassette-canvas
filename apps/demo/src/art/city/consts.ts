@@ -21,12 +21,12 @@ import {
 
 /**
  * Facade tiles, keyed by the code a building grid uses for them. Windows,
- * doors and shop windows are two tiles tall: the first code is the top half
+ * doors, and shop windows are two tiles tall: the first code is the top half
  * and the second code is the bottom half.
  *
  * - `x` wall, `c` cornice, `e` ledge above the ground floor
  * - `W` and `V` window, `D` and `E` door, `S` and `T` shop window
- * - `~` awning, `L`, `M` and `R` pitched roof, `h` chimney
+ * - `~` awning, `L`, `M`, and `R` pitched roof, `h` chimney
  */
 export const FACADE_ARTS: Readonly<Record<string, readonly string[]>> =
   Object.freeze({

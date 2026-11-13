@@ -13,7 +13,7 @@ import type { Lighting } from './types/lighting';
  * every doubling of light is worth `EXTENDED_SHADES_PER_STOP` shades. So one
  * light on an unlit scene moves a pixel by exactly its intensity, while a
  * second light of the same intensity adds only one more step, and a lamp in
- * bright daylight barely shows. Nothing stacks up into flat white.
+ * bright daylight barely shows. Nothing adds up to flat white.
  */
 export const computeLightLevels = (lighting: Lighting): Float64Array =>
   computeShadeOffsets(

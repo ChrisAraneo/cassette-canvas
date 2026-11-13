@@ -63,7 +63,7 @@ const placeStars = (darkness: number, time: number): SpritePlacement[] =>
 
 /**
  * Places what is in the sky at `time`: the stars (only at night), the sun,
- * the moon and the clouds, back to front.
+ * the moon, and the clouds, back to front.
  */
 export const composeSkyPlacements = (
   { phase, darkness }: DayCycle,

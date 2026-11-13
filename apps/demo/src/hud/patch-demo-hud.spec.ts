@@ -17,7 +17,7 @@ import {
 import { createDemoHud } from './create-demo-hud';
 import { patchDemoHud } from './patch-demo-hud';
 
-/** The time of day the animation starts at: 9:00, with the sun on its way up. */
+/** The time of day the animation starts at: 9:00, with the sun rising. */
 const MORNING: DayCycle = Object.freeze({ phase: 9 / 24, darkness: 0 });
 
 const NIGHT: DayCycle = Object.freeze({ phase: 0, darkness: 1 });

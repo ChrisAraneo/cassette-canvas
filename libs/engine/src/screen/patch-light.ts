@@ -4,7 +4,7 @@ import type { LightChanges } from './types/light-changes';
 import type { Screen } from './types/screen';
 
 /**
- * Changes a light's `row`, `column`, `radius` or `intensity`. Fields you
+ * Changes a light's `row`, `column`, `radius`, or `intensity`. Fields you
  * leave out keep their values. Returns a new screen. If no light has the id,
  * nothing changes.
  */

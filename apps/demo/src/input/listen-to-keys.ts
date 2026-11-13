@@ -13,9 +13,8 @@ const postKey = (mailbox: InputMailbox, event: HudKeyEvent | undefined): void =>
 
 /**
  * Posts the keys that go down anywhere on the page to the mailbox, so the
- * field that has the keys reads them wherever the pointer is. Keys a HUD
- * does not read are left to the browser. The listener stays for as long as
- * the page lives.
+ * focused field reads them wherever the pointer is. Keys a HUD does not read
+ * are left to the browser. The listener stays for as long as the page lives.
  */
 export const listenToKeys = (target: Document, mailbox: InputMailbox): void =>
   target.addEventListener('keydown', (event) =>

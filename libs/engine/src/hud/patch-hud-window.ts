@@ -4,7 +4,7 @@ import type { Hud } from './types/hud';
 import type { HudWindowChanges } from './types/hud-window-changes';
 
 /**
- * Changes a window's title, place, size, color, close box, open page or
+ * Changes a window's title, place, size, color, close box, open page, or
  * widgets. Fields you leave out keep their values. The window keeps its
  * place in the stack. Returns a new HUD. If no window has the id, nothing
  * changes.

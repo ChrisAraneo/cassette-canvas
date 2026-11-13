@@ -13,7 +13,7 @@ export const TEXT_ASCENT = 2;
 /** The rows a descender, such as the tail of a `g`, reaches below a capital. */
 export const TEXT_DESCENT = 2;
 
-/** The rows one line of text takes: the ascent, a capital and the descent. */
+/** The rows one line of text takes: the ascent, a capital, and the descent. */
 export const TEXT_LINE_ROWS = TEXT_ASCENT + TEXT_HEIGHT + TEXT_DESCENT;
 
 /** The transparent column each character leaves after itself. */
