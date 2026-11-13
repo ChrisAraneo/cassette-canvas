@@ -5,6 +5,70 @@ export type { Display } from './display/types/display';
 export type { DisplaySettings } from './display/types/display-settings';
 export { computeFrame } from './frame/compute-frame';
 export type { Frame } from './frame/types/frame';
+export { addHud } from './hud/add-hud';
+export { addHudWindow } from './hud/add-hud-window';
+export { composeHud } from './hud/compose-hud';
+export {
+  DEFAULT_HUD_COLOR,
+  HUD_BACKSPACE_KEY,
+  HUD_BODY_SHADE,
+  HUD_CONTENT_LEFT,
+  HUD_CONTENT_TOP,
+  HUD_CONTROL_HEIGHT,
+  HUD_EDGE_SHADE,
+  HUD_ENTER_KEY,
+  HUD_ESCAPE_KEY,
+  HUD_FACE_SHADE,
+  HUD_FRAME,
+  HUD_HIGHLIGHT_SHADE,
+  HUD_LABEL_PADDING,
+  HUD_PADDING,
+  HUD_SHADOW_SHADE,
+  HUD_TEXT_SHADE,
+  HUD_TITLE_HEIGHT,
+  HUD_TITLE_SHADE,
+} from './hud/consts';
+export { createHud } from './hud/create-hud';
+export { createHudTheme } from './hud/create-hud-theme';
+export { findHudWidget } from './hud/find-hud-widget';
+export { findHudWindow } from './hud/find-hud-window';
+export { handleHud } from './hud/handle-hud';
+export { patchHudWidget } from './hud/patch-hud-widget';
+export { patchHudWindow } from './hud/patch-hud-window';
+export { removeHudWindow } from './hud/remove-hud-window';
+export type { Hud } from './hud/types/hud';
+export type { HudAction } from './hud/types/hud-action';
+export type { HudButton } from './hud/types/hud-button';
+export type { HudChange } from './hud/types/hud-change';
+export type { HudEvent } from './hud/types/hud-event';
+export type { HudFocus } from './hud/types/hud-focus';
+export type { HudGrab } from './hud/types/hud-grab';
+export type { HudInput } from './hud/types/hud-input';
+export type { HudKeyEvent } from './hud/types/hud-key-event';
+export type { HudLabel } from './hud/types/hud-label';
+export type { HudPointerEvent } from './hud/types/hud-pointer-event';
+export type { HudRect } from './hud/types/hud-rect';
+export type { HudTab } from './hud/types/hud-tab';
+export type { HudTabs } from './hud/types/hud-tabs';
+export type { HudTheme } from './hud/types/hud-theme';
+export type { HudWidget } from './hud/types/hud-widget';
+export type { HudWidgetChanges } from './hud/types/hud-widget-changes';
+export type { HudWindow } from './hud/types/hud-window';
+export type { HudWindowChanges } from './hud/types/hud-window-changes';
+export type { HudWindowSettings } from './hud/types/hud-window-settings';
+export { addOverlay } from './overlay/add-overlay';
+export { composeOverlay } from './overlay/compose-overlay';
+export { createOverlay } from './overlay/create-overlay';
+export { findOverlay } from './overlay/find-overlay';
+export { patchOverlay } from './overlay/patch-overlay';
+export { removeOverlay } from './overlay/remove-overlay';
+export { toOverlay } from './overlay/to-overlay';
+export type { Overlay } from './overlay/types/overlay';
+export type { OverlayChanges } from './overlay/types/overlay-changes';
+export type { OverlayFill } from './overlay/types/overlay-fill';
+export type { OverlayImage } from './overlay/types/overlay-image';
+export type { OverlayPaint } from './overlay/types/overlay-paint';
+export type { OverlayPlacement } from './overlay/types/overlay-placement';
 export {
   BASE_SHADE,
   COLOR_COUNT,
@@ -43,3 +107,13 @@ export type { Sprite } from './screen/types/sprite';
 export type { SpriteChanges } from './screen/types/sprite-changes';
 export type { SpriteLegend } from './screen/types/sprite-legend';
 export type { SpritePlacement } from './screen/types/sprite-placement';
+export {
+  TEXT_ASCENT,
+  TEXT_DESCENT,
+  TEXT_GAP,
+  TEXT_HEIGHT,
+  TEXT_LINE_ROWS,
+} from './text/consts';
+export { measureText } from './text/measure-text';
+export { toTextOverlay } from './text/to-text-overlay';
+export { toTextPaint } from './text/to-text-paint';

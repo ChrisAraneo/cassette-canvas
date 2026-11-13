@@ -50,6 +50,7 @@ const createSpriteScreen = (sprites: readonly SpritePlacement[]): Screen => ({
   ambient: -2,
   sprites,
   lights: LIGHTS,
+  overlays: [],
 });
 
 const computePixels = (

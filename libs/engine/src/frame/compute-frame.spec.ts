@@ -4,6 +4,8 @@ import { describe, expect, it } from 'vitest';
 import { LIGHTEST_EXTENDED_SHADE, TRANSPARENT } from '../palette/consts';
 import { toExtendedPixel } from '../palette/to-extended-pixel';
 import { toLitPixel } from '../palette/to-lit-pixel';
+import { createOverlay } from '../overlay/create-overlay';
+import type { OverlayPlacement } from '../overlay/types/overlay-placement';
 import { toSprite } from '../screen/to-sprite';
 import type { Light } from '../screen/types/light';
 import type { Screen } from '../screen/types/screen';
@@ -60,6 +62,17 @@ const placeSprite = (
   column: number,
 ): SpritePlacement => ({ id, sprite, row, column, castsShadow: false });
 
+const placeOverlay = (
+  pixel: number,
+  row: number,
+  column: number,
+): OverlayPlacement => ({
+  id: 'panel',
+  overlay: createOverlay(1, 1, pixel),
+  row,
+  column,
+});
+
 const createLayeredScreen = (): Screen => ({
   background: BACKGROUND,
   ambient: 0,
@@ -68,6 +81,7 @@ const createLayeredScreen = (): Screen => ({
     placeSprite('block', GREEN_BLOCK, 1, 1),
   ],
   lights: [],
+  overlays: [],
 });
 
 const createWallScreen = (castsShadow: boolean): Screen => ({
@@ -75,6 +89,7 @@ const createWallScreen = (castsShadow: boolean): Screen => ({
   ambient: 0,
   sprites: [{ ...placeSprite('wall', WALL, 0, 2), castsShadow }],
   lights: [SUN],
+  overlays: [],
 });
 
 const createGrayScreen = (ambient: number): Screen => ({
@@ -82,6 +97,7 @@ const createGrayScreen = (ambient: number): Screen => ({
   ambient,
   sprites: [],
   lights: [],
+  overlays: [],
 });
 
 const GRAY_RAMP = toSprite(['abcd'], {
@@ -97,6 +113,7 @@ const createRampScreen = (ambient: number, intensity: number): Screen => ({
   ambient,
   sprites: [placeSprite('ramp', GRAY_RAMP, 0, 0)],
   lights: [{ id: 'lamp', row: 0, column: 2, radius: 1000, intensity }],
+  overlays: [],
 });
 
 describe('computeFrame', () => {
@@ -170,6 +187,7 @@ describe('computeFrame', () => {
         ambient: 0,
         sprites: [],
         lights: [{ id: 'torch', row: 0, column: 0, radius: 4, intensity: 4 }],
+        overlays: [],
       },
       1,
       5,
@@ -216,6 +234,7 @@ describe('computeFrame', () => {
         ambient: 2,
         sprites: [],
         lights: [SUN],
+        overlays: [],
       },
       1,
       2,
@@ -231,5 +250,38 @@ describe('computeFrame', () => {
     computeFrame(screen, 3, 7, 3);
 
     expect(screen).toEqual(createWallScreen(true));
+  });
+
+  it('should keep an overlay in its own colors, whatever the light does', () => {
+    const frame = computeFrame(
+      { ...createGrayScreen(-16), overlays: [placeOverlay(0x14, 0, 0)] },
+      1,
+      2,
+      1,
+    );
+
+    expect(formatFrame(frame, 2)).toEqual(['rD']);
+  });
+
+  it('should keep an overlay out of the shadows', () => {
+    const frame = computeFrame(
+      { ...createWallScreen(true), overlays: [placeOverlay(0x14, 0, 6)] },
+      3,
+      7,
+      3,
+    );
+
+    expect(formatFrame(frame, 7)).toEqual(['LLLWDDr', 'LLLWDDD', 'LLLWDDD']);
+  });
+
+  it('should draw an overlay over the sprites', () => {
+    const frame = computeFrame(
+      { ...createLayeredScreen(), overlays: [placeOverlay(0x54, 1, 0)] },
+      2,
+      4,
+      3,
+    );
+
+    expect(formatFrame(frame, 4)).toEqual(['rrbb', 'gggb', 'bggb']);
   });
 });

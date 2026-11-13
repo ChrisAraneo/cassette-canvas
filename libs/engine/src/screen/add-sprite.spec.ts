@@ -13,6 +13,7 @@ const createCoinScreen = (): Screen => ({
   ambient: 0,
   sprites: [{ id: 'coin', sprite: COIN, row: 2, column: 5, castsShadow: true }],
   lights: [],
+  overlays: [],
 });
 
 describe('addSprite', () => {

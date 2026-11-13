@@ -12,6 +12,7 @@ const createHeroScreen = (): Screen => ({
     { id: 'hero', sprite: HERO, row: 3, column: 4, castsShadow: false },
   ],
   lights: [],
+  overlays: [],
 });
 
 describe('patchSpriteByOffset', () => {

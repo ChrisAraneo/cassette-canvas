@@ -10,6 +10,7 @@ const createDayScreen = (): Screen => ({
     { id: 'hero', sprite: [0x14], row: 0, column: 0, castsShadow: false },
   ],
   lights: [],
+  overlays: [],
 });
 
 describe('patchAmbient', () => {

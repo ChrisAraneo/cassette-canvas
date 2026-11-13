@@ -76,6 +76,7 @@ const createHeroScreen = (): Screen => ({
     { id: 'hero', sprite: [0x14], row: 0, column: 1, castsShadow: false },
   ],
   lights: [],
+  overlays: [],
 });
 
 const findUpload = (calls: GlCall[]): readonly unknown[] | undefined =>

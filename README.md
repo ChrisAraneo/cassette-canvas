@@ -3,7 +3,7 @@
 <p align="center">
   <img src="https://raw.githubusercontent.com/ChrisAraneo/cassette-canvas/master/cassette.png" width="512px" height="256px"/>
   <br>
-  <a href="https://github.com/ChrisAraneo/cassette-canvas/blob/master/package.json"><img src="https://img.shields.io/badge/version-v0.2.0-blue" alt="version"></a>
+  <a href="https://github.com/ChrisAraneo/cassette-canvas/blob/master/package.json"><img src="https://img.shields.io/badge/version-v0.3.0-blue" alt="version"></a>
   <a href="https://github.com/ChrisAraneo/cassette-canvas/blob/master/LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="@chris.araneo/cassette-canvas is released under the MIT license."></a>
   <a href="https://github.com/ChrisAraneo/cassette-canvas/actions/workflows/ci.yml"><img alt="GitHub CI Status" src="https://img.shields.io/github/actions/workflow/status/ChrisAraneo/cassette-canvas/ci.yml?label=CI&logo=GitHub"></a>
   <br>
@@ -15,8 +15,9 @@
 
 - Sprites use 16 colors with 8 shades each (128 colors).
 - Pixels are large, and every sprite has the same size.
-- Ambient light and point lights use a scale of 32 shades per color. Sprites can cast shadows.
-- Retro monitor effect is always on: a soft glow around bright pixels, scanlines, film grain and a surface texture.
+- Ambient light and point lights. Sprites can cast shadows.
+- Text, windows, buttons, text fields and tabs are built in.
+- Retro monitor effect: a soft glow around bright pixels, scanlines, film grain and a surface texture.
 
 ## Installation
 
@@ -37,12 +38,15 @@ browser and needs WebGL.
 | **Pixel**          | A number with the color in the high hex digit and the shade in the low hex digit. `0x35` is color 3, shade 5. `TRANSPARENT` (`-1`) draws nothing.                                         |
 | **Pixel size**     | The size of one logical pixel in canvas pixels, for example `4`. The screen size in logical pixels is the canvas size divided by the pixel size.                                          |
 | **Sprite**         | A flat array of `spriteSize × spriteSize` pixels, row by row from the top left.                                                                                                           |
-| **Screen**         | Immutable data: the background, sprites, lights and ambient light. Later sprites are drawn over earlier ones.                                                                             |
+| **Screen**         | Immutable data: the background, sprites, lights, ambient light and overlays. Later sprites are drawn over earlier ones.                                                                   |
 | **Display**        | The canvas, its WebGL context, the monitor shader and the palette. You create it once.                                                                                                    |
 | **Ambient light**  | Shifts every pixel by a number of extended shades. `0` keeps the authored colors. `-16` (4 shades darker) looks like night.                                                               |
 | **Light**          | A point at `row`, `column`. At its center it lifts a pixel that daylight already lights by `intensity` extended shades, fading to nothing at `radius`.                                    |
 | **Stop**           | One doubling of light, worth `EXTENDED_SHADES_PER_STOP` (4) extended shades. Lights are added as light and then read off this scale, the way the eye does.                                |
 | **Shadow**         | A sprite with `castsShadow: true` blocks light. Pixels behind it get no light from that light, and the shadow's edge ramps rather than steps. Its side that faces the light is still lit. |
+| **Overlay**        | A free-size image painted over the lit frame, in its authored colors. No ambient light, no light and no shadow reaches it, so it sits on the glass rather than in the world.              |
+| **Text**           | A built-in pixel font, drawn for a 7-pixel capital (`TEXT_HEIGHT`). `measureText` gives a line's width and `toTextOverlay` draws it.                                                      |
+| **HUD**            | Immutable data: windows with a title bar, a close box and widgets (labels, buttons, fields, tabs). `handleHud` answers the pointer and the keyboard, `addHud` puts the windows on screen. |
 | **Monitor effect** | A shader that adds a 2-pixel glow, scanlines, film grain and a surface texture. It uses full RGB color, not the palette.                                                                  |
 
 ## Usage
@@ -219,6 +223,132 @@ palette is keyed by extended pixels. `toLitPixel(pixel, shadeOffset)` returns
 the extended pixel that a sprite pixel shows under that much light.
 `toLitPixel(pixel, 0)` returns its authored color.
 
+### Text, windows and a HUD
+
+The built-in font's shapes are based on PixeloidSans, drawn for a 7-pixel
+capital, which is the size it looks best at.
+
+A HUD is windows over the scene. It is mono: every window is drawn in shades
+of one palette color, so it reads as one surface whatever happens below it.
+The default color is `DEFAULT_HUD_COLOR` (15), the sand color in the demo
+palette and the closest one to beige. Text is the darkest shade, buttons and
+tabs are lighter than the window they sit on, and every edge is a one-pixel
+bevel: light on the top and left, shadow on the bottom and right, swapped
+while a button is held.
+
+```ts
+import {
+  addHud,
+  addHudWindow,
+  createHud,
+  handleHud,
+  patchHudWidget,
+} from '@chris.araneo/cassette-canvas';
+
+const hud = addHudWindow(createHud(), {
+  id: 'mixer',
+  title: 'MIXER',
+  row: 8,
+  column: 8,
+  width: 120,
+  height: 88,
+  widgets: [
+    {
+      kind: 'tabs',
+      id: 'pages',
+      page: '',
+      row: 0,
+      column: 0,
+      tabs: [
+        { id: 'deck', text: 'DECK' },
+        { id: 'tape', text: 'TAPE' },
+      ],
+    },
+    { kind: 'label', id: 'level', page: 'deck', row: 17, column: 0, text: '' },
+    {
+      kind: 'button',
+      id: 'play',
+      page: 'deck',
+      row: 30,
+      column: 0,
+      width: 40,
+      text: 'PLAY',
+    },
+    {
+      kind: 'input',
+      id: 'name',
+      page: 'tape',
+      row: 17,
+      column: 0,
+      width: 100,
+      text: '',
+    },
+  ],
+});
+```
+
+A widget's `row` and `column` are measured from the top-left pixel of the
+window's content (`HUD_CONTENT_TOP`, `HUD_CONTENT_LEFT` from the window's own
+top-left pixel). A label's `row` is the top of its capitals; a button, a field
+and a tab are `HUD_CONTROL_HEIGHT` tall. A widget's `page` is the tab it
+belongs to, and an empty `page` shows it on every page.
+
+Hand the HUD the pointer and the keyboard. Positions are logical pixels: the
+offset inside the canvas divided by the display's `pixelSize`. Keys are the
+browser's `KeyboardEvent.key`.
+
+```ts
+const pressed = handleHud(hud, { kind: 'press', row: 12, column: 30 });
+const dragged = handleHud(pressed.hud, { kind: 'move', row: 20, column: 60 });
+const typed = handleHud(dragged.hud, { kind: 'key', key: 'A' });
+```
+
+`handleHud` returns the HUD as it now is and what the person did, as a list of
+actions:
+
+- `click` a button was pressed and released,
+- `close` a window was closed with its close box, and is gone,
+- `tab` a tab was opened; `value` is the page it opened,
+- `type` a field's text changed; `value` is the text it now holds,
+- `submit` Enter was pressed in a field.
+
+Dragging a title bar moves a window, pressing a window brings it to the top,
+and the close box shows unless the window is built with `closable: false`.
+Fields scroll their text so the end and the caret stay in sight. Everything
+else is yours to answer: `patchHudWidget(hud, 'mixer', 'level', { text: 'LEVEL 7' })`
+writes a readout without rebuilding the window.
+
+Put the windows on the screen last, and draw as usual:
+
+```ts
+drawScreen(display, addHud(screen, typed.hud), time);
+```
+
+Text and overlays work on their own too, without a HUD:
+
+```ts
+import {
+  addOverlay,
+  composeOverlay,
+  measureText,
+  toPixel,
+  toTextPaint,
+} from '@chris.araneo/cassette-canvas';
+
+const banner = composeOverlay(measureText('GAME OVER') + 8, 15, [
+  {
+    pixel: toPixel(0, 1),
+    row: 0,
+    column: 0,
+    width: measureText('GAME OVER') + 8,
+    height: 15,
+  },
+  toTextPaint('GAME OVER', toPixel(1, 6), 4, 4),
+]);
+
+const withBanner = addOverlay(screen, 'banner', banner, 80, 120);
+```
+
 ### API
 
 | Function                                                            | What it does                                                          |
@@ -247,6 +377,34 @@ the extended pixel that a sprite pixel shows under that much light.
 
 Screen functions never change the screen you pass in. They return a new one.
 
+Text, overlays and the HUD:
+
+| Function                                       | What it does                                                             |
+| ---------------------------------------------- | ------------------------------------------------------------------------ |
+| `measureText(text)`                            | Returns how far a line of text moves the pen, in logical pixels          |
+| `toTextOverlay(text, pixel)`                   | Draws a line of text in one pixel value, as an overlay                   |
+| `toTextPaint(text, pixel, row, column)`        | A text step for `composeOverlay`, placed by the top of its capitals      |
+| `createOverlay(width, height, pixel?)`         | Creates an overlay filled with one pixel value (transparent by default)  |
+| `toOverlay(rows, legend)`                      | Builds an overlay from text art, as wide as its longest row              |
+| `composeOverlay(width, height, paints)`        | Paints fills, images and text into a new overlay, in order               |
+| `addOverlay(screen, id, overlay, row, column)` | Adds an overlay over everything light touches                            |
+| `patchOverlay(screen, id, changes)`            | Changes an overlay's image or place                                      |
+| `removeOverlay(screen, id)`                    | Removes an overlay                                                       |
+| `findOverlay(screen, id)`                      | Returns an overlay placement, or `undefined`                             |
+| `createHud(color?)`                            | Creates a HUD with no windows, in shades of one palette color            |
+| `createHudTheme(color?)`                       | Returns the shades a HUD is drawn in, to replace single ones             |
+| `addHudWindow(hud, settings)`                  | Adds a window on top, replacing any window with the same id              |
+| `patchHudWindow(hud, id, changes)`             | Changes a window's title, place, size, color, close box, page or widgets |
+| `removeHudWindow(hud, id)`                     | Removes a window                                                         |
+| `findHudWindow(hud, id)`                       | Returns a window, or `undefined`                                         |
+| `patchHudWidget(hud, window, widget, changes)` | Changes a widget's text, width or tabs                                   |
+| `findHudWidget(hud, window, widget)`           | Returns a widget, or `undefined`                                         |
+| `handleHud(hud, event)`                        | Answers a pointer or key event: the new HUD, and what the person did     |
+| `addHud(screen, hud)`                          | Puts the HUD's windows on a screen as overlays                           |
+| `composeHud(hud)`                              | Draws the HUD as one overlay placement per window, from the bottom up    |
+
+HUD and overlay functions never change what you pass in either.
+
 ## How drawing works
 
 `drawScreen` runs three steps:
@@ -261,7 +419,9 @@ screen
 **`computeFrame`** fills the frame with the background and draws each sprite
 in order. It also records which pixels belong to sprites that cast shadows.
 Then it works out how much light reaches every pixel and moves the pixel to
-the matching extended shade.
+the matching extended shade. Last, it paints the screen's overlays over the
+lit frame, each one in its authored colors, so nothing the light did reaches
+them.
 
 **Light.** Each light is turned into the amount of light it adds to every
 pixel it reaches. Those amounts are added to the ambient light, pixel by
@@ -298,8 +458,11 @@ libs/
 └── engine/src/
     ├── index.ts       the public API
     ├── palette/       colors, shades and pixel values
-    ├── screen/        sprites, lights and ambient light
+    ├── screen/        sprites, lights, ambient light and overlays
     ├── lighting/      light amounts, the shade scale and shadows
+    ├── overlay/       images painted over the lit frame
+    ├── text/          the built-in pixel font
+    ├── hud/           windows, labels, buttons, fields and tabs
     ├── frame/         turns a screen into lit pixels
     ├── crt/           the WebGL monitor shader
     └── display/       draws to the canvas
@@ -310,7 +473,10 @@ apps/
     ├── tiles/         cuts large art into sprites and places it
     ├── day/           the time of day and how dark it is
     ├── street/        the city street, composed from scratch every frame
-    ├── hud/           the palette swatches, the frame rate and the clock
+    ├── hud/           the windows over the street, and what their buttons do
+    ├── input/         carries the browser's events into the frame loop
+    ├── chart/         the palette swatches, the frame rate and the clock
+    ├── format/        frame rates, clock times, percents and heights as text
     └── fps/           measures the frame rate
 ```
 
@@ -325,7 +491,16 @@ each with its own display:
   sky behind the buildings. At night the stars come out, the lamps and
   headlights light up, and people and cars cast shadows. Windows light up one
   by one and go dark again later in the night.
-- **The HUD.** A swatch for each of the 128 sprite colors (16 colors × 8
+
+  Two HUD windows sit over it. **STREET** shows the frame rate and the clock
+  on one tab and the sky on the other, with buttons that move the clock an
+  hour on, back to the animation, or straight to noon or dusk. **NOTE** has a
+  field: type a title, press Enter, and it goes up in the window's title bar.
+  Drag either window by its title bar, close the note window with its X, and
+  the `NOTE...` button brings it back. Whatever the light on the street does,
+  the windows keep their own colors and never cast a shadow.
+
+- **The chart.** A swatch for each of the 128 sprite colors (16 colors × 8
   shades), the frame rate, and the time of day on the street. It has no
   ambient light, so the swatches always show their exact colors, even when it
   is night on the street.
@@ -348,6 +523,11 @@ light; at night it has 1,013 sprites and 11 lights:
 Adding up light rather than shade numbers, and softening the shadow edges,
 costs nothing by day and about 0.1 ms a frame at night, where 11 lights reach
 44% of the screen.
+
+The HUD costs about 1.1 ms a frame on top of that, for the demo's two windows
+(71 paint steps, 14,860 overlay pixels): ~0.5 ms to paint the windows into
+overlays and ~0.6 ms to paint those overlays over the lit frame. A screen with
+no overlays skips the last step altogether.
 
 ## License
 

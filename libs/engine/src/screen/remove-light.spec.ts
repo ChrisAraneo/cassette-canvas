@@ -25,6 +25,7 @@ const createLitScreen = (): Screen => ({
   ambient: -3,
   sprites: [],
   lights: [TORCH, LANTERN],
+  overlays: [],
 });
 
 describe('removeLight', () => {

@@ -11,6 +11,7 @@ const createTorchScreen = (): Screen => ({
   ambient: -3,
   sprites: [],
   lights: [{ id: 'torch', ...TORCH }],
+  overlays: [],
 });
 
 describe('addLight', () => {

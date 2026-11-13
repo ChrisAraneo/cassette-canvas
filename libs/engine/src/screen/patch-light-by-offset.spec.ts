@@ -8,6 +8,7 @@ const createTorchScreen = (): Screen => ({
   ambient: -3,
   sprites: [],
   lights: [{ id: 'torch', row: 4, column: 4, radius: 10, intensity: 3 }],
+  overlays: [],
 });
 
 describe('patchLightByOffset', () => {

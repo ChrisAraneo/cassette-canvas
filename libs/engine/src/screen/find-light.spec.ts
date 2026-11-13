@@ -24,6 +24,7 @@ const createLitScreen = (lights: Light[]) => ({
   ambient: -3,
   sprites: [],
   lights,
+  overlays: [],
 });
 
 describe('findLight', () => {

@@ -25,6 +25,7 @@ const createGameScreen = (sprites: SpritePlacement[]): Screen => ({
   ambient: 0,
   sprites,
   lights: [],
+  overlays: [],
 });
 
 describe('findSprite', () => {

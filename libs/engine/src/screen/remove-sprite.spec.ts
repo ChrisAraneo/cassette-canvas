@@ -25,6 +25,7 @@ const createGameScreen = (): Screen => ({
   ambient: 0,
   sprites: [HERO, COIN],
   lights: [],
+  overlays: [],
 });
 
 describe('removeSprite', () => {

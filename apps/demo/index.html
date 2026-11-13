@@ -38,9 +38,11 @@
         height: auto;
         image-rendering: pixelated;
         border: 1px solid #2a2540;
+        /* The HUD reads the pointer, so a drag must not scroll the page. */
+        touch-action: none;
       }
 
-      #hud {
+      #chart {
         /* Not one of the palette colors, so every swatch stands out. */
         background: #221e33;
       }
@@ -56,8 +58,12 @@
       <canvas id="street" width="1280" height="720">
         This demo needs a browser that supports canvas and WebGL.
       </canvas>
-      <canvas id="hud" width="1280" height="288"></canvas>
+      <canvas id="chart" width="1280" height="288"></canvas>
       <p>16 colors × 8 shades · 4px pixels · 8×8 sprites</p>
+      <p>
+        Drag the windows by their title bars · the HUD takes no light and casts
+        no shadow
+      </p>
     </main>
     <script type="module" src="./src/main.ts"></script>
   </body>
