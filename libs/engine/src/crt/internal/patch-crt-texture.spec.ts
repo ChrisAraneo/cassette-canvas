@@ -26,7 +26,7 @@ const createContext = (calls: TextureCall[]): WebGLRenderingContext =>
   }) as unknown as WebGLRenderingContext;
 
 describe('patchCrtTexture', () => {
-  it('should upload the frame bytes into the texture at logical resolution', () => {
+  it('should upload the frame bytes into the texture at logical resolution when it patches it', () => {
     const calls: TextureCall[] = [];
 
     patchCrtTexture(createContext(calls), CRT, {
@@ -45,7 +45,7 @@ describe('patchCrtTexture', () => {
     ]);
   });
 
-  it('should give back the very same context', () => {
+  it('should return the very same context when it patches the texture', () => {
     const context = createContext([]);
 
     expect(

@@ -14,7 +14,7 @@ const PANEL: OverlayPlacement = Object.freeze({
 });
 
 describe('patchOverlayPlacement', () => {
-  it('should apply every change when the overlay carries the id', () => {
+  it('should return every change applied when the overlay carries the id', () => {
     expect(
       patchOverlayPlacement(PANEL, 'panel', {
         overlay: BADGE,
@@ -24,14 +24,14 @@ describe('patchOverlayPlacement', () => {
     ).toEqual({ id: 'panel', overlay: BADGE, row: 7, column: 8 });
   });
 
-  it('should keep the fields the changes leave out', () => {
+  it('should return the fields the changes leave out unchanged when the overlay carries the id', () => {
     expect(patchOverlayPlacement(PANEL, 'panel', { row: 7 })).toEqual({
       ...PANEL,
       row: 7,
     });
   });
 
-  it('should give the very same placement when the id does not match', () => {
+  it('should return the very same placement when the id does not match', () => {
     expect(patchOverlayPlacement(PANEL, 'badge', { row: 7 })).toBe(PANEL);
   });
 });

@@ -24,7 +24,7 @@ const LIT_CASES: readonly LitCase[] = Object.freeze(
 );
 
 describe('toLitPixels', () => {
-  it('should move each pixel along its extended shade ramp by its shade offset', () => {
+  it('should return each pixel moved along its extended shade ramp by its shade offset when it lights them', () => {
     expect(
       toLitPixels(
         Int16Array.from([0x34, 0x34, 0x94]),
@@ -37,13 +37,13 @@ describe('toLitPixels', () => {
     ]);
   });
 
-  it('should stop at the darkest and the lightest extended shade when the offset goes past them', () => {
+  it('should return the darkest and the lightest extended shade when the offset goes past them', () => {
     expect(
       toLitPixels(Int16Array.from([0x04, 0x04]), Float64Array.from([-99, 99])),
     ).toEqual([toExtendedPixel(0, 0), toExtendedPixel(0, 31)]);
   });
 
-  it('should round half a shade up when the offset is a fraction', () => {
+  it('should return half a shade rounded up when the offset is a fraction', () => {
     expect(
       toLitPixels(
         Int16Array.from([0x04, 0x04]),
@@ -52,7 +52,7 @@ describe('toLitPixels', () => {
     ).toEqual([toExtendedPixel(0, 18), toExtendedPixel(0, 17)]);
   });
 
-  it('should give transparent places when the places hold no pixel', () => {
+  it('should return transparent places when the places hold no pixel', () => {
     expect(
       toLitPixels(
         Int16Array.from([TRANSPARENT, 0x0a, 0x100]),
@@ -61,7 +61,7 @@ describe('toLitPixels', () => {
     ).toEqual([TRANSPARENT, TRANSPARENT, TRANSPARENT]);
   });
 
-  it('should give the same pixel as toLitPixel when it lights every value by every offset', () => {
+  it('should return the same pixel as toLitPixel when it lights every value by every offset', () => {
     expect(
       toLitPixels(
         Int16Array.from(map(LIT_CASES, ({ pixel }) => pixel)),
@@ -74,7 +74,7 @@ describe('toLitPixels', () => {
     );
   });
 
-  it('should give no pixels when there are no places', () => {
+  it('should return no pixels when there are no places', () => {
     expect(toLitPixels(new Int16Array(0), new Float64Array(0))).toEqual([]);
   });
 

@@ -17,7 +17,7 @@ const WINDOW: HudWindow = Object.freeze({
 });
 
 describe('patchMatchingWindow', () => {
-  it('should apply every change when the window carries the id', () => {
+  it('should return every change when the window carries the id', () => {
     expect(
       patchMatchingWindow(WINDOW, 'street', {
         title: 'NOTES',
@@ -44,14 +44,14 @@ describe('patchMatchingWindow', () => {
     });
   });
 
-  it('should keep the fields the changes leave out', () => {
+  it('should return the fields the changes leave out when the window carries the id', () => {
     expect(patchMatchingWindow(WINDOW, 'street', { row: 1 })).toEqual({
       ...WINDOW,
       row: 1,
     });
   });
 
-  it('should give the very same window when the id does not match', () => {
+  it('should return the very same window when the id does not match', () => {
     expect(patchMatchingWindow(WINDOW, 'notes', { row: 1 })).toBe(WINDOW);
   });
 });

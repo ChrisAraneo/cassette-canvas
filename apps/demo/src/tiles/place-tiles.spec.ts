@@ -8,7 +8,7 @@ const TILES = Object.freeze([
 ]);
 
 describe('placeTiles', () => {
-  it('should move every tile by the place of the art when it places the tiles', () => {
+  it('should return every tile moved by the place of the art when it places the tiles', () => {
     expect(
       placeTiles(TILES, {
         id: 'tree',
@@ -34,7 +34,7 @@ describe('placeTiles', () => {
     ]);
   });
 
-  it('should place nothing when there are no tiles', () => {
+  it('should return no placements when there are no tiles', () => {
     expect(
       placeTiles([], { id: 'tree', row: 0, column: 0, castsShadow: false }),
     ).toEqual([]);

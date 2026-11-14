@@ -24,7 +24,7 @@ const createStreetHud = (): Hud =>
   });
 
 describe('patchHudWidget', () => {
-  it('should change the text of the widget it names', () => {
+  it('should return the new text when it names the widget', () => {
     expect(
       findHudWidget(
         patchHudWidget(createStreetHud(), 'street', 'fps', { text: 'FPS 30' }),
@@ -34,7 +34,7 @@ describe('patchHudWidget', () => {
     ).toMatchObject({ text: 'FPS 30' });
   });
 
-  it('should leave the other widgets as they are', () => {
+  it('should return the other widgets unchanged when it changes one', () => {
     expect(
       findHudWidget(
         patchHudWidget(createStreetHud(), 'street', 'fps', { text: 'FPS 30' }),
@@ -44,19 +44,19 @@ describe('patchHudWidget', () => {
     ).toBe(WIDGETS[1]);
   });
 
-  it('should change nothing when no window has the id', () => {
+  it('should return the same HUD when no window has the id', () => {
     expect(
       patchHudWidget(createStreetHud(), 'ghost', 'fps', { text: 'FPS 30' }),
     ).toEqual(createStreetHud());
   });
 
-  it('should change nothing when no widget has the id', () => {
+  it('should return the same HUD when no widget has the id', () => {
     expect(
       patchHudWidget(createStreetHud(), 'street', 'ghost', { text: 'X' }),
     ).toEqual(createStreetHud());
   });
 
-  it('should not change the HUD it is given', () => {
+  it('should not change the HUD it is given when it changes a widget', () => {
     const hud = createStreetHud();
 
     patchHudWidget(hud, 'street', 'fps', { text: 'FPS 30' });

@@ -59,7 +59,7 @@ const toSecondTabSpot = (hud: Hud): Spot => {
 };
 
 describe('applyHudEvents', () => {
-  it('should move the clock when a button is pressed and released', () => {
+  it('should return the clock moved when a button is pressed and released', () => {
     const state = createState();
     const spot = toSpot(state.hud, STREET_WINDOW, HOUR_BUTTON);
 
@@ -75,7 +75,7 @@ describe('applyHudEvents', () => {
     ).toBe(HOUR_LENGTH);
   });
 
-  it('should drag a window along by its title bar', () => {
+  it('should return the window moved when its title bar is dragged', () => {
     const state = createState();
     const spot = toTitleSpot(state.hud, NOTE_WINDOW);
 
@@ -97,7 +97,7 @@ describe('applyHudEvents', () => {
     });
   });
 
-  it('should type a line into the field and write it in the title bar', () => {
+  it('should return the typed line in the title bar when the field is submitted', () => {
     const state = createState();
     const spot = toSpot(state.hud, NOTE_WINDOW, NOTE_FIELD);
 
@@ -119,7 +119,7 @@ describe('applyHudEvents', () => {
     ).toBe('AB');
   });
 
-  it('should open the sky page when its tab is pressed', () => {
+  it('should return the sky page as the open page when its tab is pressed', () => {
     const state = createState();
     const spot = toSecondTabSpot(state.hud);
 
@@ -138,13 +138,13 @@ describe('applyHudEvents', () => {
     ).toBe(SKY_PAGE);
   });
 
-  it('should give back the very same state when nothing happened', () => {
+  it('should return the very same state when nothing happened', () => {
     const state = createState();
 
     expect(applyHudEvents(state, [], 0)).toBe(state);
   });
 
-  it('should not change the state it is given', () => {
+  it('should not change the state it is given when it applies the events', () => {
     const state = createState();
 
     applyHudEvents(

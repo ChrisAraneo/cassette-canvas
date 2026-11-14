@@ -32,7 +32,7 @@ const WINDOW: HudWindow = Object.freeze({
 });
 
 describe('paintHudLabel', () => {
-  it('should write the text in the dark shade of the theme', () => {
+  it('should return the text in the dark shade of the theme when it paints a label', () => {
     expect(paintHudLabel(createHud(), WINDOW, LABEL)).toEqual([
       {
         image: toTextOverlay('FPS 60', toPixel(15, createHud().theme.text)),
@@ -42,7 +42,7 @@ describe('paintHudLabel', () => {
     ]);
   });
 
-  it('should write it in the color of the window', () => {
+  it('should return the text in the color of the window when it paints a label', () => {
     expect(paintHudLabel(createHud(), { ...WINDOW, color: 9 }, LABEL)).toEqual([
       {
         image: toTextOverlay('FPS 60', toPixel(9, createHud().theme.text)),

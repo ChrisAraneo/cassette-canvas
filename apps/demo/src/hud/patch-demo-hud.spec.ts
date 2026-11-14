@@ -28,37 +28,37 @@ const toText = (hud: Hud, widget: string): string | undefined =>
     .otherwise(() => undefined);
 
 describe('patchDemoHud', () => {
-  it('should write the frame rate on the time page', () => {
+  it('should return the frame rate on the time page when it patches the HUD', () => {
     expect(
       toText(patchDemoHud(createDemoHud(), 59.7, MORNING), FPS_WIDGET),
     ).toBe('FPS  60');
   });
 
-  it('should write the time of day on the time page', () => {
+  it('should return the time of day on the time page when it patches the HUD', () => {
     expect(
       toText(patchDemoHud(createDemoHud(), 60, MORNING), CLOCK_WIDGET),
     ).toBe('TIME 09:00');
   });
 
-  it('should write how dark it is on the sky page', () => {
+  it('should return the darkness on the sky page when it is night', () => {
     expect(
       toText(patchDemoHud(createDemoHud(), 60, NIGHT), DARKNESS_WIDGET),
     ).toBe('DARK 100%');
   });
 
-  it('should write how high the sun is on the sky page', () => {
+  it('should return the height of the sun on the sky page when it is morning', () => {
     expect(toText(patchDemoHud(createDemoHud(), 60, MORNING), SUN_WIDGET)).toBe(
       'SUN +0.71',
     );
   });
 
-  it('should write the sun below the horizon at night', () => {
+  it('should return the height of the sun below the horizon when it is night', () => {
     expect(toText(patchDemoHud(createDemoHud(), 60, NIGHT), SUN_WIDGET)).toBe(
       'SUN -1.00',
     );
   });
 
-  it('should leave the windows where they are', () => {
+  it('should return the windows where they are when it patches the HUD', () => {
     expect(
       findHudWindow(patchDemoHud(createDemoHud(), 60, MORNING), STREET_WINDOW),
     ).toMatchObject({
@@ -67,7 +67,7 @@ describe('patchDemoHud', () => {
     });
   });
 
-  it('should not change the HUD it is given', () => {
+  it('should not change the HUD it is given when it patches it', () => {
     const hud = createDemoHud();
 
     patchDemoHud(hud, 60, MORNING);

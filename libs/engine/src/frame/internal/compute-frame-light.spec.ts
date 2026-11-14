@@ -23,7 +23,7 @@ const levelsOf = (ambient: number, occluders: Uint8Array): number[] =>
   );
 
 describe('computeFrameLight', () => {
-  it('should light each place by its distance from the light when nothing stands in the way', () => {
+  it('should return each place lit by its distance from the light when nothing stands in the way', () => {
     const levels = levelsOf(0, new Uint8Array(4));
 
     expect(levels[0]).toBe(4);
@@ -32,7 +32,7 @@ describe('computeFrameLight', () => {
     expect(levels[3] ?? 0).toBeLessThan(levels[2] ?? 0);
   });
 
-  it('should raise every place above the ambient light when it lights the frame', () => {
+  it('should return every place above the ambient light when it lights the frame', () => {
     const levels = levelsOf(-4, new Uint8Array(4));
 
     expect(levels[0] ?? 0).toBeGreaterThan(-4);
@@ -40,7 +40,7 @@ describe('computeFrameLight', () => {
     expect(levels[3] ?? 0).toBeLessThan(levels[0] ?? 0);
   });
 
-  it('should leave only the ambient light behind a shadow caster', () => {
+  it('should return only the ambient light when a place sits behind a shadow caster', () => {
     const levels = levelsOf(-1, Uint8Array.from([0, 1, 0, 0]));
 
     expect(levels[0] ?? 0).toBeGreaterThan(-1);
@@ -49,7 +49,7 @@ describe('computeFrameLight', () => {
     expect(levels[3]).toBeCloseTo(-1);
   });
 
-  it('should give no levels when the frame is empty', () => {
+  it('should return no levels when the frame is empty', () => {
     expect(
       computeFrameLight({
         pixels: new Int16Array(0),
@@ -62,7 +62,7 @@ describe('computeFrameLight', () => {
     ).toHaveLength(0);
   });
 
-  it('should pass on the very same pixels', () => {
+  it('should return the very same pixels when it lights the frame', () => {
     expect(
       computeFrameLight({
         pixels: PIXELS,

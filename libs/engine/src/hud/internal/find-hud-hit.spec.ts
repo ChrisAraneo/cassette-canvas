@@ -49,11 +49,11 @@ const createStreetHud = (): Hud =>
   });
 
 describe('findHudHit', () => {
-  it('should give nothing when the point is over no window', () => {
+  it('should return undefined when the point is over no window', () => {
     expect(findHudHit(createStreetHud(), 0, 0)).toBeUndefined();
   });
 
-  it('should find the title bar in the top band of the window', () => {
+  it('should return the title bar when the point is in the top band of the window', () => {
     expect(findHudHit(createStreetHud(), 16, 30)).toEqual({
       window: 'street',
       part: 'title',
@@ -61,7 +61,7 @@ describe('findHudHit', () => {
     });
   });
 
-  it('should find the close box at the right of the title bar', () => {
+  it('should return the close box when the point is at the right of the title bar', () => {
     expect(findHudHit(createStreetHud(), 16, 101)).toEqual({
       window: 'street',
       part: 'close',
@@ -69,7 +69,7 @@ describe('findHudHit', () => {
     });
   });
 
-  it('should give the body no close box when the window cannot be closed', () => {
+  it('should return the title bar at the close box when the window cannot be closed', () => {
     expect(
       findHudHit(
         addHudWindow(createHud(), {
@@ -88,7 +88,7 @@ describe('findHudHit', () => {
     ).toMatchObject({ part: 'title' });
   });
 
-  it('should find a widget on the open page', () => {
+  it('should return the widget when the point is over one on the open page', () => {
     expect(findHudHit(createStreetHud(), 46, 30)).toEqual({
       window: 'street',
       part: 'widget',
@@ -96,7 +96,7 @@ describe('findHudHit', () => {
     });
   });
 
-  it('should pass over a widget that belongs to another page', () => {
+  it('should return the widget of the open page when one of another page sits at the same place', () => {
     expect(
       findHudHit(
         addHudWindow(createStreetHud(), {
@@ -115,7 +115,7 @@ describe('findHudHit', () => {
     ).toMatchObject({ part: 'widget', widget: 'lamps' });
   });
 
-  it('should find the body where the window holds nothing', () => {
+  it('should return the body when the window holds nothing there', () => {
     expect(findHudHit(createStreetHud(), 80, 100)).toEqual({
       window: 'street',
       part: 'body',
@@ -123,7 +123,7 @@ describe('findHudHit', () => {
     });
   });
 
-  it('should find the window on top when two of them overlap', () => {
+  it('should return the window on top when two of them overlap', () => {
     expect(
       findHudHit(
         addHudWindow(createStreetHud(), {

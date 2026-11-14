@@ -8,7 +8,7 @@ import { patchFpsMeter } from './patch-fps-meter';
 const FRAME = 1000 / 60;
 
 describe('patchFpsMeter', () => {
-  it('should count the frame when the window has not passed yet', () => {
+  it('should return one more frame counted when the window has not passed yet', () => {
     expect(patchFpsMeter(createFpsMeter(0), FRAME)).toEqual({
       since: 0,
       frames: 1,
@@ -16,7 +16,7 @@ describe('patchFpsMeter', () => {
     });
   });
 
-  it('should measure the frame rate when the window has passed', () => {
+  it('should return the measured frame rate when the window has passed', () => {
     expect(
       reduce(
         range(1, 32),
@@ -26,7 +26,7 @@ describe('patchFpsMeter', () => {
     ).toBeCloseTo(60);
   });
 
-  it('should start a new count when it measures the frame rate', () => {
+  it('should return a new count when it measures the frame rate', () => {
     expect(patchFpsMeter({ since: 0, frames: 9, fps: 0 }, FPS_WINDOW)).toEqual({
       since: FPS_WINDOW,
       frames: 0,
@@ -34,7 +34,7 @@ describe('patchFpsMeter', () => {
     });
   });
 
-  it('should keep the last frame rate when it counts a frame', () => {
+  it('should return the last frame rate when it counts a frame', () => {
     expect(patchFpsMeter({ since: 0, frames: 2, fps: 58 }, FRAME).fps).toBe(58);
   });
 });

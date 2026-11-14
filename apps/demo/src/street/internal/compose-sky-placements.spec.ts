@@ -15,7 +15,7 @@ const hasPrefix = (
 ): boolean => some(placements, ({ id }) => startsWith(id, prefix));
 
 describe('composeSkyPlacements', () => {
-  it('should show the sun and not the moon when it is noon', () => {
+  it('should return the sun and not the moon when it is noon', () => {
     const sky = composeSkyPlacements(NOON, 0);
 
     expect([hasPrefix(sky, SUN_ID), hasPrefix(sky, MOON_ID)]).toEqual([
@@ -24,7 +24,7 @@ describe('composeSkyPlacements', () => {
     ]);
   });
 
-  it('should show the moon and not the sun when it is midnight', () => {
+  it('should return the moon and not the sun when it is midnight', () => {
     const sky = composeSkyPlacements(MIDNIGHT, 0);
 
     expect([hasPrefix(sky, SUN_ID), hasPrefix(sky, MOON_ID)]).toEqual([
@@ -33,11 +33,11 @@ describe('composeSkyPlacements', () => {
     ]);
   });
 
-  it('should keep the stars hidden when it is daylight', () => {
+  it('should return no stars when it is daylight', () => {
     expect(hasPrefix(composeSkyPlacements(NOON, 0), 'star-')).toBe(false);
   });
 
-  it('should show every star when it is night', () => {
+  it('should return every star when it is night', () => {
     expect(
       size(
         filter(composeSkyPlacements(MIDNIGHT, 0), ({ id }) =>
@@ -47,7 +47,7 @@ describe('composeSkyPlacements', () => {
     ).toBe(size(STARS));
   });
 
-  it('should make a star twinkle when its period has passed', () => {
+  it('should return the other frame of a star when its period has passed', () => {
     const star = STARS[0];
     const findStar = (time: number): unknown =>
       find(composeSkyPlacements(MIDNIGHT, time), ({ id }) => id === star?.id)
@@ -59,14 +59,14 @@ describe('composeSkyPlacements', () => {
     ]);
   });
 
-  it('should show the clouds by day and by night', () => {
+  it('should return the clouds when it is day and when it is night', () => {
     expect([
       hasPrefix(composeSkyPlacements(NOON, 0), 'cloud-'),
       hasPrefix(composeSkyPlacements(MIDNIGHT, 0), 'cloud-'),
     ]).toEqual([true, true]);
   });
 
-  it('should draw the stars behind the sun, the moon and the clouds', () => {
+  it('should return the stars before the sun, the moon, and the clouds when it is midnight', () => {
     expect(startsWith(composeSkyPlacements(MIDNIGHT, 0)[0]?.id, 'star-')).toBe(
       true,
     );

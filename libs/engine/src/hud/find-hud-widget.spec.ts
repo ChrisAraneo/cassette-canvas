@@ -22,17 +22,17 @@ const createStreetHud = (): Hud =>
   });
 
 describe('findHudWidget', () => {
-  it('should give the widget with the id', () => {
+  it('should return the widget when the window holds the id', () => {
     expect(findHudWidget(createStreetHud(), 'street', 'fps')).toMatchObject({
       text: 'FPS 60',
     });
   });
 
-  it('should give nothing when the window holds no such widget', () => {
+  it('should return undefined when the window holds no such widget', () => {
     expect(findHudWidget(createStreetHud(), 'street', 'ghost')).toBeUndefined();
   });
 
-  it('should give nothing when there is no such window', () => {
+  it('should return undefined when there is no such window', () => {
     expect(findHudWidget(createStreetHud(), 'ghost', 'fps')).toBeUndefined();
   });
 });

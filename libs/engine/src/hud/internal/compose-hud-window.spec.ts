@@ -49,7 +49,7 @@ const toWindow = (hud: Hud): HudWindow =>
   };
 
 describe('composeHudWindow', () => {
-  it('should name the overlay after the window', () => {
+  it('should return an overlay named after the window when it composes one', () => {
     const hud = createStreetHud();
 
     expect(composeHudWindow(hud, toWindow(hud)).id).toBe(
@@ -57,7 +57,7 @@ describe('composeHudWindow', () => {
     );
   });
 
-  it('should put the overlay where the window sits', () => {
+  it('should return the overlay where the window sits when it composes one', () => {
     const hud = createStreetHud();
 
     expect(composeHudWindow(hud, toWindow(hud))).toMatchObject({
@@ -66,7 +66,7 @@ describe('composeHudWindow', () => {
     });
   });
 
-  it('should draw an overlay of the size of the window', () => {
+  it('should return an overlay of the size of the window when it composes one', () => {
     const hud = createStreetHud();
     const { overlay } = composeHudWindow(hud, toWindow(hud));
 
@@ -75,7 +75,7 @@ describe('composeHudWindow', () => {
     ]);
   });
 
-  it('should fill every place, so the scene below never shows through', () => {
+  it('should return no transparent pixel when it composes a window, so the scene below never shows through', () => {
     const hud = createStreetHud();
 
     expect(composeHudWindow(hud, toWindow(hud)).overlay.pixels).not.toContain(
@@ -83,7 +83,7 @@ describe('composeHudWindow', () => {
     );
   });
 
-  it('should draw the dark edge in the corner', () => {
+  it('should return the dark edge in the corner when it composes a window', () => {
     const hud = createStreetHud();
 
     expect(composeHudWindow(hud, toWindow(hud)).overlay.pixels[0]).toBe(
@@ -91,7 +91,7 @@ describe('composeHudWindow', () => {
     );
   });
 
-  it('should draw only the widgets of the open page', () => {
+  it('should return only the widgets of the open page when it composes a window', () => {
     const hud = createStreetHud();
     const scene = composeHudWindow(hud, toWindow(hud)).overlay.pixels;
     const light = composeHudWindow(hud, {

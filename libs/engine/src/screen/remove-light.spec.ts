@@ -29,18 +29,18 @@ const createLitScreen = (): Screen => ({
 });
 
 describe('removeLight', () => {
-  it('should take the light off when the screen holds it', () => {
+  it('should return the lights without it when the screen holds it', () => {
     expect(removeLight(createLitScreen(), 'torch').lights).toEqual([LANTERN]);
   });
 
-  it('should keep every light when none carries the id', () => {
+  it('should return every light when none carries the id', () => {
     expect(removeLight(createLitScreen(), 'sun').lights).toEqual([
       TORCH,
       LANTERN,
     ]);
   });
 
-  it('should give no lights when the screen has none', () => {
+  it('should return no lights when the screen has none', () => {
     expect(
       removeLight({ ...createLitScreen(), lights: [] }, 'torch').lights,
     ).toEqual([]);

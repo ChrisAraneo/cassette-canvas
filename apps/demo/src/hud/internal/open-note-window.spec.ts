@@ -23,25 +23,25 @@ const toFieldText = (hud: Hud): string | undefined =>
     .otherwise(() => undefined);
 
 describe('openNoteWindow', () => {
-  it('should put the note window back on the screen', () => {
+  it('should return the note window back on the screen when it was closed', () => {
     expect(
       findHudWindow(openNoteWindow(removeNote(createDemoHud())), NOTE_WINDOW),
     ).toBeDefined();
   });
 
-  it('should put the note window on top', () => {
+  it('should return the note window on top when it is already open', () => {
     expect(
       last(map(openNoteWindow(createDemoHud()).windows, (window) => window.id)),
     ).toBe(NOTE_WINDOW);
   });
 
-  it('should keep the street window below it', () => {
+  it('should return the street window below the note window when it opens one', () => {
     expect(
       map(openNoteWindow(createDemoHud()).windows, (window) => window.id),
     ).toEqual([STREET_WINDOW, NOTE_WINDOW]);
   });
 
-  it('should empty the field of a window that is already open', () => {
+  it('should return an empty field when the window is already open', () => {
     expect(
       toFieldText(
         openNoteWindow(

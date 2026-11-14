@@ -40,14 +40,14 @@ const createStreetHud = (): Hud =>
   });
 
 describe('handleHud', () => {
-  it('should take hold of a window on a press of its title bar', () => {
+  it('should return a grab on the window when a press lands on its title bar', () => {
     expect(
       handleHud(createStreetHud(), { kind: 'press', row: 16, column: 30 }).hud
         .grab,
     ).toMatchObject({ kind: 'drag', window: 'street' });
   });
 
-  it('should drag the window along on a move', () => {
+  it('should return the window moved when the pointer moves', () => {
     expect(
       findHudWindow(
         handleHud(
@@ -60,7 +60,7 @@ describe('handleHud', () => {
     ).toMatchObject({ row: 20, column: 30 });
   });
 
-  it('should report a click on a press and a release of a button', () => {
+  it('should return a click action when a press and a release land on a button', () => {
     expect(
       handleHud(
         handleHud(createStreetHud(), { kind: 'press', row: 30, column: 30 })
@@ -70,7 +70,7 @@ describe('handleHud', () => {
     ).toEqual([{ kind: 'click', window: 'street', widget: 'skip', value: '' }]);
   });
 
-  it('should type into the field a press gave the keys to', () => {
+  it('should return the typed character in the field when a press set the focus on it', () => {
     expect(
       handleHud(
         handleHud(createStreetHud(), { kind: 'press', row: 48, column: 30 })
@@ -80,7 +80,7 @@ describe('handleHud', () => {
     ).toEqual([{ kind: 'type', window: 'street', widget: 'note', value: 'A' }]);
   });
 
-  it('should close the window on a press and a release of its close box', () => {
+  it('should return the HUD without the window when a press and a release land on its close box', () => {
     expect(
       handleHud(
         handleHud(createStreetHud(), { kind: 'press', row: 16, column: 101 })
@@ -90,7 +90,7 @@ describe('handleHud', () => {
     ).toEqual([]);
   });
 
-  it('should not change the HUD it is given', () => {
+  it('should not change the HUD it is given when it handles an event', () => {
     const hud = createStreetHud();
 
     handleHud(hud, { kind: 'press', row: 16, column: 30 });

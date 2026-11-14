@@ -23,13 +23,13 @@ const WINDOWS: readonly HudWindow[] = Object.freeze([
 ]);
 
 describe('filterOtherWindows', () => {
-  it('should drop the window with the id and keep the order of the rest', () => {
+  it('should return the other windows in order when one carries the id', () => {
     expect(
       map(filterOtherWindows(WINDOWS, 'street'), (window) => window.id),
     ).toEqual(['notes']);
   });
 
-  it('should keep every window when none has the id', () => {
+  it('should return every window when none has the id', () => {
     expect(filterOtherWindows(WINDOWS, 'ghost')).toEqual(WINDOWS);
   });
 });

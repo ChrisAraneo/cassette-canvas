@@ -23,7 +23,7 @@ const MIDNIGHT = Object.freeze({ phase: 0, darkness: 1 });
 const TIME = 7000;
 
 describe('composeStreetLights', () => {
-  it('should only light a glow around the sun when it is noon', () => {
+  it('should return only a glow around the sun when it is noon', () => {
     expect(composeStreetLights(NOON, TIME)).toEqual([
       expect.objectContaining({
         id: SUN_ID,
@@ -33,19 +33,19 @@ describe('composeStreetLights', () => {
     ]);
   });
 
-  it('should light a glow around the moon when it is midnight', () => {
+  it('should return a glow around the moon when it is midnight', () => {
     expect(
       find(composeStreetLights(MIDNIGHT, TIME), { id: MOON_ID })?.intensity,
     ).toBe(MOON_GLOW.intensity);
   });
 
-  it('should leave the sun out when it is below the horizon', () => {
+  it('should return no sun light when the sun is below the horizon', () => {
     expect(find(composeStreetLights(MIDNIGHT, TIME), { id: SUN_ID })).toBe(
       undefined,
     );
   });
 
-  it('should light every street lamp fully when it is night', () => {
+  it('should return every street lamp at full intensity when it is night', () => {
     expect(
       map(
         filter(composeStreetLights(MIDNIGHT, TIME), ({ id }) =>
@@ -56,7 +56,7 @@ describe('composeStreetLights', () => {
     ).toEqual(map(LAMP_COLUMNS, () => LAMP_LIGHT.intensity));
   });
 
-  it('should dim the street lamps when dusk is halfway through', () => {
+  it('should return the street lamps dimmed when dusk is halfway through', () => {
     expect(
       find(
         composeStreetLights(
@@ -68,7 +68,7 @@ describe('composeStreetLights', () => {
     ).toBeCloseTo(LAMP_LIGHT.intensity / 2);
   });
 
-  it('should put a headlight in front of every car on the screen when it is night', () => {
+  it('should return a headlight in front of every car on the screen when it is night', () => {
     expect(
       map(
         filter(composeStreetLights(MIDNIGHT, TIME), ({ id }) =>
@@ -90,7 +90,7 @@ describe('composeStreetLights', () => {
     );
   });
 
-  it('should keep the lamps and the headlights off when it is daylight', () => {
+  it('should return no lamp and no headlight lights when it is daylight', () => {
     expect(size(composeStreetLights(NOON, TIME))).toBe(1);
   });
 });

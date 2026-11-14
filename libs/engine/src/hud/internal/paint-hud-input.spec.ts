@@ -42,27 +42,27 @@ const createTypingHud = (): Hud => ({
 });
 
 describe('paintHudInput', () => {
-  it('should fill the field with the lightest shade, like paper', () => {
+  it('should return the field filled with the lightest shade, like paper, when it paints one', () => {
     expect(paintHudInput(createHud(), WINDOW, INPUT)[0]).toEqual({
       pixel: toPixel(15, THEME.highlight),
       ...computeWidgetRect(INPUT),
     });
   });
 
-  it('should draw a dark line around the field', () => {
+  it('should return a dark line around the field when it paints one', () => {
     expect(paintHudInput(createHud(), WINDOW, INPUT)[1]).toMatchObject({
       pixel: toPixel(15, THEME.edge),
     });
   });
 
-  it('should carve the top of the field with a shadow', () => {
+  it('should return a shadow along the top of the field when it paints one', () => {
     expect(paintHudInput(createHud(), WINDOW, INPUT)[5]).toMatchObject({
       pixel: toPixel(15, THEME.shadow),
       height: 1,
     });
   });
 
-  it('should show a caret in the field that takes the keys', () => {
+  it('should return a caret when the field takes the keys', () => {
     expect(last(paintHudInput(createTypingHud(), WINDOW, INPUT))).toMatchObject(
       {
         pixel: toPixel(15, THEME.text),
@@ -72,13 +72,13 @@ describe('paintHudInput', () => {
     );
   });
 
-  it('should show no caret in a field that does not take the keys', () => {
+  it('should return no caret when the field does not take the keys', () => {
     expect(last(paintHudInput(createHud(), WINDOW, INPUT))).toMatchObject({
       pixel: TRANSPARENT,
     });
   });
 
-  it('should take the same number of steps either way', () => {
+  it('should return the same number of paint steps when the field takes the keys and when it does not', () => {
     expect(size(paintHudInput(createTypingHud(), WINDOW, INPUT))).toBe(
       size(paintHudInput(createHud(), WINDOW, INPUT)),
     );

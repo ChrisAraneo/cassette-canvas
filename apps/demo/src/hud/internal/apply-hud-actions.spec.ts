@@ -16,13 +16,13 @@ const HOUR_CLICK: HudAction = Object.freeze({
 const createState = (): HudState => ({ hud: createDemoHud(), clock: 0 });
 
 describe('applyHudActions', () => {
-  it('should answer every action in the order it happened', () => {
+  it('should return the clock moved by both actions when it handles them in order', () => {
     expect(
       applyHudActions(createState(), [HOUR_CLICK, HOUR_CLICK], 0).clock,
     ).toBe(2 * HOUR_LENGTH);
   });
 
-  it('should give back the very same state when nothing came of the event', () => {
+  it('should return the very same state when the event caused no actions', () => {
     const state = createState();
 
     expect(applyHudActions(state, [], 0)).toBe(state);

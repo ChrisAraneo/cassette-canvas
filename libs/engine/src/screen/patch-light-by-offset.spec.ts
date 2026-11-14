@@ -12,19 +12,19 @@ const createTorchScreen = (): Screen => ({
 });
 
 describe('patchLightByOffset', () => {
-  it('should move the light down and right when the offsets are positive', () => {
+  it('should return the light moved down and right when the offsets are positive', () => {
     expect(
       patchLightByOffset(createTorchScreen(), 'torch', 2, 5).lights,
     ).toEqual([{ id: 'torch', row: 6, column: 9, radius: 10, intensity: 3 }]);
   });
 
-  it('should move the light up and left when the offsets are negative', () => {
+  it('should return the light moved up and left when the offsets are negative', () => {
     expect(
       patchLightByOffset(createTorchScreen(), 'torch', -6, -5).lights,
     ).toEqual([{ id: 'torch', row: -2, column: -1, radius: 10, intensity: 3 }]);
   });
 
-  it('should give back the very same screen when no light carries the id', () => {
+  it('should return the very same screen when no light carries the id', () => {
     const screen = createTorchScreen();
 
     expect(patchLightByOffset(screen, 'sun', 2, 5)).toBe(screen);

@@ -6,13 +6,13 @@ import { runEffect } from './run-effect';
 const SCENE = Object.freeze({ name: 'scene' });
 
 describe('runEffect', () => {
-  it('should give back the very same value when it runs the effect', () => {
+  it('should return the very same value when it runs the effect', () => {
     const result = runEffect(SCENE, noop);
 
     expect(result).toBe(SCENE);
   });
 
-  it('should hand the value to the effect when it runs', () => {
+  it('should pass the value to the effect when it runs', () => {
     const seen: string[] = [];
 
     runEffect('frame', (value) => seen.push(value));

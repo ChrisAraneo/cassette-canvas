@@ -29,26 +29,26 @@ const createLitScreen = (): Screen => ({
 });
 
 describe('patchLight', () => {
-  it('should move the light when it gets a new row and column', () => {
+  it('should return the light moved when it gets a new row and column', () => {
     expect(
       patchLight(createLitScreen(), 'torch', { row: 7, column: 8 }).lights[0],
     ).toEqual({ ...TORCH, row: 7, column: 8 });
   });
 
-  it('should change how bright and how far the light shines when it gets new values', () => {
+  it('should return the new intensity and radius when it gets new values', () => {
     expect(
       patchLight(createLitScreen(), 'torch', { radius: 5, intensity: 1 })
         .lights[0],
     ).toEqual({ ...TORCH, radius: 5, intensity: 1 });
   });
 
-  it('should leave the other lights as they are when it changes one', () => {
+  it('should return the very same other lights when it changes one', () => {
     expect(patchLight(createLitScreen(), 'torch', { row: 7 }).lights[1]).toBe(
       LANTERN,
     );
   });
 
-  it('should change nothing when no light carries the id', () => {
+  it('should return the same lights when no light carries the id', () => {
     expect(patchLight(createLitScreen(), 'sun', { row: 7 }).lights).toEqual([
       TORCH,
       LANTERN,

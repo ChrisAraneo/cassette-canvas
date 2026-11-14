@@ -44,21 +44,21 @@ const textOf = (hud: Hud): string =>
     .otherwise(() => '');
 
 describe('typeHud', () => {
-  it('should add the character to the field that takes the keys', () => {
+  it('should return the character added to the field when it takes the keys', () => {
     expect(textOf(typeHud(createTypingHud(), '!').hud)).toBe('HI!');
   });
 
-  it('should report the text the field now holds', () => {
+  it('should return a type action with the text when the field takes a character', () => {
     expect(typeHud(createTypingHud(), '!').actions).toEqual([
       { kind: 'type', window: 'notes', widget: 'note', value: 'HI!' },
     ]);
   });
 
-  it('should take the last character off on Backspace', () => {
+  it('should return the text without its last character when the key is Backspace', () => {
     expect(textOf(typeHud(createTypingHud(), 'Backspace').hud)).toBe('H');
   });
 
-  it('should leave an empty field empty on Backspace', () => {
+  it('should return an empty text when the field is empty and the key is Backspace', () => {
     expect(
       textOf(
         typeHud(
@@ -69,7 +69,7 @@ describe('typeHud', () => {
     ).toBe('');
   });
 
-  it('should report a submit on Enter, and leave the text as it is', () => {
+  it('should return a submit action and the same text when the key is Enter', () => {
     const change = typeHud(createTypingHud(), 'Enter');
 
     expect([textOf(change.hud), change.actions]).toEqual([
@@ -78,25 +78,25 @@ describe('typeHud', () => {
     ]);
   });
 
-  it('should give up the keys on Escape', () => {
+  it('should return no focus when the key is Escape', () => {
     expect(typeHud(createTypingHud(), 'Escape').hud.focus).toBeUndefined();
   });
 
-  it('should leave a key it does not read alone', () => {
+  it('should return no actions when it does not read the key', () => {
     expect(typeHud(createTypingHud(), 'ArrowLeft').actions).toEqual([]);
   });
 
-  it('should take a space as a character', () => {
+  it('should return the space added to the text when the key is a space', () => {
     expect(textOf(typeHud(createTypingHud(), ' ').hud)).toBe('HI ');
   });
 
-  it('should read nothing when no field takes the keys', () => {
+  it('should return the very same HUD when no field takes the keys', () => {
     const hud = createNotesHud();
 
     expect(typeHud(hud, '!').hud).toBe(hud);
   });
 
-  it('should read nothing when the keys went to something that is not a field', () => {
+  it('should return the very same HUD when the focus is not on a field', () => {
     const hud: Hud = {
       ...createNotesHud(),
       focus: { window: 'notes', widget: 'fps' },

@@ -29,13 +29,13 @@ const createContext = (
   }) as unknown as WebGLRenderingContext;
 
 describe('tryCreateShader', () => {
-  it('should give the compiled shader when the source compiles', () => {
+  it('should return the compiled shader when the source compiles', () => {
     expect(
       tryCreateShader(createContext([], SHADER, true), VERTEX_SHADER, 'main'),
     ).toBe(SHADER);
   });
 
-  it('should hand the source to the shader and compile it when it creates one', () => {
+  it('should pass the source to the shader and compile it when it creates one', () => {
     const calls: ShaderCall[] = [];
 
     tryCreateShader(createContext(calls, SHADER, true), VERTEX_SHADER, 'main');
@@ -47,13 +47,13 @@ describe('tryCreateShader', () => {
     ]);
   });
 
-  it('should give no shader when the source does not compile', () => {
+  it('should return undefined when the source does not compile', () => {
     expect(
       tryCreateShader(createContext([], SHADER, false), VERTEX_SHADER, 'oops'),
     ).toBeUndefined();
   });
 
-  it('should give no shader when the context cannot make one', () => {
+  it('should return undefined when the context cannot make one', () => {
     expect(
       tryCreateShader(createContext([], null, true), VERTEX_SHADER, 'main'),
     ).toBeUndefined();

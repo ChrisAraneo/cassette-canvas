@@ -6,27 +6,27 @@ import { DAY_LENGTH, HOURS_PER_DAY, START_HOUR } from './consts';
 const HOUR = DAY_LENGTH / HOURS_PER_DAY;
 
 describe('computeDayCycle', () => {
-  it('should start at the start hour when no time has passed', () => {
+  it('should return the start hour as the phase when no time has passed', () => {
     expect(computeDayCycle(0).phase).toBe(START_HOUR / HOURS_PER_DAY);
   });
 
-  it('should be full daylight when the animation starts', () => {
+  it('should return no darkness when the animation starts', () => {
     expect(computeDayCycle(0).darkness).toBe(0);
   });
 
-  it('should be full daylight when it is noon', () => {
+  it('should return no darkness when it is noon', () => {
     expect(computeDayCycle((12 - START_HOUR) * HOUR).darkness).toBe(0);
   });
 
-  it('should be night when it is midnight', () => {
+  it('should return full darkness when it is midnight', () => {
     expect(computeDayCycle((24 - START_HOUR) * HOUR).darkness).toBe(1);
   });
 
-  it('should be half dark when the sun sets at 18:00', () => {
+  it('should return half the darkness when the sun sets at 18:00', () => {
     expect(computeDayCycle((18 - START_HOUR) * HOUR).darkness).toBeCloseTo(0.5);
   });
 
-  it('should come back to the same time of day when a whole day has passed', () => {
+  it('should return the same phase when a whole day has passed', () => {
     expect(computeDayCycle(3 * HOUR + DAY_LENGTH).phase).toBeCloseTo(
       computeDayCycle(3 * HOUR).phase,
     );

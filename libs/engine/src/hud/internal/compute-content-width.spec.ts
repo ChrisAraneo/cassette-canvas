@@ -18,11 +18,11 @@ const WINDOW: HudWindow = Object.freeze({
 });
 
 describe('computeContentWidth', () => {
-  it('should leave the frame and the padding out on both sides', () => {
+  it('should return the width without the frame and the padding on both sides when it measures the content', () => {
     expect(computeContentWidth(WINDOW)).toBe(90 - 2 * HUD_CONTENT_LEFT);
   });
 
-  it('should never go below nothing', () => {
+  it('should return 0 when the window is narrower than the frame and the padding', () => {
     expect(computeContentWidth({ ...WINDOW, width: 2 })).toBe(0);
   });
 });

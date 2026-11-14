@@ -50,7 +50,7 @@ const filterFills = (
   );
 
 describe('paintHudTabs', () => {
-  it('should fill the open tab with the light face of the theme', () => {
+  it('should return the open tab filled with the light face of the theme when it paints the tabs', () => {
     expect(
       filterFills(
         paintHudTabs(createHud(), createWindow('scene'), TABS),
@@ -59,7 +59,7 @@ describe('paintHudTabs', () => {
     ).toMatchObject(computeTabRects(TABS)[0] ?? {});
   });
 
-  it('should drop a closed tab below the open one', () => {
+  it('should return a closed tab below the open one when it paints the tabs', () => {
     expect(
       filterFills(
         paintHudTabs(createHud(), createWindow('scene'), TABS),
@@ -70,7 +70,7 @@ describe('paintHudTabs', () => {
     });
   });
 
-  it('should run a line across the content under the tabs', () => {
+  it('should return a line across the content under the tabs when it paints them', () => {
     expect(
       filterFills(
         paintHudTabs(createHud(), createWindow('scene'), TABS),
@@ -88,7 +88,7 @@ describe('paintHudTabs', () => {
     });
   });
 
-  it('should fill no tab at all when no page is open', () => {
+  it('should return no filled tab when no page is open', () => {
     expect(
       filterFills(
         paintHudTabs(createHud(), createWindow(''), TABS),
@@ -97,7 +97,7 @@ describe('paintHudTabs', () => {
     ).toEqual([]);
   });
 
-  it('should paint the open tab after the line, so it covers it', () => {
+  it('should return the open tab after the line when it paints the tabs, so it covers the line', () => {
     const paints = paintHudTabs(createHud(), createWindow('light'), TABS);
 
     expect(

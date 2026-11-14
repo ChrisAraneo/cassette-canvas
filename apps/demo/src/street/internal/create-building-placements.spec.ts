@@ -15,7 +15,7 @@ const BUILDING = Object.freeze({
 });
 
 describe('createBuildingPlacements', () => {
-  it('should place one tile for each facade code when it builds the building', () => {
+  it('should return one tile for each facade code when it builds the building', () => {
     expect(map(createBuildingPlacements(BUILDING), 'id')).toEqual([
       'shop-0-1',
       'shop-1-0',
@@ -27,25 +27,25 @@ describe('createBuildingPlacements', () => {
     ]);
   });
 
-  it('should stand the bottom row of tiles on the sidewalk when it builds the building', () => {
+  it('should return the bottom row of tiles on the sidewalk when it builds the building', () => {
     expect(createBuildingPlacements(BUILDING)[5]?.row).toBe(
       SIDEWALK_ROW - SPRITE_SIZE,
     );
   });
 
-  it('should put each tile in its column when it builds the building', () => {
+  it('should return each tile in its column when it builds the building', () => {
     expect(createBuildingPlacements(BUILDING)[0]?.column).toBe(
       40 + SPRITE_SIZE,
     );
   });
 
-  it('should paint each tile with the legend of the building when it builds the building', () => {
+  it('should return each tile painted with the legend of the building when it builds the building', () => {
     expect(createBuildingPlacements(BUILDING)[1]?.sprite).toEqual(
       toSprite(FACADE_ARTS.c ?? [], FACADE_LEGENDS.sand),
     );
   });
 
-  it('should let the lamp light reach the walls when it builds the building', () => {
+  it('should return no shadow casters when it places a building, so the lamp light reaches the walls', () => {
     expect(
       every(createBuildingPlacements(BUILDING), { castsShadow: false }),
     ).toBe(true);

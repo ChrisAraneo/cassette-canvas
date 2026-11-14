@@ -25,11 +25,11 @@ const createContext = (
   }) as unknown as WebGLRenderingContext;
 
 describe('tryCreateVertices', () => {
-  it('should give the buffer when the context can make one', () => {
+  it('should return the buffer when the context can make one', () => {
     expect(tryCreateVertices(createContext([], BUFFER))).toBe(BUFFER);
   });
 
-  it('should fill the buffer with one triangle that covers the whole screen', () => {
+  it('should set the buffer to one triangle that covers the whole screen when it creates one', () => {
     const calls: BufferCall[] = [];
 
     tryCreateVertices(createContext(calls, BUFFER));
@@ -43,7 +43,7 @@ describe('tryCreateVertices', () => {
     ]);
   });
 
-  it('should give no buffer when the context cannot make one', () => {
+  it('should return undefined when the context cannot make one', () => {
     expect(tryCreateVertices(createContext([], null))).toBeUndefined();
   });
 });

@@ -16,7 +16,7 @@ const createHeroScreen = (): Screen => ({
 });
 
 describe('patchSpriteByOffset', () => {
-  it('should move the sprite down and right when the offsets are positive', () => {
+  it('should return the sprite moved down and right when the offsets are positive', () => {
     expect(
       patchSpriteByOffset(createHeroScreen(), 'hero', 2, 5).sprites,
     ).toEqual([
@@ -24,7 +24,7 @@ describe('patchSpriteByOffset', () => {
     ]);
   });
 
-  it('should move the sprite up and left when the offsets are negative', () => {
+  it('should return the sprite moved up and left when the offsets are negative', () => {
     expect(
       patchSpriteByOffset(createHeroScreen(), 'hero', -4, -6).sprites,
     ).toEqual([
@@ -32,7 +32,7 @@ describe('patchSpriteByOffset', () => {
     ]);
   });
 
-  it('should give back the very same screen when no sprite carries the id', () => {
+  it('should return the very same screen when no sprite carries the id', () => {
     const screen = createHeroScreen();
 
     expect(patchSpriteByOffset(screen, 'ghost', 2, 5)).toBe(screen);

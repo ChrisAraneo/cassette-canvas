@@ -39,11 +39,11 @@ const linkProgram = (calls: ProgramCall[], links: boolean) =>
   );
 
 describe('tryLinkProgram', () => {
-  it('should give the linked program when the shaders link', () => {
+  it('should return the linked program when the shaders link', () => {
     expect(linkProgram([], true)).toBe(PROGRAM);
   });
 
-  it('should attach both shaders before it links the program', () => {
+  it('should call attachShader for both shaders, then linkProgram, when it links the program', () => {
     const calls: ProgramCall[] = [];
 
     linkProgram(calls, true);
@@ -56,7 +56,7 @@ describe('tryLinkProgram', () => {
     ]);
   });
 
-  it('should feed the corners of the screen in through the position attribute', () => {
+  it('should call bindAttribLocation for the position attribute when it links the program', () => {
     const calls: ProgramCall[] = [];
 
     linkProgram(calls, true);
@@ -68,7 +68,7 @@ describe('tryLinkProgram', () => {
     ]);
   });
 
-  it('should give no program when the shaders do not link', () => {
+  it('should return undefined when the shaders do not link', () => {
     expect(linkProgram([], false)).toBeUndefined();
   });
 });

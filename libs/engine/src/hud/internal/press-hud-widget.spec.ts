@@ -63,7 +63,7 @@ const press = (widget: string, row: number, column: number) =>
   );
 
 describe('pressHudWidget', () => {
-  it('should take hold of a button', () => {
+  it('should return a grab on the button when a press lands on one', () => {
     expect(press('skip', 33, 10).hud.grab).toMatchObject({
       kind: 'press',
       window: 'street',
@@ -71,18 +71,18 @@ describe('pressHudWidget', () => {
     });
   });
 
-  it('should give the keys to a field', () => {
+  it('should return the focus on the field when a press lands on one', () => {
     expect(press('note', 50, 10).hud.focus).toEqual({
       window: 'street',
       widget: 'note',
     });
   });
 
-  it('should let go of the pointer when a field takes the keys', () => {
+  it('should return no grab when a field takes the focus', () => {
     expect(press('note', 50, 10).hud.grab).toBeUndefined();
   });
 
-  it('should open the page of the tab under the pointer', () => {
+  it('should return the page of the tab when the press lands on one', () => {
     const second = computeTabRects(TABS)[1];
 
     expect(
@@ -93,7 +93,7 @@ describe('pressHudWidget', () => {
     ).toBe('light');
   });
 
-  it('should report which tab was opened', () => {
+  it('should return a tab action with the page when the press opens one', () => {
     const second = computeTabRects(TABS)[1];
 
     expect(
@@ -103,11 +103,11 @@ describe('pressHudWidget', () => {
     ]);
   });
 
-  it('should leave the page alone when the press misses every tab', () => {
+  it('should return no actions when the press misses every tab', () => {
     expect(press('tabs', 20, 500).actions).toEqual([]);
   });
 
-  it('should hold nothing when it presses a label', () => {
+  it('should return no grab when the press lands on a label', () => {
     expect(press('fps', 68, 10).hud.grab).toBeUndefined();
   });
 });

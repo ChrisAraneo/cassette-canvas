@@ -9,7 +9,7 @@ import {
 import { computeOrb } from './compute-orb';
 
 describe('computeOrb', () => {
-  it('should put the sun at the top of its orbit when it is noon', () => {
+  it('should return the sun at the top of its orbit when it is noon', () => {
     expect(computeOrb(0.5)).toEqual({
       row: HORIZON_ROW - ORBIT_HEIGHT,
       column: ORBIT_CENTER,
@@ -17,7 +17,7 @@ describe('computeOrb', () => {
     });
   });
 
-  it('should put the sun on the horizon on the left when it is 6:00', () => {
+  it('should return the sun on the horizon on the left when it is 6:00', () => {
     const orb = computeOrb(0.25);
 
     expect([orb.row, orb.column]).toEqual([
@@ -27,11 +27,11 @@ describe('computeOrb', () => {
     expect(orb.height).toBeCloseTo(0);
   });
 
-  it('should put the sun on the horizon on the right when it is 18:00', () => {
+  it('should return the sun on the horizon on the right when it is 18:00', () => {
     expect(computeOrb(0.75).column).toBe(ORBIT_CENTER + ORBIT_WIDTH);
   });
 
-  it('should put the sun below the horizon when it is midnight', () => {
+  it('should return the sun below the horizon when it is midnight', () => {
     expect(computeOrb(0).height).toBe(-1);
   });
 });

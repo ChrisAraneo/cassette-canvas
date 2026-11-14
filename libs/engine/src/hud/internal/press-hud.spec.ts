@@ -41,7 +41,7 @@ const createTwoWindows = (): Hud =>
   });
 
 describe('pressHud', () => {
-  it('should take hold of a title bar, keeping the spot under the pointer', () => {
+  it('should return a grab on the title bar with the spot under the pointer when a press lands on it', () => {
     expect(pressHud(createStreetHud(), 16, 30).hud.grab).toEqual({
       kind: 'drag',
       window: 'street',
@@ -51,14 +51,14 @@ describe('pressHud', () => {
     });
   });
 
-  it('should take hold of a close box', () => {
+  it('should return a grab on the close box when a press lands on one', () => {
     expect(pressHud(createStreetHud(), 16, 101).hud.grab).toMatchObject({
       kind: 'close',
       window: 'street',
     });
   });
 
-  it('should take hold of a button', () => {
+  it('should return a grab on the button when a press lands on one', () => {
     expect(pressHud(createStreetHud(), 30, 30).hud.grab).toMatchObject({
       kind: 'press',
       window: 'street',
@@ -66,15 +66,15 @@ describe('pressHud', () => {
     });
   });
 
-  it('should hold nothing when it presses the body', () => {
+  it('should return no grab when the press lands on the body', () => {
     expect(pressHud(createStreetHud(), 80, 100).hud.grab).toBeUndefined();
   });
 
-  it('should report nothing happening when it takes hold', () => {
+  it('should return no actions when it takes a grab', () => {
     expect(pressHud(createStreetHud(), 16, 30).actions).toEqual([]);
   });
 
-  it('should bring the window it presses to the top', () => {
+  it('should return the pressed window last, on top of the others, when a press lands on it', () => {
     expect(
       map(
         pressHud(createTwoWindows(), 16, 30).hud.windows,
@@ -83,7 +83,7 @@ describe('pressHud', () => {
     ).toEqual(['notes', 'street']);
   });
 
-  it('should give up the keys when it presses outside every window', () => {
+  it('should return no focus when the press lands outside every window', () => {
     expect(
       pressHud(
         { ...createStreetHud(), focus: { window: 'notes', widget: 'note' } },
@@ -93,7 +93,7 @@ describe('pressHud', () => {
     ).toBeUndefined();
   });
 
-  it('should not change the HUD it is given', () => {
+  it('should not change the HUD it is given when it handles a press', () => {
     const hud = createStreetHud();
 
     pressHud(hud, 16, 30);

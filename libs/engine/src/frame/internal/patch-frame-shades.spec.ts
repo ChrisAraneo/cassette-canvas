@@ -5,7 +5,7 @@ import { toExtendedPixel } from '../../palette/to-extended-pixel';
 import { patchFrameShades } from './patch-frame-shades';
 
 describe('patchFrameShades', () => {
-  it('should move each pixel along its extended shade ramp by its light level', () => {
+  it('should return each pixel moved along its extended shade ramp by its light level when it patches the shades', () => {
     expect(
       patchFrameShades({
         pixels: Int16Array.from([0x34, 0x34, 0x94]),
@@ -18,7 +18,7 @@ describe('patchFrameShades', () => {
     ]);
   });
 
-  it('should leave transparent places transparent when they are lit', () => {
+  it('should return transparent places transparent when they are lit', () => {
     expect(
       patchFrameShades({
         pixels: Int16Array.from([TRANSPARENT]),
@@ -27,7 +27,7 @@ describe('patchFrameShades', () => {
     ).toEqual([TRANSPARENT]);
   });
 
-  it('should make places transparent when they hold values that are not pixels', () => {
+  it('should return transparent places when they hold values that are not pixels', () => {
     expect(
       patchFrameShades({
         pixels: Int16Array.from([0x0a]),
@@ -36,7 +36,7 @@ describe('patchFrameShades', () => {
     ).toEqual([TRANSPARENT]);
   });
 
-  it('should give an empty frame when the frame is empty', () => {
+  it('should return an empty frame when the frame is empty', () => {
     expect(
       patchFrameShades({
         pixels: new Int16Array(0),

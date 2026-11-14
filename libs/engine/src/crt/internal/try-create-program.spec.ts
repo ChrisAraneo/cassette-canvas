@@ -36,11 +36,11 @@ const createContext = (
   }) as unknown as WebGLRenderingContext;
 
 describe('tryCreateProgram', () => {
-  it('should give the linked program when both shaders compile', () => {
+  it('should return the linked program when both shaders compile', () => {
     expect(tryCreateProgram(createContext([], true))).toBe(PROGRAM);
   });
 
-  it('should compile the vertex and the fragment shader of the monitor', () => {
+  it('should pass the source of the vertex and the fragment shader of the monitor when it creates the program', () => {
     const calls: ProgramCall[] = [];
 
     tryCreateProgram(createContext(calls, true));
@@ -53,7 +53,7 @@ describe('tryCreateProgram', () => {
     ).toEqual([VERTEX_SHADER_SOURCE, FRAGMENT_SHADER_SOURCE]);
   });
 
-  it('should give no program when a shader does not compile', () => {
+  it('should return undefined when a shader does not compile', () => {
     expect(tryCreateProgram(createContext([], false))).toBeUndefined();
   });
 });

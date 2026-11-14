@@ -4,19 +4,19 @@ import { BASE_SHADE, SHADE_COUNT } from '../consts';
 import { toExtendedShade } from './to-extended-shade';
 
 describe('toExtendedShade', () => {
-  it('should leave one extended shade below the darkest shade', () => {
+  it('should return 1 when the shade is the darkest, so one extended shade sits below it', () => {
     expect(toExtendedShade(0)).toBe(1);
   });
 
-  it('should put four extended shades between neighbouring shades', () => {
+  it('should return four extended shades of distance when the shades are neighbors', () => {
     expect(toExtendedShade(3) - toExtendedShade(2)).toBe(4);
   });
 
-  it('should put the base shade in the middle of the extended ramp', () => {
+  it('should return the middle of the extended ramp when the shade is the base one', () => {
     expect(toExtendedShade(BASE_SHADE)).toBe(17);
   });
 
-  it('should leave two extended shades above the lightest shade', () => {
+  it('should return 29 when the shade is the lightest, so two extended shades sit above it', () => {
     expect(toExtendedShade(SHADE_COUNT - 1)).toBe(29);
   });
 });

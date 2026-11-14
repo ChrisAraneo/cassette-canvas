@@ -18,11 +18,11 @@ const COIN = placeSprite('coin', 0x34);
 const BAT = placeSprite('bat', 0x04);
 
 describe('filterOtherSprites', () => {
-  it('should drop the sprite when it carries the id', () => {
+  it('should return the other sprites when one carries the id', () => {
     expect(filterOtherSprites([HERO, COIN, BAT], 'coin')).toEqual([HERO, BAT]);
   });
 
-  it('should keep every sprite in order when none carries the id', () => {
+  it('should return every sprite in order when none carries the id', () => {
     expect(filterOtherSprites([HERO, COIN, BAT], 'ghost')).toEqual([
       HERO,
       COIN,
@@ -30,7 +30,7 @@ describe('filterOtherSprites', () => {
     ]);
   });
 
-  it('should give no sprites when there are none', () => {
+  it('should return no sprites when there are none', () => {
     expect(filterOtherSprites([], 'hero')).toEqual([]);
   });
 });

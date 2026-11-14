@@ -6,19 +6,19 @@ import { DEFAULT_HUD_COLOR, HUD_TEXT_SHADE } from './consts';
 import { createHudTheme } from './create-hud-theme';
 
 describe('createHudTheme', () => {
-  it('should take the beige-like color of the palette by default', () => {
+  it('should return DEFAULT_HUD_COLOR when no color is given', () => {
     expect(createHudTheme().color).toBe(DEFAULT_HUD_COLOR);
   });
 
-  it('should take the color it is given', () => {
+  it('should return the color it is given when it makes a theme', () => {
     expect(createHudTheme(9).color).toBe(9);
   });
 
-  it('should write every letter in a dark shade', () => {
+  it('should return HUD_TEXT_SHADE for the text when it makes a theme', () => {
     expect(createHudTheme().text).toBe(HUD_TEXT_SHADE);
   });
 
-  it('should keep every shade within the eight a sprite can use', () => {
+  it('should return every shade within the eight a sprite can use when it makes a theme', () => {
     expect(
       every(
         values({ ...createHudTheme(), color: 0 }),
@@ -27,11 +27,11 @@ describe('createHudTheme', () => {
     ).toBe(true);
   });
 
-  it('should make a button lighter than the window it sits on', () => {
+  it('should return a face lighter than the body when it makes a theme', () => {
     expect(createHudTheme().face).toBeGreaterThan(createHudTheme().body);
   });
 
-  it('should make the text darker than every surface', () => {
+  it('should return a text shade darker than the title when it makes a theme', () => {
     expect(createHudTheme().text).toBeLessThan(createHudTheme().title);
   });
 });

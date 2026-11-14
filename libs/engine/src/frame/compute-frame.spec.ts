@@ -117,13 +117,13 @@ const createRampScreen = (ambient: number, intensity: number): Screen => ({
 });
 
 describe('computeFrame', () => {
-  it('should draw the later sprite over the earlier one when they overlap', () => {
+  it('should return the later sprite over the earlier one when they overlap', () => {
     const frame = computeFrame(createLayeredScreen(), 2, 4, 3);
 
     expect(formatFrame(frame, 4)).toEqual(['rrbb', 'rggb', 'bggb']);
   });
 
-  it('should let the sprite below show through when a pixel is transparent', () => {
+  it('should return the sprite below when a pixel is transparent', () => {
     const frame = computeFrame(
       {
         ...createLayeredScreen(),
@@ -140,7 +140,7 @@ describe('computeFrame', () => {
     expect(formatFrame(frame, 2)).toEqual(['rr', 'rg']);
   });
 
-  it('should clip the sprites when they hang over the edges', () => {
+  it('should return the sprites clipped when they hang over the edges', () => {
     const frame = computeFrame(
       {
         ...createLayeredScreen(),
@@ -157,7 +157,7 @@ describe('computeFrame', () => {
     expect(formatFrame(frame, 4)).toEqual(['gbbb', 'bbbb', 'bbbr']);
   });
 
-  it('should show only the background when the screen holds no sprites', () => {
+  it('should return only the background when the screen holds no sprites', () => {
     const frame = computeFrame(
       { ...createLayeredScreen(), sprites: [] },
       2,
@@ -168,19 +168,19 @@ describe('computeFrame', () => {
     expect(formatFrame(frame, 3)).toEqual(['bbb', 'bbb']);
   });
 
-  it('should land on a darker sprite shade when the ambient light takes away four extended shades per shade', () => {
+  it('should return a darker sprite shade when the ambient light takes away four extended shades', () => {
     expect(computeFrame(createGrayScreen(-8), 1, 3, 1)).toEqual(
       times(3, () => toLitPixel(0x02, 0)),
     );
   });
 
-  it('should darken in steps finer than a sprite shade when the ambient light is not a multiple of four', () => {
+  it('should return steps finer than a sprite shade when the ambient light is not a multiple of four', () => {
     expect(computeFrame(createGrayScreen(-2), 1, 3, 1)).toEqual(
       times(3, () => toExtendedPixel(0, 15)),
     );
   });
 
-  it('should fade the light from a bright core when a light shines', () => {
+  it('should return the light faded from a bright core when a light shines', () => {
     const frame = computeFrame(
       {
         background: 0x00,
@@ -201,13 +201,13 @@ describe('computeFrame', () => {
     );
   });
 
-  it('should keep the sprite shades apart when a lamp shines on a bright scene', () => {
+  it('should return the sprite shades apart when a lamp shines on a bright scene', () => {
     const frame = computeFrame(createRampScreen(8, 16), 4, 4, 1);
 
     expect(uniq(frame)).toHaveLength(4);
   });
 
-  it('should leave the lightest extended shade for light brighter than this when a lamp shines on a bright scene', () => {
+  it('should return no lightest extended shade when a lamp shines on a bright scene', () => {
     const frame = computeFrame(createRampScreen(8, 16), 4, 4, 1);
 
     expect(includes(frame, toExtendedPixel(0, LIGHTEST_EXTENDED_SHADE))).toBe(
@@ -215,19 +215,19 @@ describe('computeFrame', () => {
     );
   });
 
-  it('should cast a shadow behind a sprite when the sprite casts shadows', () => {
+  it('should return a shadow behind a sprite when the sprite casts shadows', () => {
     const frame = computeFrame(createWallScreen(true), 3, 7, 3);
 
     expect(formatFrame(frame, 7)).toEqual(['LLLWDDD', 'LLLWDDD', 'LLLWDDD']);
   });
 
-  it('should let the light through when the sprite casts no shadow', () => {
+  it('should return no shadow when the sprite casts none', () => {
     const frame = computeFrame(createWallScreen(false), 3, 7, 3);
 
     expect(formatFrame(frame, 7)).toEqual(['LLLWLLL', 'LLLWLLL', 'LLLWLLL']);
   });
 
-  it('should keep the transparent background transparent when it is lit', () => {
+  it('should return a transparent background when it is lit', () => {
     const frame = computeFrame(
       {
         background: TRANSPARENT,
@@ -252,7 +252,7 @@ describe('computeFrame', () => {
     expect(screen).toEqual(createWallScreen(true));
   });
 
-  it('should keep an overlay in its own colors, whatever the light does', () => {
+  it('should return an overlay in its own colors when the light darkens the screen', () => {
     const frame = computeFrame(
       { ...createGrayScreen(-16), overlays: [placeOverlay(0x14, 0, 0)] },
       1,
@@ -263,7 +263,7 @@ describe('computeFrame', () => {
     expect(formatFrame(frame, 2)).toEqual(['rD']);
   });
 
-  it('should keep an overlay out of the shadows', () => {
+  it('should return an overlay outside the shadows when a sprite casts one', () => {
     const frame = computeFrame(
       { ...createWallScreen(true), overlays: [placeOverlay(0x14, 0, 6)] },
       3,
@@ -274,7 +274,7 @@ describe('computeFrame', () => {
     expect(formatFrame(frame, 7)).toEqual(['LLLWDDr', 'LLLWDDD', 'LLLWDDD']);
   });
 
-  it('should draw an overlay over the sprites', () => {
+  it('should return an overlay over the sprites when it sits on one', () => {
     const frame = computeFrame(
       { ...createLayeredScreen(), overlays: [placeOverlay(0x54, 1, 0)] },
       2,

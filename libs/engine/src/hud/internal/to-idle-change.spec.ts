@@ -4,7 +4,7 @@ import { createHud } from '../create-hud';
 import { toIdleChange } from './to-idle-change';
 
 describe('toIdleChange', () => {
-  it('should let go of what the pointer held', () => {
+  it('should return no grab when it makes an idle change', () => {
     expect(
       toIdleChange({
         ...createHud(),
@@ -19,7 +19,7 @@ describe('toIdleChange', () => {
     ).toBeUndefined();
   });
 
-  it('should give up the keys', () => {
+  it('should return no focus when it makes an idle change', () => {
     expect(
       toIdleChange({
         ...createHud(),
@@ -28,7 +28,7 @@ describe('toIdleChange', () => {
     ).toBeUndefined();
   });
 
-  it('should report nothing happening', () => {
+  it('should return no actions when it makes an idle change', () => {
     expect(toIdleChange(createHud()).actions).toEqual([]);
   });
 });

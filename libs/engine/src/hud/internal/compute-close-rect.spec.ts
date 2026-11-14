@@ -20,14 +20,14 @@ const WINDOW: HudWindow = Object.freeze({
 });
 
 describe('computeCloseRect', () => {
-  it('should be square', () => {
+  it('should return a square rectangle when it measures the close box', () => {
     expect(computeCloseRect(WINDOW)).toMatchObject({
       width: HUD_CLOSE_SIZE,
       height: HUD_CLOSE_SIZE,
     });
   });
 
-  it('should sit at the right end of the title bar', () => {
+  it('should return a rectangle at the right end of the title bar when it measures the close box', () => {
     const close = computeCloseRect(WINDOW);
 
     expect(close.column + close.width).toBe(
@@ -35,7 +35,7 @@ describe('computeCloseRect', () => {
     );
   });
 
-  it('should fit inside the title bar', () => {
+  it('should return a rectangle that fits inside the title bar when it measures the close box', () => {
     const close = computeCloseRect(WINDOW);
     const title = computeTitleRect(WINDOW);
 
@@ -45,7 +45,7 @@ describe('computeCloseRect', () => {
     ).toBe(true);
   });
 
-  it('should move with the right edge when the window is wider', () => {
+  it('should return a rectangle that moves with the right edge when the window is wider', () => {
     expect(computeCloseRect({ ...WINDOW, width: 120 }).column).toBe(
       computeCloseRect(WINDOW).column + 30,
     );

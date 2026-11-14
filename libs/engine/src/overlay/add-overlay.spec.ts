@@ -18,13 +18,13 @@ const createHudScreen = (): Screen => ({
 });
 
 describe('addOverlay', () => {
-  it('should place the overlay at the row and column when it adds it', () => {
+  it('should return the overlay at the row and column when it adds it', () => {
     expect(
       addOverlay(createHudScreen(), 'badge', BADGE, 3, 4).overlays[1],
     ).toEqual({ id: 'badge', overlay: BADGE, row: 3, column: 4 });
   });
 
-  it('should put the overlay on top of the others', () => {
+  it('should return the overlay on top when the screen already holds others', () => {
     expect(
       map(
         addOverlay(createHudScreen(), 'badge', BADGE, 3, 4).overlays,
@@ -33,13 +33,13 @@ describe('addOverlay', () => {
     ).toEqual(['panel', 'badge']);
   });
 
-  it('should take the old overlay off when one with the same id is added', () => {
+  it('should return no old overlay when one with the same id is added', () => {
     expect(
       addOverlay(createHudScreen(), 'panel', BADGE, 9, 9).overlays,
     ).toEqual([{ id: 'panel', overlay: BADGE, row: 9, column: 9 }]);
   });
 
-  it('should keep the very same sprites when it adds an overlay', () => {
+  it('should return the very same sprites when it adds an overlay', () => {
     const screen = createHudScreen();
 
     expect(addOverlay(screen, 'badge', BADGE, 0, 0).sprites).toBe(

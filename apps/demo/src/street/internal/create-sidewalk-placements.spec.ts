@@ -11,31 +11,31 @@ const withPrefix = (prefix: string): SpritePlacement[] =>
   filter(createSidewalkPlacements(), ({ id }) => startsWith(id, prefix));
 
 describe('createSidewalkPlacements', () => {
-  it('should pave two rows of tiles across the screen', () => {
+  it('should return two rows of tiles across the screen when it places the sidewalk', () => {
     expect(size(withPrefix('sidewalk-'))).toBe(
       (2 * SCREEN_WIDTH) / SPRITE_SIZE,
     );
   });
 
-  it('should plant every tree when it lays the sidewalk', () => {
+  it('should return every tree when it lays the sidewalk', () => {
     expect(size(withPrefix('tree-'))).toBe(size(TREE_COLUMNS) * size(TREE));
   });
 
-  it('should make the trees cast shadows when it plants them', () => {
+  it('should return the trees as shadow casters when it plants them', () => {
     expect(every(withPrefix('tree-'), { castsShadow: true })).toBe(true);
   });
 
-  it('should put up every lamp post when it lays the sidewalk', () => {
+  it('should return every lamp post when it lays the sidewalk', () => {
     expect(size(withPrefix('lamp-'))).toBe(
       size(LAMP_COLUMNS) * size(LAMP_POST),
     );
   });
 
-  it('should keep the lamp posts from blocking their own light when it puts them up', () => {
+  it('should return the lamp posts as no shadow casters when it places the sidewalk, so they do not block their own light', () => {
     expect(every(withPrefix('lamp-'), { castsShadow: false })).toBe(true);
   });
 
-  it('should draw the pavement before the trees and the lamps', () => {
+  it('should return the pavement before the trees and the lamps when it places the sidewalk', () => {
     expect(startsWith(createSidewalkPlacements()[0]?.id, 'sidewalk-')).toBe(
       true,
     );

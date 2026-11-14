@@ -45,27 +45,27 @@ const TABS: HudTabs = Object.freeze({
 });
 
 describe('patchMatchingWidget', () => {
-  it('should change the text of a label', () => {
+  it('should return the new text when the widget is a label', () => {
     expect(patchMatchingWidget(LABEL, 'fps', { text: 'FPS 30' })).toEqual({
       ...LABEL,
       text: 'FPS 30',
     });
   });
 
-  it('should change the text and the width of a button', () => {
+  it('should return the new text and width when the widget is a button', () => {
     expect(
       patchMatchingWidget(BUTTON, 'skip', { text: 'HOLD', width: 40 }),
     ).toEqual({ ...BUTTON, text: 'HOLD', width: 40 });
   });
 
-  it('should change the text of a field', () => {
+  it('should return the new text when the widget is a field', () => {
     expect(patchMatchingWidget(INPUT, 'note', { text: 'bye' })).toEqual({
       ...INPUT,
       text: 'bye',
     });
   });
 
-  it('should change the tabs of a strip', () => {
+  it('should return the new tabs when the widget is a strip', () => {
     expect(
       patchMatchingWidget(TABS, 'tabs', {
         tabs: [{ id: 'light', text: 'LIGHT' }],
@@ -73,11 +73,11 @@ describe('patchMatchingWidget', () => {
     ).toEqual({ ...TABS, tabs: [{ id: 'light', text: 'LIGHT' }] });
   });
 
-  it('should leave a field the widget does not have alone', () => {
+  it('should return the same widget when the change names a field it does not have', () => {
     expect(patchMatchingWidget(LABEL, 'fps', { width: 40 })).toEqual(LABEL);
   });
 
-  it('should give the very same widget when the id does not match', () => {
+  it('should return the very same widget when the id does not match', () => {
     expect(patchMatchingWidget(LABEL, 'clock', { text: 'FPS 30' })).toBe(LABEL);
   });
 });

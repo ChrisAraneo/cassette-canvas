@@ -5,7 +5,7 @@ import { PANEL_WIDTH } from '../consts';
 import { centerText } from './center-text';
 
 describe('centerText', () => {
-  it('should leave the same space on both sides when it centers text in a panel', () => {
+  it('should return a column with the same space on both sides when it centers text in a panel', () => {
     const column = centerText(3, 0);
     const width = 3 * GLYPH_PITCH - 1;
 
@@ -14,7 +14,7 @@ describe('centerText', () => {
     ).toBeLessThanOrEqual(1);
   });
 
-  it('should move the text with the panel when the panel starts further right', () => {
+  it('should return a column further right when the panel starts further right', () => {
     expect(centerText(4, 200)).toBe(200 + centerText(4, 0));
   });
 });

@@ -23,27 +23,27 @@ const WINDOW: HudWindow = Object.freeze({
 });
 
 describe('patchWindowWidgets', () => {
-  it('should change the widget with the id', () => {
+  it('should return the widget changed when it carries the id', () => {
     expect(
       patchWindowWidgets(WINDOW, 'street', 'fps', { text: 'FPS 30' })
         .widgets[0],
     ).toMatchObject({ id: 'fps', text: 'FPS 30' });
   });
 
-  it('should leave the other widgets as they are', () => {
+  it('should return the other widgets unchanged when it changes one', () => {
     expect(
       patchWindowWidgets(WINDOW, 'street', 'fps', { text: 'FPS 30' })
         .widgets[1],
     ).toBe(WIDGETS[1]);
   });
 
-  it('should give the very same window when the window id does not match', () => {
+  it('should return the very same window when the window id does not match', () => {
     expect(patchWindowWidgets(WINDOW, 'notes', 'fps', { text: 'X' })).toBe(
       WINDOW,
     );
   });
 
-  it('should change nothing when no widget has the id', () => {
+  it('should return the same widgets when no widget has the id', () => {
     expect(
       patchWindowWidgets(WINDOW, 'street', 'ghost', { text: 'X' }).widgets,
     ).toEqual(WIDGETS);

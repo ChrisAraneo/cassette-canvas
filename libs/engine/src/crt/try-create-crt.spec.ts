@@ -38,7 +38,7 @@ const createContext = ({
   }) as unknown as WebGLRenderingContext;
 
 describe('tryCreateCrt', () => {
-  it('should gather the program, the texture and the vertices when every part is made', () => {
+  it('should return the program, the texture, and the vertices when every part is made', () => {
     const crt = tryCreateCrt(
       createContext({ compiles: true, texture: TEXTURE }),
     );
@@ -50,7 +50,7 @@ describe('tryCreateCrt', () => {
     ]);
   });
 
-  it('should find the uniforms of the program when every part is made', () => {
+  it('should return the uniforms of the program when every part is made', () => {
     const crt = tryCreateCrt(
       createContext({ compiles: true, texture: TEXTURE }),
     );
@@ -58,19 +58,19 @@ describe('tryCreateCrt', () => {
     expect(crt?.uniforms.time).toEqual({ name: 'u_time' });
   });
 
-  it('should give no monitor when the shaders do not compile', () => {
+  it('should return undefined when the shaders do not compile', () => {
     expect(
       tryCreateCrt(createContext({ compiles: false, texture: TEXTURE })),
     ).toBeUndefined();
   });
 
-  it('should give no monitor when the context cannot make a texture', () => {
+  it('should return undefined when the context cannot make a texture', () => {
     expect(
       tryCreateCrt(createContext({ compiles: true, texture: null })),
     ).toBeUndefined();
   });
 
-  it('should give no monitor when there is no context', () => {
+  it('should return undefined when there is no context', () => {
     expect(tryCreateCrt(undefined)).toBeUndefined();
   });
 });

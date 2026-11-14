@@ -14,21 +14,21 @@ import { centerText } from './internal/center-text';
 const SCENERY = Object.freeze(createChartScenery());
 
 describe('composeChartScreen', () => {
-  it('should keep the background clear when it composes the chart', () => {
+  it('should return a clear background when it composes the chart', () => {
     expect(composeChartScreen(SCENERY, 60, 0).background).toBe(TRANSPARENT);
   });
 
-  it('should show the exact colors when it composes the chart', () => {
+  it('should return no ambient light and no lights when it composes the chart', () => {
     const screen = composeChartScreen(SCENERY, 60, 0);
 
     expect([screen.ambient, screen.lights]).toEqual([0, []]);
   });
 
-  it('should draw the scenery first when it composes the chart', () => {
+  it('should return the scenery as the first sprites when it composes the chart', () => {
     expect(composeChartScreen(SCENERY, 60, 0).sprites[0]).toBe(SCENERY[0]);
   });
 
-  it('should show the frame rate on the left when it is measured', () => {
+  it('should return the frame rate sprites on the left when it is measured', () => {
     expect(composeChartScreen(SCENERY, 59.8, 0).sprites).toEqual(
       expect.arrayContaining(
         placeText(' 60', FPS_FONT, {
@@ -40,7 +40,7 @@ describe('composeChartScreen', () => {
     );
   });
 
-  it('should show the time on the street on the right when time passes', () => {
+  it('should return the street time sprites on the right when time passes', () => {
     expect(
       composeChartScreen(SCENERY, 60, (3 * DAY_LENGTH) / HOURS_PER_DAY).sprites,
     ).toEqual(
@@ -54,7 +54,7 @@ describe('composeChartScreen', () => {
     );
   });
 
-  it('should draw a glyph for each digit of the frame rate when it is measured', () => {
+  it('should return a glyph for each digit of the frame rate when it is measured', () => {
     expect(
       size(
         filter(composeChartScreen(SCENERY, 144, 0).sprites, ({ id }) =>

@@ -23,13 +23,13 @@ const EVENING = 20 / 24;
 const NIGHT = 1 / 24;
 
 describe('composeWindowPlacements', () => {
-  it('should light no window when it is daylight', () => {
+  it('should return no window when it is daylight', () => {
     expect(
       composeWindowPlacements(WINDOWS, { phase: 0.5, darkness: 0 }),
     ).toEqual([]);
   });
 
-  it('should light only the windows whose dusk has come when night is falling', () => {
+  it('should return only the windows whose dusk has come when night is falling', () => {
     expect(
       map(
         composeWindowPlacements(WINDOWS, { phase: EVENING, darkness: 0.5 }),
@@ -38,7 +38,7 @@ describe('composeWindowPlacements', () => {
     ).toEqual(['early']);
   });
 
-  it('should light every window when it is dark before bedtime', () => {
+  it('should return every window when it is dark before bedtime', () => {
     expect(
       map(
         composeWindowPlacements(WINDOWS, { phase: EVENING, darkness: 1 }),
@@ -47,7 +47,7 @@ describe('composeWindowPlacements', () => {
     ).toEqual(['early', 'late']);
   });
 
-  it('should put a window out when its bedtime has passed', () => {
+  it('should return no window when its bedtime has passed', () => {
     expect(
       map(
         composeWindowPlacements(WINDOWS, { phase: NIGHT, darkness: 1 }),

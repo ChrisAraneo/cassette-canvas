@@ -29,22 +29,22 @@ const createGameScreen = (): Screen => ({
 });
 
 describe('removeSprite', () => {
-  it('should take the sprite off when the screen holds it', () => {
+  it('should return the sprites without it when the screen holds it', () => {
     expect(removeSprite(createGameScreen(), 'hero').sprites).toEqual([COIN]);
   });
 
-  it('should keep every sprite when none carries the id', () => {
+  it('should return every sprite when none carries the id', () => {
     expect(removeSprite(createGameScreen(), 'ghost').sprites).toEqual([
       HERO,
       COIN,
     ]);
   });
 
-  it('should keep the background when it takes a sprite off', () => {
+  it('should return the same background when it takes a sprite off', () => {
     expect(removeSprite(createGameScreen(), 'hero').background).toBe(0x91);
   });
 
-  it('should give an empty screen when the screen is already empty', () => {
+  it('should return an empty screen when the screen is already empty', () => {
     expect(
       removeSprite({ ...createGameScreen(), sprites: [] }, 'hero').sprites,
     ).toEqual([]);

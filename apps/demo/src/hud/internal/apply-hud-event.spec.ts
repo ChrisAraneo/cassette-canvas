@@ -54,7 +54,7 @@ const toFieldText = (hud: Hud): string | undefined =>
     .otherwise(() => undefined);
 
 describe('applyHudEvent', () => {
-  it('should take hold of a window when its title bar is pressed', () => {
+  it('should return the window grabbed when its title bar is pressed', () => {
     const state = createState();
 
     expect(
@@ -66,7 +66,7 @@ describe('applyHudEvent', () => {
     ).toMatchObject({ kind: 'drag', window: NOTE_WINDOW });
   });
 
-  it('should give the field the keys when it is pressed', () => {
+  it('should return the focus on the field when it is pressed', () => {
     const state = createState();
 
     expect(
@@ -78,7 +78,7 @@ describe('applyHudEvent', () => {
     ).toEqual({ window: NOTE_WINDOW, widget: NOTE_FIELD });
   });
 
-  it('should type into the field that has the keys', () => {
+  it('should return the character in the focused field when a key goes down', () => {
     const state = createState();
 
     expect(
@@ -98,7 +98,7 @@ describe('applyHudEvent', () => {
     ).toBe('A');
   });
 
-  it('should answer what came of the event', () => {
+  it('should return the clock moved when a press and a release cause an hour click', () => {
     const state = createState();
     const spot = toSpot(state.hud, STREET_WINDOW, HOUR_BUTTON);
 
@@ -111,7 +111,7 @@ describe('applyHudEvent', () => {
     ).toBe(HOUR_LENGTH);
   });
 
-  it('should write a line in the title bar when the field answers the enter key', () => {
+  it('should return the line in the title bar when the field reads the enter key', () => {
     const state = createState();
 
     expect(
@@ -132,7 +132,7 @@ describe('applyHudEvent', () => {
     ).toBeDefined();
   });
 
-  it('should not change the state it is given', () => {
+  it('should not change the state it is given when it handles an event', () => {
     const state = createState();
 
     applyHudEvent(

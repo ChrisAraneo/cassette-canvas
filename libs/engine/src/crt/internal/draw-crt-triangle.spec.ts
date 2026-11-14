@@ -33,7 +33,7 @@ const createContext = (calls: DrawCall[]): WebGLRenderingContext =>
   }) as unknown as WebGLRenderingContext;
 
 describe('drawCrtTriangle', () => {
-  it('should cover the whole canvas with one triangle when it draws', () => {
+  it('should draw one triangle that covers the whole canvas when it draws the monitor', () => {
     const calls: DrawCall[] = [];
 
     drawCrtTriangle(createContext(calls), CRT);

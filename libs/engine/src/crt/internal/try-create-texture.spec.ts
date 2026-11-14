@@ -30,11 +30,11 @@ const createContext = (
   }) as unknown as WebGLRenderingContext;
 
 describe('tryCreateTexture', () => {
-  it('should give the texture when the context can make one', () => {
+  it('should return the texture when the context can make one', () => {
     expect(tryCreateTexture(createContext([], TEXTURE))).toBe(TEXTURE);
   });
 
-  it('should read the nearest pixel and stop at the edges when it samples the texture', () => {
+  it('should set the texture to read the nearest pixel and stop at the edges when it creates one', () => {
     const calls: TextureCall[] = [];
 
     tryCreateTexture(createContext(calls, TEXTURE));
@@ -48,7 +48,7 @@ describe('tryCreateTexture', () => {
     ]);
   });
 
-  it('should give no texture when the context cannot make one', () => {
+  it('should return undefined when the context cannot make one', () => {
     expect(tryCreateTexture(createContext([], null))).toBeUndefined();
   });
 });

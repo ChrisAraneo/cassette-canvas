@@ -32,19 +32,19 @@ const createWindow = (page: string): HudWindow => ({
 });
 
 describe('filterPageWidgets', () => {
-  it('should keep the widgets of the open page', () => {
+  it('should return the widgets of the open page when a page is open', () => {
     expect(
       map(filterPageWidgets(createWindow('scene')), (widget) => widget.id),
     ).toEqual(['always', 'scene']);
   });
 
-  it('should keep a widget with no page whatever page is open', () => {
+  it('should return a widget with no page when any page is open', () => {
     expect(
       map(filterPageWidgets(createWindow('light')), (widget) => widget.id),
     ).toEqual(['always', 'light']);
   });
 
-  it('should keep only the widgets with no page when no page is open', () => {
+  it('should return only the widgets with no page when no page is open', () => {
     expect(
       map(filterPageWidgets(createWindow('')), (widget) => widget.id),
     ).toEqual(['always']);

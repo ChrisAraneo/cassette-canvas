@@ -60,7 +60,7 @@ describe('listenToPointer', () => {
     ]);
   });
 
-  it('should take hold of the pointer while a button is down', () => {
+  it('should call setPointerCapture with the pointer id when a button goes down', () => {
     const listeners: Listeners = {};
     const held: number[] = [];
     const canvas = createCanvas(listeners);

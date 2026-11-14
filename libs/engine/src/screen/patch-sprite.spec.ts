@@ -31,46 +31,46 @@ const createGameScreen = (): Screen => ({
 });
 
 describe('patchSprite', () => {
-  it('should move the sprite when it gets a new row and column', () => {
+  it('should return the sprite moved when it gets a new row and column', () => {
     expect(
       patchSprite(createGameScreen(), 'hero', { row: 10, column: 20 })
         .sprites[0],
     ).toEqual({ ...HERO, row: 10, column: 20 });
   });
 
-  it('should swap the sprite when it gets a new one', () => {
+  it('should return the new sprite when it gets one', () => {
     expect(
       patchSprite(createGameScreen(), 'hero', { sprite: HERO_WALKING })
         .sprites[0],
     ).toEqual({ ...HERO, sprite: HERO_WALKING });
   });
 
-  it('should make the sprite cast shadows when it is told to', () => {
+  it('should return the sprite casting shadows when it is told to', () => {
     expect(
       patchSprite(createGameScreen(), 'hero', { castsShadow: true }).sprites[0]
         ?.castsShadow,
     ).toBe(true);
   });
 
-  it('should leave the other sprites as they are when it changes one', () => {
+  it('should return the very same other sprites when it changes one', () => {
     expect(
       patchSprite(createGameScreen(), 'hero', { row: 10 }).sprites[1],
     ).toBe(COIN);
   });
 
-  it('should keep the drawing order when it changes a sprite', () => {
+  it('should return the sprites in the same drawing order when it changes one', () => {
     expect(
       patchSprite(createGameScreen(), 'hero', { row: 10 }).sprites[0]?.id,
     ).toBe('hero');
   });
 
-  it('should change nothing when no sprite carries the id', () => {
+  it('should return the same sprites when no sprite carries the id', () => {
     expect(
       patchSprite(createGameScreen(), 'ghost', { row: 10 }).sprites,
     ).toEqual([HERO, COIN]);
   });
 
-  it('should keep the background when it changes a sprite', () => {
+  it('should return the same background when it changes a sprite', () => {
     expect(
       patchSprite(createGameScreen(), 'hero', { row: 10 }).background,
     ).toBe(0x91);

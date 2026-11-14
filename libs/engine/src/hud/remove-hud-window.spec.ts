@@ -20,7 +20,7 @@ const createTwoWindows = (): Hud =>
   );
 
 describe('removeHudWindow', () => {
-  it('should take the window with the id off, and keep the rest', () => {
+  it('should return the other windows in order when one carries the id', () => {
     expect(
       map(
         removeHudWindow(createTwoWindows(), 'street').windows,
@@ -29,7 +29,7 @@ describe('removeHudWindow', () => {
     ).toEqual(['notes']);
   });
 
-  it('should let go of a window it removes', () => {
+  it('should return no grab when it removes the window the pointer holds', () => {
     expect(
       removeHudWindow(
         {
@@ -47,7 +47,7 @@ describe('removeHudWindow', () => {
     ).toBeUndefined();
   });
 
-  it('should keep holding another window', () => {
+  it('should return the grab when it removes another window', () => {
     expect(
       removeHudWindow(
         {
@@ -65,7 +65,7 @@ describe('removeHudWindow', () => {
     ).toMatchObject({ window: 'notes' });
   });
 
-  it('should give up the keys of a window it removes', () => {
+  it('should return no focus when it removes the window that takes the keys', () => {
     expect(
       removeHudWindow(
         {
@@ -77,7 +77,7 @@ describe('removeHudWindow', () => {
     ).toBeUndefined();
   });
 
-  it('should change nothing when no window has the id', () => {
+  it('should return the same HUD when no window has the id', () => {
     expect(removeHudWindow(createTwoWindows(), 'ghost')).toEqual(
       createTwoWindows(),
     );

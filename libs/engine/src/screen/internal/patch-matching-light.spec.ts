@@ -12,7 +12,7 @@ const TORCH: Light = Object.freeze({
 });
 
 describe('patchMatchingLight', () => {
-  it('should apply every change when the light carries the id', () => {
+  it('should return every change when the light carries the id', () => {
     expect(
       patchMatchingLight(TORCH, 'torch', {
         row: 8,
@@ -23,14 +23,14 @@ describe('patchMatchingLight', () => {
     ).toEqual({ id: 'torch', row: 8, column: 9, radius: 16, intensity: 2 });
   });
 
-  it('should keep the parts that are not changed when only some change', () => {
+  it('should return the parts that are not changed when only some change', () => {
     expect(patchMatchingLight(TORCH, 'torch', { intensity: 1 })).toEqual({
       ...TORCH,
       intensity: 1,
     });
   });
 
-  it('should give back the very same light when it carries another id', () => {
+  it('should return the very same light when it carries another id', () => {
     expect(patchMatchingLight(TORCH, 'lantern', { row: 8 })).toBe(TORCH);
   });
 });

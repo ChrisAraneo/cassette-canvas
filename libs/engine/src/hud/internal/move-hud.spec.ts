@@ -22,23 +22,23 @@ const createDraggingHud = (): Hud => ({
 });
 
 describe('moveHud', () => {
-  it('should keep the spot the pointer took hold of under the pointer', () => {
+  it('should return the window moved when the pointer drags it, so the grabbed spot stays under the pointer', () => {
     expect(
       findHudWindow(moveHud(createDraggingHud(), 40, 60).hud, 'street'),
     ).toMatchObject({ row: 34, column: 50 });
   });
 
-  it('should let a window go beyond the edge of the screen', () => {
+  it('should return the window beyond the edge of the screen when the pointer goes there', () => {
     expect(
       findHudWindow(moveHud(createDraggingHud(), 0, 0).hud, 'street'),
     ).toMatchObject({ row: -6, column: -10 });
   });
 
-  it('should report nothing happening while it drags', () => {
+  it('should return no actions when it drags a window', () => {
     expect(moveHud(createDraggingHud(), 40, 60).actions).toEqual([]);
   });
 
-  it('should move nothing when the pointer holds a button', () => {
+  it('should return the window where it was when the pointer holds a button', () => {
     expect(
       moveHud(
         {
@@ -57,7 +57,7 @@ describe('moveHud', () => {
     ).toMatchObject({ windows: createStreetHud().windows });
   });
 
-  it('should give back the very same HUD when the pointer holds nothing', () => {
+  it('should return the very same HUD when the pointer holds nothing', () => {
     const hud = createStreetHud();
 
     expect(moveHud(hud, 40, 60).hud).toBe(hud);

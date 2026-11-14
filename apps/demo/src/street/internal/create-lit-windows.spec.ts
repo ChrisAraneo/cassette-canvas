@@ -21,11 +21,11 @@ const HOUSE = Object.freeze({
 const HOME_WINDOWS = slice(createLitWindows([HOUSE]), 0, 2);
 
 describe('createLitWindows', () => {
-  it('should find every home window and every shop window when it looks at the facade', () => {
+  it('should return every home window and every shop window when it looks at the facade', () => {
     expect(size(createLitWindows([HOUSE]))).toBe(4);
   });
 
-  it('should cover the window with its glow when it lights a window', () => {
+  it('should return the glow over the window when it lights a window', () => {
     expect(
       map(createLitWindows([HOUSE])[1]?.placements, ({ row, column }) => [
         row,
@@ -37,7 +37,7 @@ describe('createLitWindows', () => {
     ]);
   });
 
-  it('should light the home windows one by one as night falls', () => {
+  it('should return the home windows lit one by one when night falls', () => {
     expect(
       every(
         HOME_WINDOWS,
@@ -46,7 +46,7 @@ describe('createLitWindows', () => {
     ).toBe(true);
   });
 
-  it('should put the home windows out between 21:00 and 3:00', () => {
+  it('should return a bedtime between 21:00 and 3:00 for every home window when it lights them', () => {
     expect(
       every(
         HOME_WINDOWS,
@@ -56,7 +56,7 @@ describe('createLitWindows', () => {
     ).toBe(true);
   });
 
-  it('should keep shop hours when it lights a shop window', () => {
+  it('should return the shop hours when it lights a shop window', () => {
     const shop = createLitWindows([HOUSE])[2];
 
     expect([shop?.dusk, shop?.bedtime]).toEqual([
@@ -66,7 +66,7 @@ describe('createLitWindows', () => {
     expect(map(shop?.placements, 'sprite')).toEqual(map(LIT_SHOP, 'sprite'));
   });
 
-  it('should find no windows when there are no buildings', () => {
+  it('should return no windows when there are no buildings', () => {
     expect(createLitWindows([])).toEqual([]);
   });
 });

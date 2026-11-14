@@ -23,33 +23,33 @@ const TABS: HudWidget = Object.freeze({
 });
 
 describe('toHudWindow', () => {
-  it('should keep every setting it is given', () => {
+  it('should return every setting it is given when it makes a window', () => {
     expect(toHudWindow(createHud(), SETTINGS)).toMatchObject(SETTINGS);
   });
 
-  it('should take the color of the HUD when none is given', () => {
+  it('should return the color of the HUD when none is given', () => {
     expect(toHudWindow(createHud(3), SETTINGS).color).toBe(3);
   });
 
-  it('should keep a color of its own', () => {
+  it('should return the color of the window when it has one', () => {
     expect(toHudWindow(createHud(3), { ...SETTINGS, color: 9 }).color).toBe(9);
   });
 
-  it('should let the window be closed unless it is told otherwise', () => {
+  it('should return a closable window when nothing says otherwise', () => {
     expect(toHudWindow(createHud(), SETTINGS).closable).toBe(true);
   });
 
-  it('should hold no widgets when none are given', () => {
+  it('should return no widgets when none are given', () => {
     expect(toHudWindow(createHud(), SETTINGS).widgets).toEqual([]);
   });
 
-  it('should open the first tab when no page is given', () => {
+  it('should return the first tab as the page when none is given', () => {
     expect(
       toHudWindow(createHud(), { ...SETTINGS, widgets: [TABS] }).page,
     ).toBe('scene');
   });
 
-  it('should keep the page it is given', () => {
+  it('should return the page it is given when it makes a window', () => {
     expect(
       toHudWindow(createHud(), {
         ...SETTINGS,

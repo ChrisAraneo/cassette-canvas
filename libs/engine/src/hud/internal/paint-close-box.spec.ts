@@ -30,31 +30,31 @@ const toBevel = (hud: Hud): OverlayPaint | undefined =>
   paintCloseBox(hud, WINDOW)[1];
 
 describe('paintCloseBox', () => {
-  it('should paint nothing when the window cannot be closed', () => {
+  it('should return no paint steps when the window cannot be closed', () => {
     expect(paintCloseBox(createHud(), { ...WINDOW, closable: false })).toEqual(
       [],
     );
   });
 
-  it('should fill the box with the light face of the theme', () => {
+  it('should return the box filled with the light face of the theme when it paints a close box', () => {
     expect(paintCloseBox(createHud(), WINDOW)[0]).toMatchObject({
       pixel: toPixel(15, createHud().theme.face),
     });
   });
 
-  it('should light the top of the box while it is not held', () => {
+  it('should return the light on top of the box when it is not held', () => {
     expect(toBevel(createHud())).toMatchObject({
       pixel: toPixel(15, createHud().theme.highlight),
     });
   });
 
-  it('should turn the bevel around while it is held', () => {
+  it('should return the bevel turned around when it is held', () => {
     expect(toBevel(createHoldingHud())).toMatchObject({
       pixel: toPixel(15, createHud().theme.shadow),
     });
   });
 
-  it('should move the cross down and right while it is held', () => {
+  it('should return the cross moved down and right when it is held', () => {
     const resting = paintCloseBox(createHud(), WINDOW);
     const held = paintCloseBox(createHoldingHud(), WINDOW);
 

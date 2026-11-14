@@ -25,19 +25,19 @@ const LABEL: HudWidget = Object.freeze({
 });
 
 describe('computeFirstPage', () => {
-  it('should open the first tab of the first strip', () => {
+  it('should return the first tab of the first strip when the widgets hold one', () => {
     expect(computeFirstPage([LABEL, TABS])).toBe('scene');
   });
 
-  it('should open no page when there are no tabs', () => {
+  it('should return an empty page when there are no tabs', () => {
     expect(computeFirstPage([LABEL])).toBe('');
   });
 
-  it('should open no page when the strip holds no tabs', () => {
+  it('should return an empty page when the strip holds no tabs', () => {
     expect(computeFirstPage([{ ...TABS, tabs: [] }])).toBe('');
   });
 
-  it('should open no page when there are no widgets at all', () => {
+  it('should return an empty page when there are no widgets at all', () => {
     expect(computeFirstPage([])).toBe('');
   });
 });

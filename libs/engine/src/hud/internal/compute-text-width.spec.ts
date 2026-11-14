@@ -5,11 +5,11 @@ import { measureText } from '../../text/measure-text';
 import { computeTextWidth } from './compute-text-width';
 
 describe('computeTextWidth', () => {
-  it('should leave the gap after the last character out', () => {
+  it('should return the width without the gap after the last character when it measures a text', () => {
     expect(computeTextWidth('HI')).toBe(measureText('HI') - TEXT_GAP);
   });
 
-  it('should give nothing for an empty text', () => {
+  it('should return 0 when the text is empty', () => {
     expect(computeTextWidth('')).toBe(0);
   });
 });

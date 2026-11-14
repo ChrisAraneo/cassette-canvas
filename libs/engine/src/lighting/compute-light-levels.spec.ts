@@ -47,19 +47,19 @@ const stackOf = (count: number): Light[] =>
   map(range(count), (index) => ({ ...TORCH, id: `torch-${index}` }));
 
 describe('computeLightLevels', () => {
-  it('should give every place the ambient light when there are no lights', () => {
+  it('should return the ambient light for every place when there are no lights', () => {
     expect(levelsOf(-3, [])).toEqual([-3, -3, -3, -3, -3]);
   });
 
-  it('should move a pixel by the whole intensity at the center of one light', () => {
+  it('should return the whole intensity when the place is the center of one light', () => {
     expect(centerOf(DAYLIGHT, [TORCH])).toBe(TORCH.intensity);
   });
 
-  it('should fade the light back to the ambient light at its radius', () => {
+  it('should return the ambient light when the place is at the radius of the light', () => {
     expect(levelsOf(-3, [TORCH])[4]).toBe(-3);
   });
 
-  it('should fade the light down with every step away from its center', () => {
+  it('should return less light when the place is a step further from the center', () => {
     const levels = levelsOf(-3, [TORCH]);
 
     expect(levels[1] ?? 0).toBeLessThan(levels[0] ?? 0);
@@ -67,7 +67,7 @@ describe('computeLightLevels', () => {
     expect(levels[3] ?? 0).toBeLessThan(levels[2] ?? 0);
   });
 
-  it('should add the light of two lights that overlap, not their shades', () => {
+  it('should return the added light, not the added shades, when two lights overlap', () => {
     const one = levelsOf(DAYLIGHT, [TORCH])[2] ?? 0;
     const both = levelsOf(DAYLIGHT, [TORCH, LANTERN])[2] ?? 0;
 
@@ -75,13 +75,13 @@ describe('computeLightLevels', () => {
     expect(both).toBeLessThan(2 * one);
   });
 
-  it('should spend no more than one stop of shades on every doubling of the lights', () => {
+  it('should return no more than one stop of shades when the lights double', () => {
     expect(centerOf(8, stackOf(8))).toBeLessThanOrEqual(
       centerOf(8, stackOf(1)) + 3 * EXTENDED_SHADES_PER_STOP,
     );
   });
 
-  it('should show a light far less in daylight than in the dark', () => {
+  it('should return far less light when the scene is daylight than when it is dark', () => {
     const dim: Light = { ...TORCH, intensity: 1 };
 
     expect(centerOf(NIGHT, [dim]) - NIGHT).toBeGreaterThan(
@@ -89,7 +89,7 @@ describe('computeLightLevels', () => {
     );
   });
 
-  it('should give no levels when the screen has no places', () => {
+  it('should return no levels when the screen has no places', () => {
     expect(
       computeLightLevels({
         ...createLighting(DAYLIGHT, [TORCH]),

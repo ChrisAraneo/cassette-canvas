@@ -29,15 +29,15 @@ const createGameScreen = (sprites: SpritePlacement[]): Screen => ({
 });
 
 describe('findSprite', () => {
-  it('should give the placed sprite when the screen holds it', () => {
+  it('should return the placed sprite when the screen holds it', () => {
     expect(findSprite(createGameScreen([HERO, COIN]), 'coin')).toBe(COIN);
   });
 
-  it('should give nothing when no sprite carries the id', () => {
+  it('should return undefined when no sprite carries the id', () => {
     expect(findSprite(createGameScreen([HERO, COIN]), 'ghost')).toBeUndefined();
   });
 
-  it('should give nothing when the screen is empty', () => {
+  it('should return undefined when the screen is empty', () => {
     expect(findSprite(createGameScreen([]), 'hero')).toBeUndefined();
   });
 });

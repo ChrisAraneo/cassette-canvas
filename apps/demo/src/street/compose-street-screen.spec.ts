@@ -25,25 +25,25 @@ const indexOfPrefix = (
 ): number => findIndex(sprites, ({ id }) => startsWith(id, prefix));
 
 describe('composeStreetScreen', () => {
-  it('should paint the day sky behind everything when it composes the street', () => {
+  it('should return the day sky as the background when it composes the street', () => {
     expect(composeStreetScreen(SCENERY, 0).background).toBe(DAY_SKY);
   });
 
-  it('should keep the authored colors when it is morning', () => {
+  it('should return no ambient light when it is morning', () => {
     expect(composeStreetScreen(SCENERY, 0).ambient).toBeCloseTo(0);
   });
 
-  it('should only light the glow of the sun when it is morning', () => {
+  it('should return only the glow of the sun as a light when it is morning', () => {
     expect(composeStreetScreen(SCENERY, 0).lights).toEqual([
       expect.objectContaining({ id: SUN_ID }),
     ]);
   });
 
-  it('should darken everything when it is night', () => {
+  it('should return the ambient light of the night when it is night', () => {
     expect(composeStreetScreen(SCENERY, NIGHT).ambient).toBe(-NIGHT_DEPTH);
   });
 
-  it('should light the windows, the lamps and the headlights when it is night', () => {
+  it('should return the window, lamp, and headlight lights when it is night', () => {
     const screen = composeStreetScreen(SCENERY, NIGHT);
 
     expect([
@@ -53,13 +53,13 @@ describe('composeStreetScreen', () => {
     ]).toEqual([true, true, true]);
   });
 
-  it('should show the lit skyline when it is night', () => {
+  it('should return the lit skyline sprites when it is night', () => {
     expect(composeStreetScreen(SCENERY, NIGHT).sprites).toEqual(
       expect.arrayContaining([...SCENERY.nightSkyline]),
     );
   });
 
-  it('should draw the sky behind the buildings and the buildings behind the people', () => {
+  it('should return the sky before the buildings and the buildings before the people when it composes the screen', () => {
     const sprites = composeStreetScreen(SCENERY, 0).sprites;
 
     expect(indexOfPrefix(sprites, SUN_ID)).toBeLessThan(
@@ -70,7 +70,7 @@ describe('composeStreetScreen', () => {
     );
   });
 
-  it('should draw the cars over the road when it composes the street', () => {
+  it('should return the car sprites after the road when it composes the street', () => {
     const sprites = composeStreetScreen(SCENERY, 0).sprites;
 
     expect(
@@ -79,7 +79,7 @@ describe('composeStreetScreen', () => {
     expect(startsWith(last(sprites)?.id, 'car-')).toBe(true);
   });
 
-  it('should add sprites only for what changes at night', () => {
+  it('should return extra sprites only for what changes when it is night', () => {
     expect(
       size(composeStreetScreen(SCENERY, NIGHT).sprites) -
         size(composeStreetScreen(SCENERY, 0).sprites),

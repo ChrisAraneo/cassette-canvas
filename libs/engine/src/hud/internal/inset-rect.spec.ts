@@ -5,7 +5,7 @@ import { insetRect } from './inset-rect';
 const BOX = Object.freeze({ row: 0, column: 0, width: 10, height: 8 });
 
 describe('insetRect', () => {
-  it('should move the corner in and take the amount off both sides', () => {
+  it('should return the corner moved in and the amount taken off both sides when it insets a rectangle', () => {
     expect(insetRect(BOX, 1)).toEqual({
       row: 1,
       column: 1,
@@ -14,7 +14,7 @@ describe('insetRect', () => {
     });
   });
 
-  it('should give back the same rectangle for no inset', () => {
+  it('should return the same rectangle when the inset is 0', () => {
     expect(insetRect(BOX, 0)).toEqual(BOX);
   });
 });

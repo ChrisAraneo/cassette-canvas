@@ -14,11 +14,11 @@ const createDayScreen = (): Screen => ({
 });
 
 describe('patchAmbient', () => {
-  it('should set the ambient light when it changes it', () => {
+  it('should return the new ambient light when it changes it', () => {
     expect(patchAmbient(createDayScreen(), -3).ambient).toBe(-3);
   });
 
-  it('should keep the very same sprites when it changes the ambient light', () => {
+  it('should return the very same sprites when it changes the ambient light', () => {
     const screen = createDayScreen();
 
     expect(patchAmbient(screen, -3).sprites).toBe(screen.sprites);

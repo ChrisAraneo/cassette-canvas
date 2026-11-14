@@ -17,7 +17,7 @@ const WINDOW: HudWindow = Object.freeze({
 });
 
 describe('computeWindowRect', () => {
-  it('should take the place and the size of the window', () => {
+  it('should return the place and the size of the window when it measures one', () => {
     expect(computeWindowRect(WINDOW)).toEqual({
       row: 10,
       column: 20,

@@ -10,25 +10,25 @@ const PALETTE: Palette = Object.freeze({
 });
 
 describe('toFrameBytes', () => {
-  it('should write each pixel as opaque red, green and blue bytes when the palette holds it', () => {
+  it('should return each pixel as opaque red, green, and blue bytes when the palette holds it', () => {
     expect(toFrameBytes([0x14, 0x54], PALETTE)).toEqual(
       Uint8ClampedArray.from([10, 20, 30, 255, 40, 50, 60, 255]),
     );
   });
 
-  it('should write a clear pixel when the pixel is transparent', () => {
+  it('should return a clear pixel when the pixel is transparent', () => {
     expect(toFrameBytes([TRANSPARENT], PALETTE)).toEqual(
       Uint8ClampedArray.from([0, 0, 0, 0]),
     );
   });
 
-  it('should write a clear pixel when the palette does not hold the pixel', () => {
+  it('should return a clear pixel when the palette does not hold the pixel', () => {
     expect(toFrameBytes([0x77], PALETTE)).toEqual(
       Uint8ClampedArray.from([0, 0, 0, 0]),
     );
   });
 
-  it('should write no bytes when the frame is empty', () => {
+  it('should return no bytes when the frame is empty', () => {
     expect(toFrameBytes([], PALETTE)).toEqual(Uint8ClampedArray.from([]));
   });
 });

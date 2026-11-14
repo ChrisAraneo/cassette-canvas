@@ -17,21 +17,21 @@ const findTile = (row: number, column: number): SpritePlacement | undefined =>
   find(createRoadPlacements(), { row, column });
 
 describe('createRoadPlacements', () => {
-  it('should pave every row from the far curb to the near one across the screen', () => {
+  it('should return every row from the far curb to the near one across the screen when it places the road', () => {
     expect(size(createRoadPlacements())).toBe(
       ((NEAR_CURB_ROW - ROAD_ROW) / SPRITE_SIZE + 1) *
         (SCREEN_WIDTH / SPRITE_SIZE),
     );
   });
 
-  it('should put a curb at both edges of the road', () => {
+  it('should return a curb at both edges when it places the road', () => {
     expect([
       findTile(ROAD_ROW, 0)?.sprite,
       findTile(NEAR_CURB_ROW, 0)?.sprite,
     ]).toEqual([CURB, NEAR_CURB]);
   });
 
-  it('should dash the line between the lanes when it paves the middle row', () => {
+  it('should return a dashed line between the lanes in the middle row when it places the road', () => {
     expect(
       map(
         filter(createRoadPlacements(), { row: LANE_MARK_ROW }),
@@ -45,7 +45,7 @@ describe('createRoadPlacements', () => {
     );
   });
 
-  it('should pave the lanes with plain asphalt', () => {
+  it('should return plain asphalt in the lanes when it places the road', () => {
     expect(
       uniq(
         map(

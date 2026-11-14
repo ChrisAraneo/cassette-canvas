@@ -42,37 +42,37 @@ const createClosingHud = (): Hud => ({
 });
 
 describe('releaseHud', () => {
-  it('should report a click when the pointer is still on the button', () => {
+  it('should return a click action when the pointer is still on the button', () => {
     expect(releaseHud(createPressingHud(), 30, 30).actions).toEqual([
       { kind: 'click', window: 'street', widget: 'skip', value: '' },
     ]);
   });
 
-  it('should report nothing when the pointer slid off the button', () => {
+  it('should return no actions when the pointer slid off the button', () => {
     expect(releaseHud(createPressingHud(), 80, 100).actions).toEqual([]);
   });
 
-  it('should let go of the button either way', () => {
+  it('should return no grab when the pointer is still on the button and when it slid off', () => {
     expect(releaseHud(createPressingHud(), 80, 100).hud.grab).toBeUndefined();
   });
 
-  it('should close the window when the pointer is still on the close box', () => {
+  it('should return the HUD without the window when the pointer is still on the close box', () => {
     expect(
       findHudWindow(releaseHud(createClosingHud(), 16, 101).hud, 'street'),
     ).toBeUndefined();
   });
 
-  it('should report the window it closed', () => {
+  it('should return a close action with the window when it closes one', () => {
     expect(releaseHud(createClosingHud(), 16, 101).actions).toEqual([
       { kind: 'close', window: 'street', widget: '', value: '' },
     ]);
   });
 
-  it('should keep the window when the pointer slid off the close box', () => {
+  it('should return the window when the pointer slid off the close box', () => {
     expect(size(releaseHud(createClosingHud(), 80, 100).hud.windows)).toBe(1);
   });
 
-  it('should let go after a drag, without reporting anything', () => {
+  it('should return no grab and no actions when a drag ends', () => {
     const change = releaseHud(
       {
         ...createStreetHud(),

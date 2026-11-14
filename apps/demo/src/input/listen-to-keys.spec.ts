@@ -35,15 +35,15 @@ const listen = (key: string): HudEvent[] => {
 };
 
 describe('listenToKeys', () => {
-  it('should post a character that goes down', () => {
+  it('should post a key event when a character goes down', () => {
     expect(listen('A')).toEqual([{ kind: 'key', key: 'A' }]);
   });
 
-  it('should post the keys a field answers by name', () => {
+  it('should post a key event when a named key goes down', () => {
     expect(listen('Enter')).toEqual([{ kind: 'key', key: 'Enter' }]);
   });
 
-  it('should post nothing for a key the HUD does not read', () => {
+  it('should post nothing when the HUD does not read the key', () => {
     expect(listen('ArrowUp')).toEqual([]);
   });
 });

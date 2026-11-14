@@ -18,7 +18,7 @@ const WINDOW: HudWindow = Object.freeze({
 });
 
 describe('computeTitleRect', () => {
-  it('should sit inside the frame and run the width of the window', () => {
+  it('should return a rectangle inside the frame that runs the width of the window when it measures the title bar', () => {
     expect(computeTitleRect(WINDOW)).toEqual({
       row: HUD_FRAME,
       column: HUD_FRAME,
@@ -27,7 +27,7 @@ describe('computeTitleRect', () => {
     });
   });
 
-  it('should be measured from the window, not from the screen', () => {
+  it('should return a row measured from the window when the window sits at row 99', () => {
     expect(computeTitleRect({ ...WINDOW, row: 99 }).row).toBe(HUD_FRAME);
   });
 });

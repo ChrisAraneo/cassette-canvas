@@ -43,19 +43,19 @@ const click = (widget: string, window = STREET_WINDOW): HudAction => ({
 });
 
 describe('applyHudAction', () => {
-  it('should move the clock on an hour by the hour button', () => {
+  it('should return the clock moved on an hour when the hour button is clicked', () => {
     expect(applyHudAction(createState(0), click(HOUR_BUTTON), 0).clock).toBe(
       HOUR_LENGTH,
     );
   });
 
-  it('should bring the clock back to the animation on the now button', () => {
+  it('should return the clock back at the animation when the now button is clicked', () => {
     expect(
       applyHudAction(createState(5 * HOUR_LENGTH), click(NOW_BUTTON), 0).clock,
     ).toBe(0);
   });
 
-  it('should jump to the evening on the dusk button', () => {
+  it('should return the clock at the evening when the dusk button is clicked', () => {
     expect(
       computeDayCycle(
         applyHudAction(createState(0), click(DUSK_BUTTON), 0).clock,
@@ -63,7 +63,7 @@ describe('applyHudAction', () => {
     ).toBeCloseTo(DUSK_HOUR / HOURS_PER_DAY);
   });
 
-  it('should jump to the middle of the day on the noon button', () => {
+  it('should return the clock at the middle of the day when the noon button is clicked', () => {
     expect(
       computeDayCycle(
         applyHudAction(createState(0), click(NOON_BUTTON), 0).clock,
@@ -71,7 +71,7 @@ describe('applyHudAction', () => {
     ).toBeCloseTo(NOON_HOUR / HOURS_PER_DAY);
   });
 
-  it('should bring the note window back on the note button', () => {
+  it('should return the note window back on the screen when the note button is clicked', () => {
     expect(
       findHudWindow(
         applyHudAction(
@@ -84,7 +84,7 @@ describe('applyHudAction', () => {
     ).toBeDefined();
   });
 
-  it('should write a line typed in the field in the title bar', () => {
+  it('should return the typed line in the title bar when the action is a submit', () => {
     expect(
       findHudWindow(
         applyHudAction(
@@ -102,7 +102,7 @@ describe('applyHudAction', () => {
     ).toBe('Evening');
   });
 
-  it('should leave the state as it is when a tab is opened', () => {
+  it('should return the state unchanged when a tab is opened', () => {
     const state = createState(0);
 
     expect(
@@ -114,13 +114,13 @@ describe('applyHudAction', () => {
     ).toBe(state);
   });
 
-  it('should leave the state as it is when a window it does not know is clicked', () => {
+  it('should return the state unchanged when a window it does not know is clicked', () => {
     const state = createState(0);
 
     expect(applyHudAction(state, click(HOUR_BUTTON, 'other'), 0)).toBe(state);
   });
 
-  it('should leave the windows alone when it moves the clock', () => {
+  it('should return the windows unchanged when it moves the clock', () => {
     const state = createState(0);
 
     expect(

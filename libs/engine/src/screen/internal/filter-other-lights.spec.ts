@@ -20,18 +20,18 @@ const LANTERN: Light = {
 };
 
 describe('filterOtherLights', () => {
-  it('should drop the light when it carries the id', () => {
+  it('should return the other lights when one carries the id', () => {
     expect(filterOtherLights([TORCH, LANTERN], 'torch')).toEqual([LANTERN]);
   });
 
-  it('should keep every light in order when none carries the id', () => {
+  it('should return every light in order when none carries the id', () => {
     expect(filterOtherLights([TORCH, LANTERN], 'sun')).toEqual([
       TORCH,
       LANTERN,
     ]);
   });
 
-  it('should give no lights when there are none', () => {
+  it('should return no lights when there are none', () => {
     expect(filterOtherLights([], 'torch')).toEqual([]);
   });
 });

@@ -56,7 +56,7 @@ const createContext = (calls: CrtCall[]): WebGLRenderingContext =>
   }) as unknown as WebGLRenderingContext;
 
 describe('drawCrt', () => {
-  it('should upload the frame, set up the shader and then draw', () => {
+  it('should upload the frame, set up the shader, and then draw when it shows a picture', () => {
     const calls: CrtCall[] = [];
 
     drawCrt(createContext(calls), CRT, PICTURE, 1500);
@@ -78,7 +78,7 @@ describe('drawCrt', () => {
     ]);
   });
 
-  it('should hand the time to the shader so the grain moves', () => {
+  it('should pass the time to the shader when it draws, so the grain moves', () => {
     const calls: CrtCall[] = [];
 
     drawCrt(createContext(calls), CRT, PICTURE, 1500);
@@ -86,7 +86,7 @@ describe('drawCrt', () => {
     expect(calls[7]?.values).toEqual(['time', 1500]);
   });
 
-  it('should draw last when it shows the frame', () => {
+  it('should call drawArrays last when it shows the frame', () => {
     const calls: CrtCall[] = [];
 
     drawCrt(createContext(calls), CRT, PICTURE, 0);

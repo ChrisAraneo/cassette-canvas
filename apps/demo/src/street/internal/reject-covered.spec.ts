@@ -22,21 +22,21 @@ const place = (
 const WALL = Object.freeze([place('wall', SOLID, 10, 10)]);
 
 describe('rejectCovered', () => {
-  it('should leave out a placement when every one of its pixels is covered', () => {
+  it('should return no placement when every one of its pixels is covered', () => {
     expect(rejectCovered([place('behind', SOLID, 10, 10)], WALL)).toEqual([]);
   });
 
-  it('should keep a placement when one of its pixels shows', () => {
+  it('should return the placement when one of its pixels shows', () => {
     expect(
       map(rejectCovered([place('peeking', SOLID, 10, 12)], WALL), 'id'),
     ).toEqual(['peeking']);
   });
 
-  it('should only look at visible pixels when it checks a placement', () => {
+  it('should return no placement when only its visible pixels are covered', () => {
     expect(rejectCovered([place('dot', DOT, 17, 17)], WALL)).toEqual([]);
   });
 
-  it('should keep everything when nothing covers it', () => {
+  it('should return every placement when nothing covers them', () => {
     expect(
       map(rejectCovered([place('free', SOLID, 10, 10)], []), 'id'),
     ).toEqual(['free']);

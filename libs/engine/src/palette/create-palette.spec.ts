@@ -47,13 +47,13 @@ const COLORS_WITH_A_TYPO: PaletteColors = [
 ];
 
 describe('createPalette', () => {
-  it('should hold every extended shade of every color when it expands the colors', () => {
+  it('should return every extended shade of every color when it expands the colors', () => {
     expect(size(keys(createPalette(COLORS)))).toBe(
       COLOR_COUNT * EXTENDED_SHADE_COUNT,
     );
   });
 
-  it('should key the colors by extended pixel when it expands the colors', () => {
+  it('should return the colors keyed by extended pixel when it expands the colors', () => {
     const pixels = keys(createPalette(COLORS));
 
     expect(
@@ -63,7 +63,7 @@ describe('createPalette', () => {
     ).toBe(true);
   });
 
-  it('should show each color exactly as given when it reaches the base shade', () => {
+  it('should return each color exactly as given when it reaches the base shade', () => {
     const palette = createPalette(COLORS);
 
     expect(palette[toLitPixel(toPixel(9, BASE_SHADE), 0)]).toEqual({
@@ -73,7 +73,7 @@ describe('createPalette', () => {
     });
   });
 
-  it('should darken the color when it gives the darkest sprite shade', () => {
+  it('should return a darker color when it reaches the darkest sprite shade', () => {
     const palette = createPalette(COLORS);
 
     expect(palette[toLitPixel(toPixel(1, 0), 0)]).toEqual({
@@ -83,7 +83,7 @@ describe('createPalette', () => {
     });
   });
 
-  it('should hold a color darker than any sprite shade for light to reach', () => {
+  it('should return a color darker than any sprite shade when the extended shade is the darkest', () => {
     const palette = createPalette(COLORS);
 
     expect(palette[toExtendedPixel(9, 0)]).toEqual({
@@ -93,7 +93,7 @@ describe('createPalette', () => {
     });
   });
 
-  it('should fall back to black when a color is not written as a full hex color', () => {
+  it('should return black when a color is not written as a full hex color', () => {
     const palette = createPalette(COLORS_WITH_A_TYPO);
 
     expect(palette[toLitPixel(toPixel(1, BASE_SHADE), 0)]).toBe(BLACK);

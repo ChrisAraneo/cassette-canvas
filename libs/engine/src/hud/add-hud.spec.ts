@@ -22,13 +22,13 @@ const createStreetHud = (): Hud =>
   });
 
 describe('addHud', () => {
-  it('should put the windows of the HUD on the screen as overlays', () => {
+  it('should return the windows of the HUD as overlays when it adds them to the screen', () => {
     expect(
       addHud(createScreen(toPixel(8, 5)), createStreetHud()).overlays,
     ).toEqual(composeHud(createStreetHud()));
   });
 
-  it('should leave the overlays that were already there below', () => {
+  it('should return the overlays that were already there below the windows when it adds the HUD', () => {
     expect(
       map(
         addHud(
@@ -50,7 +50,7 @@ describe('addHud', () => {
     ).toEqual(['badge', `${HUD_OVERLAY_PREFIX}-street`]);
   });
 
-  it('should keep the background, the sprites and the lights', () => {
+  it('should return the same background, sprites, and lights when it adds the HUD', () => {
     const screen = createScreen(toPixel(8, 5), -16);
 
     expect(addHud(screen, createStreetHud())).toMatchObject({
@@ -61,7 +61,7 @@ describe('addHud', () => {
     });
   });
 
-  it('should not change the screen it is given', () => {
+  it('should not change the screen it is given when it adds the HUD', () => {
     const screen = createScreen();
 
     addHud(screen, createStreetHud());

@@ -15,44 +15,44 @@ const createEvent = (
   }) as unknown as KeyboardEvent;
 
 describe('toKeyEvent', () => {
-  it('should pass a character on to be typed', () => {
+  it('should return a key event when the key is a character', () => {
     expect(toKeyEvent(createEvent('a'))).toEqual({ kind: 'key', key: 'a' });
   });
 
-  it('should pass a space on to be typed', () => {
+  it('should return a key event when the key is a space', () => {
     expect(toKeyEvent(createEvent(' '))).toEqual({ kind: 'key', key: ' ' });
   });
 
-  it('should pass the backspace on', () => {
+  it('should return a key event when the key is Backspace', () => {
     expect(toKeyEvent(createEvent('Backspace'))).toEqual({
       kind: 'key',
       key: 'Backspace',
     });
   });
 
-  it('should pass the enter key on', () => {
+  it('should return a key event when the key is Enter', () => {
     expect(toKeyEvent(createEvent('Enter'))).toEqual({
       kind: 'key',
       key: 'Enter',
     });
   });
 
-  it('should pass the escape key on', () => {
+  it('should return a key event when the key is Escape', () => {
     expect(toKeyEvent(createEvent('Escape'))).toEqual({
       kind: 'key',
       key: 'Escape',
     });
   });
 
-  it('should leave a key the HUD does not read to the browser', () => {
+  it('should return undefined when the HUD does not read the key', () => {
     expect(toKeyEvent(createEvent('ArrowLeft'))).toBeUndefined();
   });
 
-  it('should leave a shortcut to the browser', () => {
+  it('should return undefined when the control key is held', () => {
     expect(toKeyEvent(createEvent('r', { ctrlKey: true }))).toBeUndefined();
   });
 
-  it('should leave a shortcut with the command key to the browser', () => {
+  it('should return undefined when the command key is held', () => {
     expect(toKeyEvent(createEvent('r', { metaKey: true }))).toBeUndefined();
   });
 });

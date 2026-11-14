@@ -18,7 +18,7 @@ const MOVER = Object.freeze({
 });
 
 describe('placeMover', () => {
-  it('should show the first frame where the mover starts when no time has passed', () => {
+  it('should return the first frame where the mover starts when no time has passed', () => {
     expect(placeMover(MOVER, 0)).toEqual([
       {
         id: 'walker-0-0',
@@ -30,15 +30,15 @@ describe('placeMover', () => {
     ]);
   });
 
-  it('should show the next frame when one frame has passed', () => {
+  it('should return the next frame when one frame has passed', () => {
     expect(map(placeMover(MOVER, 200), 'sprite')).toEqual([[0x54]]);
   });
 
-  it('should play the frames again when the last one has passed', () => {
+  it('should return the first frame again when the last one has passed', () => {
     expect(map(placeMover(MOVER, 400), 'sprite')).toEqual([[0x14]]);
   });
 
-  it('should move along the track when time passes', () => {
+  it('should return the mover moved along the track when time passes', () => {
     expect(placeMover(MOVER, 1000)[0]?.column).toBe(60 - TRACK_MARGIN);
   });
 });

@@ -41,26 +41,26 @@ const createHoldingHud = (): Hud => ({
 });
 
 describe('paintHudButton', () => {
-  it('should fill the button with the light face of the theme', () => {
+  it('should return the button filled with the light face of the theme when it paints one', () => {
     expect(paintHudButton(createHud(), WINDOW, BUTTON)[0]).toEqual({
       pixel: toPixel(15, THEME.face),
       ...computeWidgetRect(BUTTON),
     });
   });
 
-  it('should light the top of the button while it rests', () => {
+  it('should return the light on top of the button when it rests', () => {
     expect(paintHudButton(createHud(), WINDOW, BUTTON)[1]).toMatchObject({
       pixel: toPixel(15, THEME.highlight),
     });
   });
 
-  it('should turn the bevel around while it is held', () => {
+  it('should return the bevel turned around when it is held', () => {
     expect(paintHudButton(createHoldingHud(), WINDOW, BUTTON)[1]).toMatchObject(
       { pixel: toPixel(15, THEME.shadow) },
     );
   });
 
-  it('should put the text in the middle of the button', () => {
+  it('should return the text in the middle of the button when it paints one', () => {
     expect(last(paintHudButton(createHud(), WINDOW, BUTTON))).toMatchObject({
       column:
         computeWidgetRect(BUTTON).column +
@@ -68,7 +68,7 @@ describe('paintHudButton', () => {
     });
   });
 
-  it('should move the text down and right while it is held', () => {
+  it('should return the text moved down and right when it is held', () => {
     expect(
       last(paintHudButton(createHoldingHud(), WINDOW, BUTTON)),
     ).toMatchObject({

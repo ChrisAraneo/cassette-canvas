@@ -26,11 +26,11 @@ const NOTES = Object.freeze({
 const createStreetHud = (): Hud => addHudWindow(createHud(), STREET);
 
 describe('addHudWindow', () => {
-  it('should hold the window it is given', () => {
+  it('should return the window it is given when it adds one', () => {
     expect(createStreetHud().windows[0]).toMatchObject(STREET);
   });
 
-  it('should put the window on top of the others', () => {
+  it('should return the window last when the HUD already holds others', () => {
     expect(
       map(
         addHudWindow(createStreetHud(), NOTES).windows,
@@ -39,17 +39,17 @@ describe('addHudWindow', () => {
     ).toEqual(['street', 'notes']);
   });
 
-  it('should take the old window off when one with the same id is added', () => {
+  it('should return only the new window when one with the same id is added', () => {
     expect(
       addHudWindow(createStreetHud(), { ...STREET, title: 'AGAIN' }).windows,
     ).toHaveLength(1);
   });
 
-  it('should keep the theme when it adds a window', () => {
+  it('should return the same theme when it adds a window', () => {
     expect(createStreetHud().theme).toEqual(createHud().theme);
   });
 
-  it('should not change the HUD it is given', () => {
+  it('should not change the HUD it is given when it adds a window', () => {
     const hud = createHud();
 
     addHudWindow(hud, STREET);

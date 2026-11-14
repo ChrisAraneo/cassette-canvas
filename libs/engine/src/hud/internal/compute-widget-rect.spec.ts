@@ -32,32 +32,32 @@ const BUTTON: HudButton = Object.freeze({
 });
 
 describe('computeWidgetRect', () => {
-  it('should measure a widget from the top-left of the content', () => {
+  it('should return a rectangle measured from the top-left of the content when it measures a widget', () => {
     expect(computeWidgetRect(LABEL)).toMatchObject({
       row: HUD_CONTENT_TOP + 4,
       column: HUD_CONTENT_LEFT + 6,
     });
   });
 
-  it('should make a label as wide and as tall as its letters', () => {
+  it('should return a label as wide and as tall as its letters when the widget is a label', () => {
     expect(computeWidgetRect(LABEL)).toMatchObject({
       width: computeTextWidth('FPS 60'),
       height: TEXT_HEIGHT,
     });
   });
 
-  it('should fit a button of no width to its text', () => {
+  it('should return a button fitted to its text when it asks for no width', () => {
     expect(computeWidgetRect(BUTTON)).toMatchObject({
       width: computeControlWidth('SKIP'),
       height: HUD_CONTROL_HEIGHT,
     });
   });
 
-  it('should keep the width a button asks for', () => {
+  it('should return the width a button asks for when it has one', () => {
     expect(computeWidgetRect({ ...BUTTON, width: 40 }).width).toBe(40);
   });
 
-  it('should give a field the width it asks for', () => {
+  it('should return the width a field asks for when it has one', () => {
     expect(
       computeWidgetRect({
         kind: 'input',
@@ -71,7 +71,7 @@ describe('computeWidgetRect', () => {
     ).toMatchObject({ width: 60, height: HUD_CONTROL_HEIGHT });
   });
 
-  it('should make a tab strip as wide as its tabs together', () => {
+  it('should return a tab strip as wide as its tabs together when the widget is a strip', () => {
     expect(
       computeWidgetRect({
         kind: 'tabs',

@@ -25,7 +25,7 @@ const createStack = (): Hud =>
 const toIds = (hud: Hud): string[] => map(hud.windows, (window) => window.id);
 
 describe('raiseHudWindow', () => {
-  it('should put the window on top and keep the order of the rest', () => {
+  it('should return the window last and the rest in order when it raises one', () => {
     expect(toIds(raiseHudWindow(createStack(), 'street'))).toEqual([
       'notes',
       'help',
@@ -33,7 +33,7 @@ describe('raiseHudWindow', () => {
     ]);
   });
 
-  it('should leave the window that is already on top where it is', () => {
+  it('should return the same order when the window is already on top', () => {
     expect(toIds(raiseHudWindow(createStack(), 'help'))).toEqual([
       'street',
       'notes',
@@ -41,7 +41,7 @@ describe('raiseHudWindow', () => {
     ]);
   });
 
-  it('should change nothing when no window has the id', () => {
+  it('should return the same windows when no window has the id', () => {
     expect(raiseHudWindow(createStack(), 'ghost')).toEqual(createStack());
   });
 });

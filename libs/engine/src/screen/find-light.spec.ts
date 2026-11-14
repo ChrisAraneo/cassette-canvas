@@ -28,17 +28,17 @@ const createLitScreen = (lights: Light[]) => ({
 });
 
 describe('findLight', () => {
-  it('should give the light when the screen holds it', () => {
+  it('should return the light when the screen holds it', () => {
     expect(findLight(createLitScreen([TORCH, LANTERN]), 'lantern')).toBe(
       LANTERN,
     );
   });
 
-  it('should give nothing when no light carries the id', () => {
+  it('should return undefined when no light carries the id', () => {
     expect(findLight(createLitScreen([TORCH, LANTERN]), 'sun')).toBeUndefined();
   });
 
-  it('should give nothing when the screen has no lights', () => {
+  it('should return undefined when the screen has no lights', () => {
     expect(findLight(createLitScreen([]), 'torch')).toBeUndefined();
   });
 });

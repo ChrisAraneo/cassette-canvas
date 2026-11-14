@@ -15,13 +15,13 @@ const BADGE = toLitPixel(0x17, 0);
 const createNightFrame = (): number[] => [DARK, DARK, DARK, DARK];
 
 describe('patchFrameOverlays', () => {
-  it('should give back the very same frame when there are no overlays', () => {
+  it('should return the very same frame when there are no overlays', () => {
     const frame = createNightFrame();
 
     expect(patchFrameOverlays(frame, [], 2, 2)).toBe(frame);
   });
 
-  it('should paint an overlay in the colors it was authored in', () => {
+  it('should return an overlay in the colors it was authored in when the frame is dark', () => {
     expect(
       patchFrameOverlays(
         createNightFrame(),
@@ -39,7 +39,7 @@ describe('patchFrameOverlays', () => {
     ).toEqual([PANEL, PANEL, DARK, DARK]);
   });
 
-  it('should leave the lit frame where an overlay is transparent', () => {
+  it('should return the lit frame when an overlay is transparent there', () => {
     expect(
       patchFrameOverlays(
         createNightFrame(),
@@ -57,7 +57,7 @@ describe('patchFrameOverlays', () => {
     ).toEqual([DARK, PANEL, DARK, DARK]);
   });
 
-  it('should let a later overlay cover an earlier one', () => {
+  it('should return a later overlay over an earlier one when they overlap', () => {
     expect(
       patchFrameOverlays(
         createNightFrame(),
@@ -81,7 +81,7 @@ describe('patchFrameOverlays', () => {
     ).toEqual([PANEL, PANEL, PANEL, BADGE]);
   });
 
-  it('should cut off the parts of an overlay that fall outside the frame', () => {
+  it('should return no parts of an overlay when they fall outside the frame', () => {
     expect(
       patchFrameOverlays(
         createNightFrame(),
@@ -99,7 +99,7 @@ describe('patchFrameOverlays', () => {
     ).toEqual([DARK, PANEL, DARK, PANEL]);
   });
 
-  it('should not change the frame it is given', () => {
+  it('should not change the frame it is given when it patches the overlays', () => {
     const frame = createNightFrame();
 
     patchFrameOverlays(
@@ -112,7 +112,7 @@ describe('patchFrameOverlays', () => {
     expect(frame).toEqual(createNightFrame());
   });
 
-  it('should leave a place a pixel value cannot reach as it is', () => {
+  it('should return a place unchanged when a pixel value cannot reach it', () => {
     expect(
       patchFrameOverlays(
         createNightFrame(),

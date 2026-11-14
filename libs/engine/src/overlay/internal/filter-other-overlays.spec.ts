@@ -19,11 +19,11 @@ const BADGE: OverlayPlacement = Object.freeze({
 });
 
 describe('filterOtherOverlays', () => {
-  it('should drop the overlay with the id and keep the rest in order', () => {
+  it('should return the rest in order when it drops the overlay with the id', () => {
     expect(filterOtherOverlays([PANEL, BADGE], 'panel')).toEqual([BADGE]);
   });
 
-  it('should keep every overlay when none has the id', () => {
+  it('should return every overlay when none has the id', () => {
     expect(filterOtherOverlays([PANEL, BADGE], 'ghost')).toEqual([
       PANEL,
       BADGE,

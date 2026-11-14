@@ -17,7 +17,7 @@ const createCoinScreen = (): Screen => ({
 });
 
 describe('addSprite', () => {
-  it('should place the sprite at the row and column when it adds it', () => {
+  it('should return the sprite at the row and column when it adds one', () => {
     const screen = addSprite(createCoinScreen(), 'hero', HERO, 3, 4);
 
     expect(screen.sprites[1]).toEqual({
@@ -29,7 +29,7 @@ describe('addSprite', () => {
     });
   });
 
-  it('should put the sprite on top when the screen already holds others', () => {
+  it('should return the sprite last when the screen already holds others', () => {
     const screen = addSprite(createCoinScreen(), 'hero', HERO, 3, 4);
 
     expect(map(screen.sprites, (placement) => placement.id)).toEqual([
@@ -38,7 +38,7 @@ describe('addSprite', () => {
     ]);
   });
 
-  it('should take the old sprite off when one with the same id is placed again', () => {
+  it('should return only the new sprite when one with the same id is placed again', () => {
     const screen = addSprite(createCoinScreen(), 'coin', COIN, 9, 9);
 
     expect(screen.sprites).toEqual([
@@ -46,19 +46,19 @@ describe('addSprite', () => {
     ]);
   });
 
-  it('should keep the background when it adds a sprite', () => {
+  it('should return the same background when it adds a sprite', () => {
     expect(addSprite(createCoinScreen(), 'hero', HERO, 3, 4).background).toBe(
       0x91,
     );
   });
 
-  it('should keep the very same lights when it adds a sprite', () => {
+  it('should return the very same lights when it adds a sprite', () => {
     const screen = createCoinScreen();
 
     expect(addSprite(screen, 'hero', HERO, 3, 4).lights).toBe(screen.lights);
   });
 
-  it('should place the sprite when the screen is empty', () => {
+  it('should return the sprite when the screen is empty', () => {
     const screen = addSprite(
       { ...createCoinScreen(), sprites: [] },
       'hero',

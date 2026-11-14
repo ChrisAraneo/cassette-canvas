@@ -15,7 +15,7 @@ const createHudScreen = (): Screen => ({
 });
 
 describe('findOverlay', () => {
-  it('should give the overlay with the id', () => {
+  it('should return the overlay when the screen holds the id', () => {
     expect(findOverlay(createHudScreen(), 'panel')).toEqual({
       id: 'panel',
       overlay: PANEL,
@@ -24,7 +24,7 @@ describe('findOverlay', () => {
     });
   });
 
-  it('should give nothing when no overlay has the id', () => {
+  it('should return undefined when no overlay has the id', () => {
     expect(findOverlay(createHudScreen(), 'ghost')).toBeUndefined();
   });
 });

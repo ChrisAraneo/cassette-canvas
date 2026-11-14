@@ -21,7 +21,7 @@ const createTwoWindows = (): Hud =>
   );
 
 describe('patchHudWindow', () => {
-  it('should move the window when it gets a new row and column', () => {
+  it('should return the window moved when it gets a new row and column', () => {
     expect(
       findHudWindow(
         patchHudWindow(createTwoWindows(), 'street', { row: 1, column: 2 }),
@@ -30,7 +30,7 @@ describe('patchHudWindow', () => {
     ).toMatchObject({ row: 1, column: 2 });
   });
 
-  it('should put the window on another color', () => {
+  it('should return the new color when it gets one', () => {
     expect(
       findHudWindow(
         patchHudWindow(createTwoWindows(), 'street', { color: 9 }),
@@ -39,7 +39,7 @@ describe('patchHudWindow', () => {
     ).toBe(9);
   });
 
-  it('should keep the fields the changes leave out', () => {
+  it('should return the fields the changes leave out when it changes a window', () => {
     expect(
       findHudWindow(
         patchHudWindow(createTwoWindows(), 'street', { row: 1 }),
@@ -48,7 +48,7 @@ describe('patchHudWindow', () => {
     ).toBe(20);
   });
 
-  it('should keep the stack in order when it changes a window', () => {
+  it('should return the windows in the same order when it changes one', () => {
     expect(
       map(
         patchHudWindow(createTwoWindows(), 'street', { row: 1 }).windows,
@@ -57,7 +57,7 @@ describe('patchHudWindow', () => {
     ).toEqual(['street', 'notes']);
   });
 
-  it('should change nothing when no window has the id', () => {
+  it('should return the same HUD when no window has the id', () => {
     expect(patchHudWindow(createTwoWindows(), 'ghost', { row: 1 })).toEqual(
       createTwoWindows(),
     );

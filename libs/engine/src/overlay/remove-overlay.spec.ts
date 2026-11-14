@@ -20,13 +20,13 @@ const createHudScreen = (): Screen => ({
 });
 
 describe('removeOverlay', () => {
-  it('should take the overlay with the id off the screen', () => {
+  it('should return the other overlays when one carries the id', () => {
     expect(removeOverlay(createHudScreen(), 'panel').overlays).toEqual([
       { id: 'badge', overlay: BADGE, row: 5, column: 6 },
     ]);
   });
 
-  it('should change nothing when no overlay has the id', () => {
+  it('should return the screen unchanged when no overlay has the id', () => {
     expect(removeOverlay(createHudScreen(), 'ghost')).toEqual(
       createHudScreen(),
     );

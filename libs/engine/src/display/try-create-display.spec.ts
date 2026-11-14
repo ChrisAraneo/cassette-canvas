@@ -59,7 +59,7 @@ const createCanvas = (
   }) as unknown as HTMLCanvasElement;
 
 describe('tryCreateDisplay', () => {
-  it('should count the logical pixels of the canvas when every part is ready', () => {
+  it('should return the logical pixels of the canvas when every part is ready', () => {
     const display = tryCreateDisplay(
       createCanvas(createContext(true)),
       SETTINGS,
@@ -68,7 +68,7 @@ describe('tryCreateDisplay', () => {
     expect([display?.width, display?.height]).toEqual([16, 12]);
   });
 
-  it('should hold all the extended colors when every part is ready', () => {
+  it('should return all the extended colors when every part is ready', () => {
     const display = tryCreateDisplay(
       createCanvas(createContext(true)),
       SETTINGS,
@@ -77,7 +77,7 @@ describe('tryCreateDisplay', () => {
     expect(size(keys(display?.palette))).toBe(512);
   });
 
-  it('should set up the monitor effect when every part is ready', () => {
+  it('should return the monitor effect set up when every part is ready', () => {
     const display = tryCreateDisplay(
       createCanvas(createContext(true)),
       SETTINGS,
@@ -86,7 +86,7 @@ describe('tryCreateDisplay', () => {
     expect(display?.crt.uniforms.time).toEqual({ name: 'u_time' });
   });
 
-  it('should ask the canvas for a WebGL context without smoothing or depth', () => {
+  it('should call getContext for a WebGL context without smoothing or depth when it creates a display', () => {
     const requests: unknown[][] = [];
 
     tryCreateDisplay(createCanvas(createContext(true), requests), SETTINGS);
@@ -94,17 +94,17 @@ describe('tryCreateDisplay', () => {
     expect(requests).toEqual([['webgl', CRT_CONTEXT_ATTRIBUTES]]);
   });
 
-  it('should give no display when the canvas has no WebGL context', () => {
+  it('should return undefined when the canvas has no WebGL context', () => {
     expect(tryCreateDisplay(createCanvas(null), SETTINGS)).toBeUndefined();
   });
 
-  it('should give no display when the monitor shaders do not compile', () => {
+  it('should return undefined when the monitor shaders do not compile', () => {
     expect(
       tryCreateDisplay(createCanvas(createContext(false)), SETTINGS),
     ).toBeUndefined();
   });
 
-  it('should give no display when the pixel size is zero', () => {
+  it('should return undefined when the pixel size is zero', () => {
     expect(
       tryCreateDisplay(createCanvas(createContext(true)), {
         ...SETTINGS,
@@ -113,7 +113,7 @@ describe('tryCreateDisplay', () => {
     ).toBeUndefined();
   });
 
-  it('should give no display when the sprite size is negative', () => {
+  it('should return undefined when the sprite size is negative', () => {
     expect(
       tryCreateDisplay(createCanvas(createContext(true)), {
         ...SETTINGS,

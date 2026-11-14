@@ -61,7 +61,7 @@ const WINDOW: HudWindow = Object.freeze({
 });
 
 describe('paintHudWidget', () => {
-  it('should draw a label as a label', () => {
+  it('should return the label paint steps when the widget is a label', () => {
     expect(paintHudWidget(createHud(), WINDOW, LABEL)).toEqual(
       paintHudLabel(createHud(), WINDOW, {
         kind: 'label',
@@ -74,7 +74,7 @@ describe('paintHudWidget', () => {
     );
   });
 
-  it('should draw a button as a button', () => {
+  it('should return the button paint steps when the widget is a button', () => {
     expect(paintHudWidget(createHud(), WINDOW, BUTTON)).toEqual(
       paintHudButton(createHud(), WINDOW, {
         kind: 'button',
@@ -88,7 +88,7 @@ describe('paintHudWidget', () => {
     );
   });
 
-  it('should draw a field as a field', () => {
+  it('should return the field paint steps when the widget is a field', () => {
     expect(paintHudWidget(createHud(), WINDOW, INPUT)).toEqual(
       paintHudInput(createHud(), WINDOW, {
         kind: 'input',
@@ -102,7 +102,7 @@ describe('paintHudWidget', () => {
     );
   });
 
-  it('should draw a tab strip as a tab strip', () => {
+  it('should return the tab strip paint steps when the widget is a tab strip', () => {
     expect(paintHudWidget(createHud(), WINDOW, TABS)).toEqual(
       paintHudTabs(createHud(), WINDOW, {
         kind: 'tabs',

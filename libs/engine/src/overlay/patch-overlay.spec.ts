@@ -21,27 +21,27 @@ const createHudScreen = (): Screen => ({
 });
 
 describe('patchOverlay', () => {
-  it('should move the overlay when it gets a new row and column', () => {
+  it('should return the overlay moved when it gets a new row and column', () => {
     expect(
       patchOverlay(createHudScreen(), 'panel', { row: 10, column: 20 })
         .overlays[0],
     ).toEqual({ id: 'panel', overlay: PANEL, row: 10, column: 20 });
   });
 
-  it('should swap the image when it gets a new one', () => {
+  it('should return the new image when it gets one', () => {
     expect(
       patchOverlay(createHudScreen(), 'panel', { overlay: BADGE }).overlays[0]
         ?.overlay,
     ).toBe(BADGE);
   });
 
-  it('should keep the fields the changes leave out', () => {
+  it('should return the fields the changes leave out unchanged when it changes an overlay', () => {
     expect(
       patchOverlay(createHudScreen(), 'panel', { row: 10 }).overlays[0]?.column,
     ).toBe(2);
   });
 
-  it('should keep the drawing order when it changes an overlay', () => {
+  it('should return the same drawing order when it changes an overlay', () => {
     expect(
       map(
         patchOverlay(createHudScreen(), 'panel', { row: 10 }).overlays,
@@ -50,7 +50,7 @@ describe('patchOverlay', () => {
     ).toEqual(['panel', 'badge']);
   });
 
-  it('should change nothing when no overlay has the id', () => {
+  it('should return the screen unchanged when no overlay has the id', () => {
     expect(patchOverlay(createHudScreen(), 'ghost', { row: 10 })).toEqual(
       createHudScreen(),
     );

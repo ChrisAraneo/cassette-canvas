@@ -16,7 +16,7 @@ const HERO: SpritePlacement = Object.freeze({
 });
 
 describe('patchSpritePlacement', () => {
-  it('should apply every change when the sprite carries the id', () => {
+  it('should return every change when the sprite carries the id', () => {
     expect(
       patchSpritePlacement(HERO, 'hero', {
         sprite: HERO_WALKING,
@@ -33,14 +33,14 @@ describe('patchSpritePlacement', () => {
     });
   });
 
-  it('should keep the parts that are not changed when only some change', () => {
+  it('should return the parts that are not changed when only some change', () => {
     expect(patchSpritePlacement(HERO, 'hero', { column: 20 })).toEqual({
       ...HERO,
       column: 20,
     });
   });
 
-  it('should give back the very same sprite when it carries another id', () => {
+  it('should return the very same sprite when it carries another id', () => {
     expect(patchSpritePlacement(HERO, 'coin', { column: 20 })).toBe(HERO);
   });
 });

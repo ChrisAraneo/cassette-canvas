@@ -16,17 +16,17 @@ const createStreetHud = (): Hud =>
   });
 
 describe('findHudWindow', () => {
-  it('should give the window with the id', () => {
+  it('should return the window when the HUD holds the id', () => {
     expect(findHudWindow(createStreetHud(), 'street')).toMatchObject({
       title: 'STREET',
     });
   });
 
-  it('should give nothing when no window has the id', () => {
+  it('should return undefined when no window has the id', () => {
     expect(findHudWindow(createStreetHud(), 'ghost')).toBeUndefined();
   });
 
-  it('should give nothing when the HUD holds no windows', () => {
+  it('should return undefined when the HUD holds no windows', () => {
     expect(findHudWindow(createHud(), 'street')).toBeUndefined();
   });
 });

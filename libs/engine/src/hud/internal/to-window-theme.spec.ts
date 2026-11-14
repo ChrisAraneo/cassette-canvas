@@ -18,11 +18,11 @@ const WINDOW: HudWindow = Object.freeze({
 });
 
 describe('toWindowTheme', () => {
-  it('should put the theme on the color of the window', () => {
+  it('should return the theme in the color of the window when the window carries one', () => {
     expect(toWindowTheme(createHud(15), WINDOW).color).toBe(9);
   });
 
-  it('should keep every shade of the HUD theme', () => {
+  it('should return every shade of the HUD theme when it recolors it', () => {
     const hud = createHud(15);
 
     expect(toWindowTheme(hud, WINDOW)).toEqual({

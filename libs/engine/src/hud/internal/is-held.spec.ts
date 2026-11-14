@@ -16,19 +16,19 @@ const createPressingHud = (): Hud => ({
 });
 
 describe('isHeld', () => {
-  it('should hold the button the pointer took hold of', () => {
+  it('should return true when the pointer holds the button', () => {
     expect(isHeld(createPressingHud(), 'street', 'skip')).toBe(true);
   });
 
-  it('should not hold another widget of the same window', () => {
+  it('should return false when the widget is another one of the same window', () => {
     expect(isHeld(createPressingHud(), 'street', 'hold')).toBe(false);
   });
 
-  it('should not hold a widget of another window', () => {
+  it('should return false when the widget belongs to another window', () => {
     expect(isHeld(createPressingHud(), 'notes', 'skip')).toBe(false);
   });
 
-  it('should hold nothing while a window is being dragged', () => {
+  it('should return false when a window is being dragged', () => {
     expect(
       isHeld(
         {
@@ -47,7 +47,7 @@ describe('isHeld', () => {
     ).toBe(false);
   });
 
-  it('should hold nothing when the pointer holds nothing', () => {
+  it('should return false when the pointer holds nothing', () => {
     expect(isHeld(createHud(), 'street', 'skip')).toBe(false);
   });
 });

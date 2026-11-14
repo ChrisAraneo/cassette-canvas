@@ -82,7 +82,7 @@ const computeOccluders = (
   );
 
 describe('computeFramePixels', () => {
-  it('should draw each sprite row by row from its corner over the background', () => {
+  it('should return each sprite row by row from its corner over the background when it composes the pixels', () => {
     const screen = createSpriteScreen([
       placeSprite([0x14, 0x54, 0x54, 0x14], 1, 1),
     ]);
@@ -90,7 +90,7 @@ describe('computeFramePixels', () => {
     expect(computePixels(screen, 2, 4, 3)).toEqual(['bbbb', 'brgb', 'bgrb']);
   });
 
-  it('should draw the later sprite over the earlier one when they overlap', () => {
+  it('should return the later sprite over the earlier one when they overlap', () => {
     const screen = createSpriteScreen([
       placeSprite([0x14, 0x14], 0, 0),
       placeSprite([0x54, 0x54], 0, 1),
@@ -99,7 +99,7 @@ describe('computeFramePixels', () => {
     expect(computePixels(screen, 2, 3, 1)).toEqual(['rgg']);
   });
 
-  it('should let the sprite below show through when a pixel is transparent', () => {
+  it('should return the sprite below when a pixel is transparent', () => {
     const screen = createSpriteScreen([
       placeSprite([0x14, 0x14], 0, 0),
       placeSprite([0x54, TRANSPARENT], 0, 0),
@@ -108,13 +108,13 @@ describe('computeFramePixels', () => {
     expect(computePixels(screen, 2, 2, 1)).toEqual(['gr']);
   });
 
-  it('should leave the place alone when a sprite pixel is not a pixel', () => {
+  it('should return the place unchanged when a sprite pixel is not a pixel', () => {
     const screen = createSpriteScreen([placeSprite([NOT_A_PIXEL], 0, 0)]);
 
     expect(computePixels(screen, 1, 1, 1)).toEqual(['b']);
   });
 
-  it('should clip the sprites when they hang over the edges', () => {
+  it('should return the sprites clipped when they hang over the edges', () => {
     const screen = createSpriteScreen([
       placeSprite([0x54, 0x54, 0x54, 0x54], -1, -1),
       placeSprite([0x14, 0x14, 0x14, TRANSPARENT], 2, 3),
@@ -123,32 +123,32 @@ describe('computeFramePixels', () => {
     expect(computePixels(screen, 2, 4, 3)).toEqual(['gbbb', 'bbbb', 'bbbr']);
   });
 
-  it('should snap the sprite to the pixel grid when it sits between pixels', () => {
+  it('should return the sprite snapped to the pixel grid when it sits between pixels', () => {
     const screen = createSpriteScreen([placeSprite([0x14], 0.75, 1.5)]);
 
     expect(computePixels(screen, 1, 3, 1)).toEqual(['brb']);
   });
 
-  it('should leave out the extra pixels when the sprite holds more than its size', () => {
+  it('should return no extra pixels when the sprite holds more than its size', () => {
     const screen = createSpriteScreen([placeSprite([0x14, 0x54], 0, 0)]);
 
     expect(computePixels(screen, 1, 2, 1)).toEqual(['rb']);
   });
 
-  it('should fill the frame with the background when the screen holds no sprites', () => {
+  it('should return the frame filled with the background when the screen holds no sprites', () => {
     expect(computePixels(createSpriteScreen([]), 2, 3, 2)).toEqual([
       'bbb',
       'bbb',
     ]);
   });
 
-  it('should leave every place transparent when the background is not a pixel', () => {
+  it('should return every place transparent when the background is not a pixel', () => {
     const screen = { ...createSpriteScreen([]), background: NOT_A_PIXEL };
 
     expect(computePixels(screen, 1, 2, 1)).toEqual(['..']);
   });
 
-  it('should give an empty frame when the frame has no places', () => {
+  it('should return an empty frame when the frame has no places', () => {
     const screen = createSpriteScreen([placeSprite([0x14], 0, 0)]);
 
     expect(
@@ -156,7 +156,7 @@ describe('computeFramePixels', () => {
     ).toHaveLength(0);
   });
 
-  it('should mark the places of a sprite when the sprite casts shadows', () => {
+  it('should return the places of a sprite marked when the sprite casts shadows', () => {
     const screen = createSpriteScreen([
       placeSprite([0x14], 0, 0),
       placeShadowCaster([0x54], 0, 2),
@@ -165,7 +165,7 @@ describe('computeFramePixels', () => {
     expect(computeOccluders(screen, 1, 3)).toEqual([0, 0, 1]);
   });
 
-  it('should keep a shadow caster when a sprite that casts none covers it', () => {
+  it('should return a shadow caster marked when a sprite that casts none covers it', () => {
     const screen = createSpriteScreen([
       placeShadowCaster([0x54], 0, 1),
       placeSprite([0x14], 0, 1),
@@ -174,7 +174,7 @@ describe('computeFramePixels', () => {
     expect(computeOccluders(screen, 1, 2)).toEqual([0, 1]);
   });
 
-  it('should not mark the transparent pixels of a shadow caster', () => {
+  it('should not mark the transparent pixels when a sprite casts a shadow', () => {
     const screen = createSpriteScreen([
       placeShadowCaster([0x54, TRANSPARENT], 0, 0),
     ]);
@@ -182,13 +182,13 @@ describe('computeFramePixels', () => {
     expect(computeOccluders(screen, 2, 2)).toEqual([1, 0]);
   });
 
-  it('should mark no places when no sprite casts shadows', () => {
+  it('should return no places marked when no sprite casts shadows', () => {
     const screen = createSpriteScreen([placeSprite([0x14, 0x54], 0, 0)]);
 
     expect(computeOccluders(screen, 2, 2)).toEqual([0, 0]);
   });
 
-  it('should pass on the ambient light for the lighting', () => {
+  it('should return the ambient light of the screen for the lighting when it composes the pixels', () => {
     const { lighting } = computeFramePixels({
       screen: createSpriteScreen([]),
       spriteSize: 1,
@@ -199,7 +199,7 @@ describe('computeFramePixels', () => {
     expect(lighting.ambient).toBe(-2);
   });
 
-  it('should pass on the very same lights for the lighting', () => {
+  it('should return the very same lights for the lighting when it composes the pixels', () => {
     const { lighting } = computeFramePixels({
       screen: createSpriteScreen([]),
       spriteSize: 1,
@@ -210,7 +210,7 @@ describe('computeFramePixels', () => {
     expect(lighting.lights).toBe(LIGHTS);
   });
 
-  it('should pass on the width and the height for the lighting', () => {
+  it('should return the width and the height for the lighting when it composes the pixels', () => {
     const { lighting } = computeFramePixels({
       screen: createSpriteScreen([]),
       spriteSize: 1,

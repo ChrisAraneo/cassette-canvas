@@ -15,7 +15,7 @@ const createTorchScreen = (): Screen => ({
 });
 
 describe('addLight', () => {
-  it('should put the light where its settings say when it adds it', () => {
+  it('should return the light at the row and column from its settings when it adds one', () => {
     expect(
       addLight(createTorchScreen(), 'lantern', {
         row: 9,
@@ -26,7 +26,7 @@ describe('addLight', () => {
     ).toEqual({ id: 'lantern', row: 9, column: 2, radius: 20, intensity: 4 });
   });
 
-  it('should keep the lights that were there when it adds one', () => {
+  it('should return the lights that were there when it adds one', () => {
     expect(
       map(
         addLight(createTorchScreen(), 'lantern', TORCH).lights,
@@ -35,13 +35,13 @@ describe('addLight', () => {
     ).toEqual(['torch', 'lantern']);
   });
 
-  it('should take the old light off when one with the same id is added again', () => {
+  it('should return only the new light when one with the same id is added again', () => {
     expect(
       addLight(createTorchScreen(), 'torch', { ...TORCH, intensity: 1 }).lights,
     ).toEqual([{ id: 'torch', ...TORCH, intensity: 1 }]);
   });
 
-  it('should keep the very same sprites when it adds a light', () => {
+  it('should return the very same sprites when it adds a light', () => {
     const screen = createTorchScreen();
 
     expect(addLight(screen, 'lantern', TORCH).sprites).toBe(screen.sprites);

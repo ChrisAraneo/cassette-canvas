@@ -121,7 +121,7 @@ describe('drawScreen', () => {
     expect(findUpload(calls)?.[8]).toEqual(new Uint8Array(2 * BYTES_PER_PIXEL));
   });
 
-  it('should hand the time to the monitor effect so the grain moves', () => {
+  it('should pass the time to the monitor effect when it draws the screen, so the grain moves', () => {
     const calls: GlCall[] = [];
 
     drawScreen(createStubDisplay(calls), createHeroScreen(), 2500);
@@ -131,7 +131,7 @@ describe('drawScreen', () => {
     );
   });
 
-  it('should tell the monitor effect how large a pixel is', () => {
+  it('should pass the pixel size to the monitor effect when it draws the screen', () => {
     const calls: GlCall[] = [];
 
     drawScreen(createStubDisplay(calls), createHeroScreen(), 0);
@@ -141,7 +141,7 @@ describe('drawScreen', () => {
     ).toBe(3);
   });
 
-  it('should give back the very same display when it draws the screen', () => {
+  it('should return the very same display when it draws the screen', () => {
     const display = createStubDisplay([]);
 
     expect(drawScreen(display, createHeroScreen(), 0)).toBe(display);

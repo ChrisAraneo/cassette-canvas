@@ -66,13 +66,13 @@ const formatLit = (exposures: Float32Array, width: number): string[] =>
   );
 
 describe('computeLightExposure', () => {
-  it('should put its whole light at its center', () => {
+  it('should return the whole light when the place is the center of the light', () => {
     expect(
       computeLightExposure(createLighting(5, 1, []), TORCH)[0],
     ).toBeCloseTo(TORCH_EMISSION);
   });
 
-  it('should thin the light out with every step away from its center', () => {
+  it('should return less light when the place is a step further from the center', () => {
     const exposures = toArray(
       computeLightExposure(createLighting(5, 1, []), { ...TORCH, radius: 4 }),
     );
@@ -86,7 +86,7 @@ describe('computeLightExposure', () => {
     ]);
   });
 
-  it('should keep more than half its light in the core and less than half past halfway', () => {
+  it('should return more than half the light when the place is in the core, and less than half past halfway', () => {
     const exposures = computeLightExposure(createLighting(5, 1, []), {
       ...TORCH,
       radius: 4,
@@ -96,7 +96,7 @@ describe('computeLightExposure', () => {
     expect(exposures[2] ?? 0).toBeLessThan(TORCH_EMISSION / 2);
   });
 
-  it('should leave the places beyond its reach dark', () => {
+  it('should return no light when a place lies beyond the radius', () => {
     expect(
       toArray(
         computeLightExposure(createLighting(5, 1, []), { ...TORCH, radius: 1 }),
@@ -104,7 +104,7 @@ describe('computeLightExposure', () => {
     ).toEqual([TORCH_EMISSION, 0, 0, 0, 0]);
   });
 
-  it('should give no light behind a shadow caster', () => {
+  it('should return no light when a place sits behind a shadow caster', () => {
     expect(
       formatLit(
         computeLightExposure(createLighting(5, 1, [1]), {
@@ -116,7 +116,7 @@ describe('computeLightExposure', () => {
     ).toEqual(['##...']);
   });
 
-  it('should light the side of a shadow caster that faces the light', () => {
+  it('should return light when a place sits on the side of a shadow caster that faces the light', () => {
     expect(
       computeLightExposure(createLighting(5, 1, [2]), {
         ...TORCH,
@@ -125,7 +125,7 @@ describe('computeLightExposure', () => {
     ).toBeGreaterThan(0);
   });
 
-  it('should let the light out when the light sits inside a shadow caster', () => {
+  it('should return light around the light when it sits inside a shadow caster', () => {
     expect(
       computeLightExposure(createLighting(5, 1, [0]), {
         ...TORCH,
@@ -134,13 +134,13 @@ describe('computeLightExposure', () => {
     ).toBeGreaterThan(0);
   });
 
-  it('should keep the heart of a shadow dark', () => {
+  it('should return no light when a place sits in the middle of a shadow', () => {
     expect(
       computeLightExposure(createLighting(9, 7, WALL), WIDE_SUN)[3 * 9 + 6],
     ).toBe(0);
   });
 
-  it('should ramp from light into shadow across the edge rather than step down', () => {
+  it('should return a ramp rather than a step when a place crosses the edge of a shadow', () => {
     const exposures = computeLightExposure(
       createLighting(9, 7, WALL),
       WIDE_SUN,
@@ -154,7 +154,7 @@ describe('computeLightExposure', () => {
     expect(deeper).toBeGreaterThan(0);
   });
 
-  it('should keep the penumbra the same width however long the shadow runs', () => {
+  it('should return the same penumbra width when the shadow runs longer', () => {
     const exposures = computeLightExposure(
       createLighting(9, 7, WALL),
       WIDE_SUN,
@@ -167,7 +167,7 @@ describe('computeLightExposure', () => {
     expect(far).toBeCloseTo(near, 2);
   });
 
-  it('should throw a wedge of shadow behind a wall when the light shines across the screen', () => {
+  it('should return a wedge of shadow behind a wall when the light shines across the screen', () => {
     const exposures = computeLightExposure(
       createLighting(7, 3, [3, 10, 17]),
       SUN,
@@ -176,7 +176,7 @@ describe('computeLightExposure', () => {
     expect(formatLit(exposures, 7)).toEqual(['####...', '####...', '####...']);
   });
 
-  it('should light the screen when the light stands off the screen', () => {
+  it('should return light on the screen when the light stands off the screen', () => {
     const exposures = computeLightExposure(createLighting(4, 2, []), {
       ...SUN,
       row: -500,
@@ -186,7 +186,7 @@ describe('computeLightExposure', () => {
     expect(formatLit(exposures, 4)).toEqual(['####', '####']);
   });
 
-  it('should take light away instead when the light has a negative intensity', () => {
+  it('should return less light when the light has a negative intensity', () => {
     expect(
       computeLightExposure(createLighting(5, 1, []), {
         ...TORCH,
@@ -195,7 +195,7 @@ describe('computeLightExposure', () => {
     ).toBeCloseTo(toExposure(-4) - REFERENCE_EXPOSURE);
   });
 
-  it('should give no light when the light has no reach', () => {
+  it('should return no light when the light has no reach', () => {
     expect(
       toArray(
         computeLightExposure(createLighting(3, 1, []), { ...TORCH, radius: 0 }),
@@ -203,7 +203,7 @@ describe('computeLightExposure', () => {
     ).toEqual([0, 0, 0]);
   });
 
-  it('should give no light when the light has no intensity', () => {
+  it('should return no light when the light has no intensity', () => {
     expect(
       toArray(
         computeLightExposure(createLighting(3, 1, []), {
@@ -214,7 +214,7 @@ describe('computeLightExposure', () => {
     ).toEqual([0, 0, 0]);
   });
 
-  it('should give an empty field when the screen has no places', () => {
+  it('should return an empty field when the screen has no places', () => {
     expect(computeLightExposure(createLighting(0, 0, []), TORCH)).toHaveLength(
       0,
     );

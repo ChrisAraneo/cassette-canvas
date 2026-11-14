@@ -3,19 +3,19 @@ import { describe, expect, it } from 'vitest';
 import { measureText } from './measure-text';
 
 describe('measureText', () => {
-  it('should give nothing for an empty text', () => {
+  it('should return zero when the text is empty', () => {
     expect(measureText('')).toBe(0);
   });
 
-  it('should add up the width of every character', () => {
+  it('should return the width of every character added up when it measures a text', () => {
     expect(measureText('HI')).toBe(10);
   });
 
-  it('should give a narrow character less room than a wide one', () => {
+  it('should return less room when the character is narrow than when it is wide', () => {
     expect(measureText('i')).toBeLessThan(measureText('m'));
   });
 
-  it('should move the pen like a space for a character it does not know', () => {
+  it('should return the width of a space when it does not know the character', () => {
     expect(measureText('é')).toBe(measureText(' '));
   });
 });

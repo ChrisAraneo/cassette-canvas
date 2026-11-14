@@ -16,25 +16,25 @@ const toFieldText = (hud: Hud): string | undefined =>
     .otherwise(() => undefined);
 
 describe('renameNoteWindow', () => {
-  it('should write the line in the title bar', () => {
+  it('should return the line in the title bar when it renames the window', () => {
     expect(
       findHudWindow(renameNoteWindow(createDemoHud(), 'Cassette'), NOTE_WINDOW)
         ?.title,
     ).toBe('Cassette');
   });
 
-  it('should empty the field, so the next line starts clean', () => {
+  it('should return an empty field when it renames the window, so the next line starts empty', () => {
     expect(toFieldText(renameNoteWindow(createDemoHud(), 'Cassette'))).toBe('');
   });
 
-  it('should give the window its own name back when the line is empty', () => {
+  it('should return the name of the window itself when the line is empty', () => {
     expect(
       findHudWindow(renameNoteWindow(createDemoHud(), '   '), NOTE_WINDOW)
         ?.title,
     ).toBe(NOTE_TITLE);
   });
 
-  it('should keep the window where it is', () => {
+  it('should return the window where it is when it renames it', () => {
     expect(
       findHudWindow(renameNoteWindow(createDemoHud(), 'Cassette'), NOTE_WINDOW),
     ).toMatchObject({
@@ -43,7 +43,7 @@ describe('renameNoteWindow', () => {
     });
   });
 
-  it('should leave the street window alone', () => {
+  it('should return the street window unchanged when it renames the note window', () => {
     expect(renameNoteWindow(createDemoHud(), 'Cassette').windows[0]).toEqual(
       createDemoHud().windows[0],
     );

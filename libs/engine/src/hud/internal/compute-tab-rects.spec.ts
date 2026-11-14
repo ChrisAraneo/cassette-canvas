@@ -23,7 +23,7 @@ const TABS: HudTabs = Object.freeze({
 });
 
 describe('computeTabRects', () => {
-  it('should start the first tab where the strip is placed', () => {
+  it('should return the first tab where the strip is placed when it measures the tabs', () => {
     expect(computeTabRects(TABS)[0]).toEqual({
       row: HUD_CONTENT_TOP + 4,
       column: HUD_CONTENT_LEFT + 6,
@@ -32,20 +32,20 @@ describe('computeTabRects', () => {
     });
   });
 
-  it('should put the next tab right after the one before it', () => {
+  it('should return the next tab right after the one before it when it measures the tabs', () => {
     expect(computeTabRects(TABS)[1]?.column).toBe(
       HUD_CONTENT_LEFT + 6 + computeControlWidth('SCENE'),
     );
   });
 
-  it('should give every tab a width of its own text', () => {
+  it('should return every tab as wide as its own text when it measures the tabs', () => {
     expect(map(computeTabRects(TABS), (rect) => rect.width)).toEqual([
       computeControlWidth('SCENE'),
       computeControlWidth('LIGHT'),
     ]);
   });
 
-  it('should give no rectangles for a strip with no tabs', () => {
+  it('should return no rectangles when the strip holds no tabs', () => {
     expect(computeTabRects({ ...TABS, tabs: [] })).toEqual([]);
   });
 });

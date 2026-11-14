@@ -24,7 +24,7 @@ const WINDOW: HudWindow = Object.freeze({
 const THEME = createHud().theme;
 
 describe('paintHudWindow', () => {
-  it('should fill the whole window with its body shade first', () => {
+  it('should return the whole window filled with its body shade first when it paints one', () => {
     expect(paintHudWindow(createHud(), WINDOW)[0]).toEqual({
       pixel: toPixel(15, THEME.body),
       row: 0,
@@ -34,14 +34,14 @@ describe('paintHudWindow', () => {
     });
   });
 
-  it('should paint in the window, not where the window sits', () => {
+  it('should return the paint steps in the window, not where the window sits, when it paints one', () => {
     expect(paintHudWindow(createHud(), WINDOW)[0]).toMatchObject({
       row: 0,
       column: 0,
     });
   });
 
-  it('should lay the title bar over the body', () => {
+  it('should return the title bar over the body when it paints a window', () => {
     expect(
       find(paintHudWindow(createHud(), WINDOW), (paint) =>
         match(paint)
@@ -51,13 +51,13 @@ describe('paintHudWindow', () => {
     ).toMatchObject(computeTitleRect(WINDOW));
   });
 
-  it('should write the title into the bar', () => {
+  it('should return the title in the bar when it paints a window', () => {
     expect(
       some(paintHudWindow(createHud(), WINDOW), (paint) => 'image' in paint),
     ).toBe(true);
   });
 
-  it('should take the color of the window', () => {
+  it('should return the color of the window when it paints one', () => {
     expect(
       paintHudWindow(createHud(), { ...WINDOW, color: 9 })[0],
     ).toMatchObject({ pixel: toPixel(9, THEME.body) });

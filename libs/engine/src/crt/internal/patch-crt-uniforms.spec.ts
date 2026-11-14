@@ -44,7 +44,7 @@ const createContext = (calls: UniformCall[]): WebGLRenderingContext =>
   }) as unknown as WebGLRenderingContext;
 
 describe('patchCrtUniforms', () => {
-  it('should use the monitor program before it sets anything', () => {
+  it('should call useProgram before it sets anything when it patches the uniforms', () => {
     const calls: UniformCall[] = [];
 
     patchCrtUniforms(createContext(calls), CRT, PICTURE, 1500);
@@ -52,7 +52,7 @@ describe('patchCrtUniforms', () => {
     expect(calls[0]).toEqual({ name: 'useProgram', values: [PROGRAM] });
   });
 
-  it('should tell the shader the frame, the canvas, the pixel size and the time', () => {
+  it('should pass the frame, the canvas, the pixel size, and the time to the shader when it patches the uniforms', () => {
     const calls: UniformCall[] = [];
 
     patchCrtUniforms(createContext(calls), CRT, PICTURE, 1500);
