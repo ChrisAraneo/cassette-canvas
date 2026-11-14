@@ -12,9 +12,11 @@ import type { HudEvent } from './types/hud-event';
  * actions it caused.
  *
  * - `press` finds the window under the pointer, brings it to the top, and
- *   grabs a title bar, a button, or a close box, sets the focus on a field,
- *   or opens a tab.
- * - `move` drags a window that is held by its title bar.
+ *   grabs a title bar, a button, a close box, or the thumb on a list's
+ *   scroll bar, sets the focus on a field, opens a tab, or scrolls a list or
+ *   selects an item in one.
+ * - `move` drags a window that is held by its title bar, and stops it at the
+ *   edges of the HUD's screen, or scrolls a list whose thumb is held.
  * - `release` drops the grab, and returns a `click` or a `close` when the
  *   pointer is still over what it grabbed.
  * - `key` types into the focused field.

@@ -23,4 +23,15 @@ describe('createHud', () => {
   it('should return a theme of the color it is given when it makes a HUD', () => {
     expect(createHud(9).theme).toEqual(createHudTheme(9));
   });
+
+  it('should return no screen size when none is given, so windows go anywhere', () => {
+    expect(createHud().size).toBeUndefined();
+  });
+
+  it('should return the screen size it is given when it makes a HUD', () => {
+    expect(createHud(9, { width: 160, height: 90 }).size).toEqual({
+      width: 160,
+      height: 90,
+    });
+  });
 });

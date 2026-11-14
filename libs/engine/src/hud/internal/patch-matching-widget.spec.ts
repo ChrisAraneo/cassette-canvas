@@ -1,8 +1,11 @@
 import { describe, expect, it } from 'vitest';
 
 import type { HudButton } from '../types/hud-button';
+import type { HudDivider } from '../types/hud-divider';
 import type { HudInput } from '../types/hud-input';
 import type { HudLabel } from '../types/hud-label';
+import type { HudList } from '../types/hud-list';
+import type { HudPanel } from '../types/hud-panel';
 import type { HudTabs } from '../types/hud-tabs';
 import { patchMatchingWidget } from './patch-matching-widget';
 
@@ -44,6 +47,46 @@ const TABS: HudTabs = Object.freeze({
   tabs: [{ id: 'scene', text: 'SCENE' }],
 });
 
+const PANEL: HudPanel = Object.freeze({
+  kind: 'panel',
+  id: 'meters',
+  page: '',
+  row: 0,
+  column: 0,
+  width: 60,
+  height: 20,
+});
+
+const DIVIDER: HudDivider = Object.freeze({
+  kind: 'divider',
+  id: 'line',
+  page: '',
+  row: 0,
+  column: 0,
+  width: 60,
+});
+
+const LIST: HudList = Object.freeze({
+  kind: 'list',
+  id: 'tracks',
+  page: '',
+  row: 0,
+  column: 0,
+  width: 80,
+  height: 48,
+  items: [
+    {
+      id: 'a',
+      lines: ['SIDE A'],
+      height: 0,
+      widgets: [],
+      selectable: true,
+    },
+  ],
+  scroll: 0,
+  selected: '',
+});
+
 describe('patchMatchingWidget', () => {
   it('should return the new text when the widget is a label', () => {
     expect(patchMatchingWidget(LABEL, 'fps', { text: 'FPS 30' })).toEqual({
@@ -71,6 +114,52 @@ describe('patchMatchingWidget', () => {
         tabs: [{ id: 'light', text: 'LIGHT' }],
       }),
     ).toEqual({ ...TABS, tabs: [{ id: 'light', text: 'LIGHT' }] });
+  });
+
+  it('should return the new size when the widget is a panel', () => {
+    expect(
+      patchMatchingWidget(PANEL, 'meters', { width: 70, height: 30 }),
+    ).toEqual({ ...PANEL, width: 70, height: 30 });
+  });
+
+  it('should return the new width when the widget is a divider', () => {
+    expect(patchMatchingWidget(DIVIDER, 'line', { width: 70 })).toEqual({
+      ...DIVIDER,
+      width: 70,
+    });
+  });
+
+  it('should return the new items when the widget is a list', () => {
+    expect(
+      patchMatchingWidget(LIST, 'tracks', {
+        items: [
+          {
+            id: 'b',
+            lines: ['SIDE B'],
+            height: 0,
+            widgets: [],
+            selectable: true,
+          },
+        ],
+      }),
+    ).toEqual({
+      ...LIST,
+      items: [
+        {
+          id: 'b',
+          lines: ['SIDE B'],
+          height: 0,
+          widgets: [],
+          selectable: true,
+        },
+      ],
+    });
+  });
+
+  it('should return the new scroll and selected item when the widget is a list', () => {
+    expect(
+      patchMatchingWidget(LIST, 'tracks', { scroll: 2, selected: 'a' }),
+    ).toEqual({ ...LIST, scroll: 2, selected: 'a' });
   });
 
   it('should return the same widget when the change names a field it does not have', () => {

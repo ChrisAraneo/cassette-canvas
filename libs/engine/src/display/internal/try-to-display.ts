@@ -6,6 +6,8 @@ const { nonNullable, number } = P;
 
 const POSITIVE_INTEGER = number.int().positive();
 
+const POSITIVE_RATE = number.finite().positive();
+
 export const tryToDisplay = (draft: DisplayDraft): Display | undefined =>
   match(draft)
     .with(
@@ -16,6 +18,7 @@ export const tryToDisplay = (draft: DisplayDraft): Display | undefined =>
         spriteSize: POSITIVE_INTEGER,
         width: POSITIVE_INTEGER,
         height: POSITIVE_INTEGER,
+        fps: POSITIVE_RATE,
       },
       (display) => display,
     )

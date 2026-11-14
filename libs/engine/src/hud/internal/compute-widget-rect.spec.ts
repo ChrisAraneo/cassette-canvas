@@ -5,6 +5,7 @@ import {
   HUD_CONTENT_LEFT,
   HUD_CONTENT_TOP,
   HUD_CONTROL_HEIGHT,
+  HUD_DIVIDER_HEIGHT,
 } from '../consts';
 import type { HudButton } from '../types/hud-button';
 import type { HudLabel } from '../types/hud-label';
@@ -69,6 +70,65 @@ describe('computeWidgetRect', () => {
         text: '',
       }),
     ).toMatchObject({ width: 60, height: HUD_CONTROL_HEIGHT });
+  });
+
+  it('should return the size a panel asks for when the widget is a panel', () => {
+    expect(
+      computeWidgetRect({
+        kind: 'panel',
+        id: 'meters',
+        page: '',
+        row: 4,
+        column: 6,
+        width: 60,
+        height: 20,
+      }),
+    ).toEqual({
+      row: HUD_CONTENT_TOP + 4,
+      column: HUD_CONTENT_LEFT + 6,
+      width: 60,
+      height: 20,
+    });
+  });
+
+  it('should return a divider two rows tall when the widget is a divider', () => {
+    expect(
+      computeWidgetRect({
+        kind: 'divider',
+        id: 'line',
+        page: '',
+        row: 4,
+        column: 6,
+        width: 60,
+      }),
+    ).toEqual({
+      row: HUD_CONTENT_TOP + 4,
+      column: HUD_CONTENT_LEFT + 6,
+      width: 60,
+      height: HUD_DIVIDER_HEIGHT,
+    });
+  });
+
+  it('should return the size a list asks for when the widget is a list', () => {
+    expect(
+      computeWidgetRect({
+        kind: 'list',
+        id: 'tracks',
+        page: '',
+        row: 4,
+        column: 6,
+        width: 80,
+        height: 48,
+        items: [],
+        scroll: 0,
+        selected: '',
+      }),
+    ).toEqual({
+      row: HUD_CONTENT_TOP + 4,
+      column: HUD_CONTENT_LEFT + 6,
+      width: 80,
+      height: 48,
+    });
   });
 
   it('should return a tab strip as wide as its tabs together when the widget is a strip', () => {

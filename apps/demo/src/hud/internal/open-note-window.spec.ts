@@ -8,7 +8,7 @@ import { filter, last, map } from 'lodash-es';
 import { match } from 'ts-pattern';
 import { describe, expect, it } from 'vitest';
 
-import { NOTE_FIELD, NOTE_WINDOW, STREET_WINDOW } from '../consts';
+import { NOTE_FIELD, NOTE_WINDOW, STREET_WINDOW, TAPE_WINDOW } from '../consts';
 import { createDemoHud } from '../create-demo-hud';
 import { openNoteWindow } from './open-note-window';
 
@@ -35,10 +35,10 @@ describe('openNoteWindow', () => {
     ).toBe(NOTE_WINDOW);
   });
 
-  it('should return the street window below the note window when it opens one', () => {
+  it('should return the other windows below the note window when it opens one', () => {
     expect(
       map(openNoteWindow(createDemoHud()).windows, (window) => window.id),
-    ).toEqual([STREET_WINDOW, NOTE_WINDOW]);
+    ).toEqual([STREET_WINDOW, TAPE_WINDOW, NOTE_WINDOW]);
   });
 
   it('should return an empty field when the window is already open', () => {

@@ -50,7 +50,8 @@ const PALETTE: Palette = Object.freeze({
   [toLitPixel(0x94, 0)]: { red: 20, green: 30, blue: 90 },
 });
 
-const createStubDisplay = (calls: GlCall[]): Display => ({
+/** A display that draws 50 frames a second, so one frame lasts 20 ms. */
+const createStubDisplay = (calls: GlCall[], drawnAt = 0): Display => ({
   context: {
     drawingBufferWidth: 6,
     drawingBufferHeight: 3,
@@ -67,7 +68,12 @@ const createStubDisplay = (calls: GlCall[]): Display => ({
   spriteSize: 1,
   width: 2,
   height: 1,
+  fps: 50,
+  drawnAt,
 });
+
+/** A time far enough after the last frame for the next one to be due. */
+const DUE_TIME = 20;
 
 const createHeroScreen = (): Screen => ({
   background: 0x94,
@@ -86,7 +92,7 @@ describe('drawScreen', () => {
   it('should upload the composed frame at logical resolution when it draws the screen', () => {
     const calls: GlCall[] = [];
 
-    drawScreen(createStubDisplay(calls), createHeroScreen(), 0);
+    drawScreen(createStubDisplay(calls), createHeroScreen(), DUE_TIME);
 
     expect(findUpload(calls)?.[3]).toBe(2);
     expect(findUpload(calls)?.[4]).toBe(1);
@@ -101,7 +107,7 @@ describe('drawScreen', () => {
     drawScreen(
       createStubDisplay(calls),
       { ...createHeroScreen(), ambient: -1 },
-      0,
+      DUE_TIME,
     );
 
     expect(findUpload(calls)?.[8]).toEqual(
@@ -115,7 +121,7 @@ describe('drawScreen', () => {
     drawScreen(
       createStubDisplay(calls),
       { ...createHeroScreen(), background: TRANSPARENT, sprites: [] },
-      0,
+      DUE_TIME,
     );
 
     expect(findUpload(calls)?.[8]).toEqual(new Uint8Array(2 * BYTES_PER_PIXEL));
@@ -134,24 +140,53 @@ describe('drawScreen', () => {
   it('should pass the pixel size to the monitor effect when it draws the screen', () => {
     const calls: GlCall[] = [];
 
-    drawScreen(createStubDisplay(calls), createHeroScreen(), 0);
+    drawScreen(createStubDisplay(calls), createHeroScreen(), DUE_TIME);
 
     expect(
       find(calls, (call) => call.values[0] === 'pixelSize')?.values[1],
     ).toBe(3);
   });
 
-  it('should return the very same display when it draws the screen', () => {
+  it('should return the display carrying the time of the frame when it draws the screen', () => {
     const display = createStubDisplay([]);
 
-    expect(drawScreen(display, createHeroScreen(), 0)).toBe(display);
+    expect(drawScreen(display, createHeroScreen(), DUE_TIME)).toEqual({
+      ...display,
+      drawnAt: DUE_TIME,
+    });
   });
 
   it('should not change the old screen when it draws it', () => {
     const screen = createHeroScreen();
 
-    drawScreen(createStubDisplay([]), screen, 0);
+    drawScreen(createStubDisplay([]), screen, DUE_TIME);
 
     expect(screen).toEqual(createHeroScreen());
+  });
+
+  it('should draw nothing when the frame comes sooner than the display rate allows', () => {
+    const calls: GlCall[] = [];
+
+    drawScreen(createStubDisplay(calls), createHeroScreen(), 19);
+
+    expect(calls).toEqual([]);
+  });
+
+  it('should return the very same display when it skips a frame', () => {
+    const display = createStubDisplay([]);
+
+    expect(drawScreen(display, createHeroScreen(), 19)).toBe(display);
+  });
+
+  it('should draw the frame when the display has drawn nothing yet', () => {
+    const calls: GlCall[] = [];
+
+    drawScreen(
+      createStubDisplay(calls, Number.NEGATIVE_INFINITY),
+      createHeroScreen(),
+      0,
+    );
+
+    expect(findUpload(calls)?.[3]).toBe(2);
   });
 });

@@ -1,9 +1,11 @@
+import { TEXT_BOLT, TEXT_HEART } from '../consts';
 import type { Glyph } from './types/glyph';
 
 /**
- * The glyphs of the built-in font, keyed by character, for every printable
- * ASCII character. The shapes come from PixeloidSans at its design size,
- * where a capital is 7 pixels tall.
+ * The glyphs of the built-in font, keyed by character: every printable
+ * ASCII character, and the heart and the lightning bolt the font adds to
+ * them. The ASCII shapes come from PixeloidSans at its design size, where a
+ * capital is 7 pixels tall.
  *
  * `advance` is the distance to the next character, `top` is where the art
  * starts, measured from the top of a capital (a negative `top` reaches above
@@ -431,4 +433,14 @@ export const GLYPHS: Readonly<Record<string, Glyph>> = Object.freeze({
     rows: ['##..', '..#.', '..#.', '..##', '..##', '..#.', '..#.', '##..'],
   },
   '~': { advance: 6, top: 2, rows: ['.#...', '#.#.#', '...#.'] },
+  [TEXT_HEART]: {
+    advance: 6,
+    top: 1,
+    rows: ['##.##', '#####', '#####', '.###.', '..#..'],
+  },
+  [TEXT_BOLT]: {
+    advance: 6,
+    top: 0,
+    rows: ['...##', '..##.', '.####', '####.', '.##..', '##...', '#....'],
+  },
 });

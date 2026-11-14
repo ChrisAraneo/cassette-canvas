@@ -16,6 +16,8 @@ const createDraft = (): DisplayDraft => ({
   spriteSize: 8,
   width: 16,
   height: 12,
+  fps: 640,
+  drawnAt: Number.NEGATIVE_INFINITY,
 });
 
 describe('tryToDisplay', () => {
@@ -41,6 +43,20 @@ describe('tryToDisplay', () => {
 
   it('should return undefined when the sprite size is a fraction', () => {
     expect(tryToDisplay({ ...createDraft(), spriteSize: 1.5 })).toBeUndefined();
+  });
+
+  it('should return undefined when the frame rate is zero', () => {
+    expect(tryToDisplay({ ...createDraft(), fps: 0 })).toBeUndefined();
+  });
+
+  it('should return undefined when the frame rate is negative', () => {
+    expect(tryToDisplay({ ...createDraft(), fps: -60 })).toBeUndefined();
+  });
+
+  it('should return the draft when the frame rate is a fraction, so half rates work', () => {
+    const draft = { ...createDraft(), fps: 29.97 };
+
+    expect(tryToDisplay(draft)).toBe(draft);
   });
 
   it('should return undefined when the canvas is too small for one pixel', () => {

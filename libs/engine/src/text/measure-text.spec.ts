@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
+import { TEXT_BOLT, TEXT_HEART } from './consts';
 import { measureText } from './measure-text';
 
 describe('measureText', () => {
@@ -17,5 +18,9 @@ describe('measureText', () => {
 
   it('should return the width of a space when it does not know the character', () => {
     expect(measureText('é')).toBe(measureText(' '));
+  });
+
+  it('should return room for the heart and the bolt when the text holds them', () => {
+    expect(measureText(`${TEXT_HEART}${TEXT_BOLT}`)).toBe(12);
   });
 });

@@ -2,8 +2,8 @@
 
 | Function                                                            | What it does                                                          |
 | ------------------------------------------------------------------- | --------------------------------------------------------------------- |
-| `tryCreateDisplay(canvas, { colors, pixelSize, spriteSize })`       | Creates a display, or returns `undefined`                             |
-| `drawScreen(display, screen, time)`                                 | Draws the screen with the monitor effect and returns the display      |
+| `tryCreateDisplay(canvas, { colors, pixelSize, spriteSize, fps? })` | Creates a display, or returns `undefined`                             |
+| `drawScreen(display, screen, time)`                                 | Draws the screen, or skips the frame, and returns the display to keep |
 | `createScreen(background?, ambient?)`                               | Creates an empty screen (transparent, ambient `0` by default)         |
 | `addSprite(screen, id, sprite, row, column)`                        | Adds a sprite on top, replacing any sprite with the same id           |
 | `patchSprite(screen, id, { sprite?, row?, column?, castsShadow? })` | Changes a sprite's image (animation), position, or shadow             |
@@ -31,8 +31,8 @@ Text, overlays and the HUD:
 | Function                                       | What it does                                                                |
 | ---------------------------------------------- | --------------------------------------------------------------------------- |
 | `measureText(text)`                            | Returns how far a line of text moves the pen, in logical pixels             |
-| `toTextOverlay(text, pixel)`                   | Draws a line of text in one pixel value, as an overlay                      |
-| `toTextPaint(text, pixel, row, column)`        | Returns a text step for `composeOverlay`, placed by the top of its capitals |
+| `toTextOverlay(text, pixels)`                  | Draws a line of text as an overlay, in one pixel value or one per character |
+| `toTextPaint(text, pixels, row, column)`       | Returns a text step for `composeOverlay`, placed by the top of its capitals |
 | `createOverlay(width, height, pixel?)`         | Creates an overlay filled with one pixel value (transparent by default)     |
 | `toOverlay(rows, legend)`                      | Builds an overlay from text art, as wide as its longest row                 |
 | `composeOverlay(width, height, paints)`        | Paints fills, images, and text into a new overlay, in order                 |
@@ -40,16 +40,20 @@ Text, overlays and the HUD:
 | `patchOverlay(screen, id, changes)`            | Changes an overlay's image or place                                         |
 | `removeOverlay(screen, id)`                    | Removes an overlay                                                          |
 | `findOverlay(screen, id)`                      | Returns an overlay placement, or `undefined`                                |
-| `createHud(color?)`                            | Creates a HUD with no windows, in shades of one palette color               |
+| `createHud(color?, size?)`                     | Creates a HUD with no windows, in shades of one palette color               |
 | `createHudTheme(color?)`                       | Returns the shades a HUD is drawn in, to replace single ones                |
 | `addHudWindow(hud, settings)`                  | Adds a window on top, replacing any window with the same id                 |
 | `patchHudWindow(hud, id, changes)`             | Changes a window's title, place, size, color, close box, page, or widgets   |
 | `removeHudWindow(hud, id)`                     | Removes a window                                                            |
 | `findHudWindow(hud, id)`                       | Returns a window, or `undefined`                                            |
-| `patchHudWidget(hud, window, widget, changes)` | Changes a widget's text, width, or tabs                                     |
+| `patchHudWidget(hud, window, widget, changes)` | Changes a widget's text, size, tabs, items, scroll, or selected item        |
 | `findHudWidget(hud, window, widget)`           | Returns a widget, or `undefined`                                            |
 | `handleHud(hud, event)`                        | Handles a pointer or key event: returns the new HUD and the actions         |
 | `addHud(screen, hud)`                          | Puts the HUD's windows on a screen as overlays                              |
 | `composeHud(hud)`                              | Draws the HUD as one overlay placement per window, from the bottom up       |
 
 HUD and overlay functions never change what you pass in either.
+
+`drawScreen` is the one function whose result you have to keep: the display it
+returns carries the time of the frame it drew, which is how it holds itself to
+the `fps` the settings named. Pass that display to the next frame.

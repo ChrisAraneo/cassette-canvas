@@ -22,6 +22,23 @@ const patchWidget = (widget: HudWidget, changes: HudWidgetChanges): HudWidget =>
       ...strip,
       tabs: changes.tabs ?? strip.tabs,
     }))
+    .with({ kind: 'panel' }, (panel) => ({
+      ...panel,
+      width: changes.width ?? panel.width,
+      height: changes.height ?? panel.height,
+    }))
+    .with({ kind: 'divider' }, (divider) => ({
+      ...divider,
+      width: changes.width ?? divider.width,
+    }))
+    .with({ kind: 'list' }, (list) => ({
+      ...list,
+      width: changes.width ?? list.width,
+      height: changes.height ?? list.height,
+      items: changes.items ?? list.items,
+      scroll: changes.scroll ?? list.scroll,
+      selected: changes.selected ?? list.selected,
+    }))
     .exhaustive();
 
 export const patchMatchingWidget = (

@@ -3,6 +3,7 @@ import { keys, noop, size } from 'lodash-es';
 import { describe, expect, it } from 'vitest';
 
 import { CRT_CONTEXT_ATTRIBUTES } from '../crt/consts';
+import { DEFAULT_MAX_FPS } from './consts';
 import type { PaletteColors } from '../palette/types/palette-colors';
 import { tryCreateDisplay } from './try-create-display';
 
@@ -101,6 +102,42 @@ describe('tryCreateDisplay', () => {
   it('should return undefined when the monitor shaders do not compile', () => {
     expect(
       tryCreateDisplay(createCanvas(createContext(false)), SETTINGS),
+    ).toBeUndefined();
+  });
+
+  it('should return the default frame rate when the settings name none', () => {
+    const display = tryCreateDisplay(
+      createCanvas(createContext(true)),
+      SETTINGS,
+    );
+
+    expect(display?.fps).toBe(DEFAULT_MAX_FPS);
+  });
+
+  it('should return the frame rate the settings name when they name one', () => {
+    const display = tryCreateDisplay(createCanvas(createContext(true)), {
+      ...SETTINGS,
+      fps: 30,
+    });
+
+    expect(display?.fps).toBe(30);
+  });
+
+  it('should return a display that has drawn nothing yet when it creates one', () => {
+    const display = tryCreateDisplay(
+      createCanvas(createContext(true)),
+      SETTINGS,
+    );
+
+    expect(display?.drawnAt).toBe(Number.NEGATIVE_INFINITY);
+  });
+
+  it('should return undefined when the frame rate is zero', () => {
+    expect(
+      tryCreateDisplay(createCanvas(createContext(true)), {
+        ...SETTINGS,
+        fps: 0,
+      }),
     ).toBeUndefined();
   });
 

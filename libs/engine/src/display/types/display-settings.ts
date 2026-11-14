@@ -8,4 +8,11 @@ export interface DisplaySettings {
   readonly pixelSize: number;
   /** The width and height of every sprite, in logical pixels. */
   readonly spriteSize: number;
+  /**
+   * The most frames a second the display draws, which it never exceeds.
+   * `drawScreen` skips a frame that comes sooner than that. Defaults to
+   * `DEFAULT_MAX_FPS` (640), which is above any monitor's refresh rate, so
+   * by default every frame is drawn.
+   */
+  readonly fps?: number;
 }

@@ -3,7 +3,14 @@ import { match } from 'ts-pattern';
 import { describe, expect, it } from 'vitest';
 
 import { isPixel } from '../palette/is-pixel';
-import { TEXT_ASCENT, TEXT_GAP, TEXT_HEIGHT, TEXT_LINE_ROWS } from './consts';
+import {
+  TEXT_ASCENT,
+  TEXT_BOLT,
+  TEXT_GAP,
+  TEXT_HEART,
+  TEXT_HEIGHT,
+  TEXT_LINE_ROWS,
+} from './consts';
 import { measureText } from './measure-text';
 import { toTextOverlay } from './to-text-overlay';
 
@@ -59,6 +66,20 @@ describe('toTextOverlay', () => {
 
   it('should return a width one gap past the last letter when it draws a text', () => {
     expect(toTextOverlay('H', INK).width - size('#...#')).toBe(TEXT_GAP);
+  });
+
+  it('should return the letters in their own pixels when the line has a list of them', () => {
+    expect(toTextOverlay('HI', [INK, 0x26]).pixels).toEqual(
+      expect.arrayContaining([INK, 0x26]),
+    );
+  });
+
+  it('should return a heart as wide as the capitals are tall when it draws one', () => {
+    expect(toRows(TEXT_HEART)[TEXT_ASCENT + 2]).toBe('#####.');
+  });
+
+  it('should return a bolt reaching the top of the capitals when it draws one', () => {
+    expect(toInkedRows(TEXT_BOLT)[0]).toBe(TEXT_ASCENT + 1);
   });
 
   it('should return an empty overlay when the text is empty', () => {

@@ -1,7 +1,9 @@
 import {
+  findHudWidget,
   findHudWindow,
   type Hud,
   type HudAction,
+  TEXT_HEART,
 } from '@cassette-canvas/engine';
 import { filter, map } from 'lodash-es';
 import { describe, expect, it } from 'vitest';
@@ -19,7 +21,11 @@ import {
   NOTE_FIELD,
   NOTE_WINDOW,
   NOW_BUTTON,
+  PLAY_BUTTON,
   STREET_WINDOW,
+  TAPE_LABEL,
+  TAPE_LIST,
+  TAPE_WINDOW,
 } from '../consts';
 import { createDemoHud } from '../create-demo-hud';
 import type { HudState } from '../types/hud-state';
@@ -100,6 +106,53 @@ describe('applyHudAction', () => {
         NOTE_WINDOW,
       )?.title,
     ).toBe('Evening');
+  });
+
+  it('should return the track in the readout when one is picked from the list', () => {
+    expect(
+      findHudWidget(
+        applyHudAction(
+          createState(0),
+          {
+            kind: 'select',
+            window: TAPE_WINDOW,
+            widget: TAPE_LIST,
+            value: 'neon',
+          },
+          0,
+        ).hud,
+        TAPE_WINDOW,
+        TAPE_LABEL,
+      ),
+    ).toMatchObject({ text: `${TEXT_HEART} NEON RAIN` });
+  });
+
+  it('should return the track in the readout when the play button on it is clicked', () => {
+    expect(
+      findHudWidget(
+        applyHudAction(
+          createState(0),
+          click(`${PLAY_BUTTON}-deck`, TAPE_WINDOW),
+          0,
+        ).hud,
+        TAPE_WINDOW,
+        TAPE_LABEL,
+      ),
+    ).toMatchObject({ text: `${TEXT_HEART} CASSETTE DECK` });
+  });
+
+  it('should return the track selected in the list when the play button on it is clicked', () => {
+    expect(
+      findHudWidget(
+        applyHudAction(
+          createState(0),
+          click(`${PLAY_BUTTON}-deck`, TAPE_WINDOW),
+          0,
+        ).hud,
+        TAPE_WINDOW,
+        TAPE_LIST,
+      ),
+    ).toMatchObject({ selected: 'deck' });
   });
 
   it('should return the state unchanged when a tab is opened', () => {

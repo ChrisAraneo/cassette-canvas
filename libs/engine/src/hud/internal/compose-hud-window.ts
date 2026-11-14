@@ -4,14 +4,14 @@ import type { OverlayPlacement } from '../../overlay/types/overlay-placement';
 import { HUD_OVERLAY_PREFIX } from '../consts';
 import type { Hud } from '../types/hud';
 import type { HudWindow } from '../types/hud-window';
-import { filterPageWidgets } from './filter-page-widgets';
 import { paintHudWidget } from './paint-hud-widget';
 import { paintHudWindow } from './paint-hud-window';
+import { toWindowWidgets } from './to-window-widgets';
 
 /**
- * Paints one window, frame first and then the widgets of its open page, into
- * an overlay of its own size. Its id is the overlay prefix, a dash, and the
- * window id.
+ * Paints one window, frame first and then the widgets of its open page, with
+ * the widgets of a list's items over the list they sit on, into an overlay
+ * of its own size. Its id is the overlay prefix, a dash, and the window id.
  */
 export const composeHudWindow = (
   hud: Hud,
@@ -20,8 +20,8 @@ export const composeHudWindow = (
   id: `${HUD_OVERLAY_PREFIX}-${window.id}`,
   overlay: composeOverlay(window.width, window.height, [
     ...paintHudWindow(hud, window),
-    ...flatMap(filterPageWidgets(window), (widget) =>
-      paintHudWidget(hud, window, widget),
+    ...flatMap(toWindowWidgets(window), (placed) =>
+      paintHudWidget(hud, window, placed.widget),
     ),
   ]),
   row: window.row,

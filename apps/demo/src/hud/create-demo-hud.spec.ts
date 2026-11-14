@@ -4,14 +4,15 @@ import { describe, expect, it } from 'vitest';
 
 import { DEMO_COLORS, SAND } from '../art/consts';
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from '../street/consts';
-import { NOTE_WINDOW, STREET_WINDOW, TIME_PAGE } from './consts';
+import { NOTE_WINDOW, STREET_WINDOW, TAPE_WINDOW, TIME_PAGE } from './consts';
 import { createDemoHud } from './create-demo-hud';
 
 describe('createDemoHud', () => {
-  it('should return the street window and the note window when it makes the HUD', () => {
+  it('should return the street, the note, and the tape window when it makes the HUD', () => {
     expect(map(createDemoHud().windows, (window) => window.id)).toEqual([
       STREET_WINDOW,
       NOTE_WINDOW,
+      TAPE_WINDOW,
     ]);
   });
 
@@ -35,7 +36,14 @@ describe('createDemoHud', () => {
     expect(createDemoHud().theme.color).toBe(DEFAULT_HUD_COLOR);
   });
 
-  it('should return both windows inside the street screen when it makes the HUD', () => {
+  it('should return the street screen as the size no window can be dragged past', () => {
+    expect(createDemoHud().size).toEqual({
+      width: SCREEN_WIDTH,
+      height: SCREEN_HEIGHT,
+    });
+  });
+
+  it('should return every window inside the street screen when it makes the HUD', () => {
     expect(
       every(
         createDemoHud().windows,

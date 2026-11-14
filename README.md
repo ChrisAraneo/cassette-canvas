@@ -16,7 +16,9 @@
 - Sprites use 16 colors with 8 shades each (128 colors).
 - Pixels are large, and every sprite has the same size.
 - Ambient light and point lights. Sprites can cast shadows.
-- Text, windows, buttons, text fields, and tabs are built in.
+- Text, windows, buttons, text fields, tabs, panels, dividers, and scrolling
+  lists are built in. A list item holds more than one line and widgets of its
+  own, and its scroll bar drags.
 - Retro monitor effect: a soft glow around bright pixels, scanlines, film grain, and a surface texture.
 
 Full documentation is in [docs/](docs/README.md). The published package ships
@@ -49,9 +51,13 @@ import {
   addSprite,
   createHud,
   createScreen,
+  DEFAULT_HUD_COLOR,
+  type Display,
   drawScreen,
   handleHud,
   patchSprite,
+  TEXT_BOLT,
+  TEXT_HEART,
   toPixel,
   toSprite,
   tryCreateDisplay,
@@ -59,7 +65,8 @@ import {
 
 const PIXEL_SIZE = 4;
 
-// 16 base colors, 4 canvas pixels to a logical pixel, 8 by 8 sprites.
+// 16 base colors, 4 canvas pixels to a logical pixel, 8 by 8 sprites, and at
+// most 60 frames a second.
 const display = tryCreateDisplay(canvas, {
   colors: [
     '#7f7f7f',
@@ -81,6 +88,7 @@ const display = tryCreateDisplay(canvas, {
   ],
   pixelSize: PIXEL_SIZE,
   spriteSize: 8,
+  fps: 60,
 });
 
 const HEART = toSprite(
@@ -108,31 +116,99 @@ const screen = addLight(caster, 'torch', {
   intensity: 5,
 });
 
-// A window over the scene, with a line of text and a button under it.
-let hud = addHudWindow(createHud(), {
-  id: 'torch',
-  title: 'TORCH',
-  row: 8,
-  column: 8,
-  width: 92,
-  height: 60,
-  widgets: [
-    { kind: 'label', id: 'state', page: '', row: 1, column: 0, text: 'LIT' },
-    {
-      kind: 'button',
-      id: 'blow',
-      page: '',
-      row: 14,
-      column: 0,
-      width: 72,
-      text: 'BLOW OUT',
-    },
-  ],
-});
+// A window over the scene, with a line of text, a button under it, and a
+// list of torches under that. The HUD knows the screen it is on, the canvas
+// size in logical pixels, so the window cannot be dragged off it.
+let hud = addHudWindow(
+  createHud(DEFAULT_HUD_COLOR, {
+    width: canvas.width / PIXEL_SIZE,
+    height: canvas.height / PIXEL_SIZE,
+  }),
+  {
+    id: 'torch',
+    title: 'TORCH',
+    row: 8,
+    column: 8,
+    width: 92,
+    height: 104,
+    widgets: [
+      { kind: 'label', id: 'state', page: '', row: 1, column: 0, text: 'LIT' },
+      {
+        kind: 'button',
+        id: 'blow',
+        page: '',
+        row: 14,
+        column: 0,
+        width: 72,
+        text: 'BLOW OUT',
+      },
+      { kind: 'divider', id: 'line', page: '', row: 30, column: 0, width: 72 },
+      {
+        kind: 'list',
+        id: 'torches',
+        page: '',
+        row: 35,
+        column: 0,
+        width: 72,
+        height: 46,
+        items: [
+          {
+            id: 'hall',
+            lines: [`HALL ${TEXT_HEART}`, 'LIT'],
+            height: 0,
+            widgets: [
+              {
+                kind: 'button',
+                id: 'blow-hall',
+                page: '',
+                row: 3,
+                column: 32,
+                width: 26,
+                text: 'BLOW',
+              },
+            ],
+            selectable: true,
+          },
+          {
+            id: 'crypt',
+            lines: [`CRYPT ${TEXT_BOLT}`],
+            height: 0,
+            widgets: [],
+            selectable: true,
+          },
+          {
+            id: 'tower',
+            lines: ['TOWER'],
+            height: 0,
+            widgets: [],
+            selectable: true,
+          },
+          {
+            id: 'gate',
+            lines: ['GATE'],
+            height: 0,
+            widgets: [],
+            selectable: true,
+          },
+          {
+            id: 'well',
+            lines: ['WELL'],
+            height: 0,
+            widgets: [],
+            selectable: true,
+          },
+        ],
+        scroll: 0,
+        selected: 'hall',
+      },
+    ],
+  },
+);
 
 // Pass the pointer to the HUD in logical pixels: the offset inside the
 // canvas divided by the pixel size. It returns the new HUD and the actions
-// the person caused, such as a click on the `blow` button.
+// the person caused, such as a click on the `blow` button, a click on the
+// one that sits on the first torch, or a torch picked from the list.
 canvas.addEventListener('pointerdown', (event) => {
   const rect = canvas.getBoundingClientRect();
   const change = handleHud(hud, {
@@ -146,16 +222,18 @@ canvas.addEventListener('pointerdown', (event) => {
 });
 
 // Draw once per frame, with the HUD over the lit scene. The time in
-// milliseconds animates the film grain.
-const draw = (time: number) => {
-  if (display) {
-    drawScreen(display, addHud(screen, hud), time);
-  }
+// milliseconds animates the film grain. Keep the display `drawScreen`
+// returns: it carries the time of the last frame, which is how the display
+// never draws more frames a second than its `fps`.
+const draw = (ready: Display, time: number) => {
+  const drawn = drawScreen(ready, addHud(screen, hud), time);
 
-  requestAnimationFrame(draw);
+  requestAnimationFrame((next) => draw(drawn, next));
 };
 
-requestAnimationFrame(draw);
+if (display) {
+  requestAnimationFrame((time) => draw(display, time));
+}
 ```
 
 ## License

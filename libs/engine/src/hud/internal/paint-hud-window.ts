@@ -1,42 +1,31 @@
 import type { OverlayPaint } from '../../overlay/types/overlay-paint';
 import { toPixel } from '../../palette/to-pixel';
 import { toTextPaint } from '../../text/to-text-paint';
-import { HUD_EDGE, HUD_PADDING, HUD_TEXT_TOP } from '../consts';
+import { HUD_PADDING, HUD_TEXT_TOP } from '../consts';
 import type { Hud } from '../types/hud';
 import type { HudWindow } from '../types/hud-window';
 import { computeTitleRect } from './compute-title-rect';
-import { insetRect } from './inset-rect';
-import { paintBevel } from './paint-bevel';
 import { paintCloseBox } from './paint-close-box';
+import { paintPanel } from './paint-panel';
 import { toWindowTheme } from './to-window-theme';
 
 /**
- * Returns the paint steps for a window without its widgets: a dark line
- * around a raised frame, the title bar with the title in it, the groove
- * under the bar, and the close box.
+ * Returns the paint steps for a window without its widgets: the panel every
+ * window is built from, the title bar with the title in it, the groove under
+ * the bar, and the close box.
  */
 export const paintHudWindow = (
   hud: Hud,
   window: HudWindow,
 ): readonly OverlayPaint[] => {
   const theme = toWindowTheme(hud, window);
-  const edge = toPixel(theme.color, theme.edge);
   const shadow = toPixel(theme.color, theme.shadow);
-  const frame = {
-    row: 0,
-    column: 0,
-    width: window.width,
-    height: window.height,
-  };
   const title = computeTitleRect(window);
 
   return [
-    { pixel: toPixel(theme.color, theme.body), ...frame },
-    ...paintBevel(frame, edge, edge),
-    ...paintBevel(
-      insetRect(frame, HUD_EDGE),
-      toPixel(theme.color, theme.highlight),
-      shadow,
+    ...paintPanel(
+      { row: 0, column: 0, width: window.width, height: window.height },
+      theme,
     ),
     { pixel: toPixel(theme.color, theme.title), ...title },
     {

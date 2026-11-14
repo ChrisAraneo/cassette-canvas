@@ -10,7 +10,7 @@ libs/
     ├── lighting/      light amounts, the shade scale, and shadows
     ├── overlay/       images painted over the lit frame
     ├── text/          the built-in pixel font
-    ├── hud/           windows, labels, buttons, fields, and tabs
+    ├── hud/           windows, and the widgets they hold
     ├── frame/         turns a screen into lit pixels
     ├── crt/           the WebGL monitor shader
     └── display/       draws to the canvas

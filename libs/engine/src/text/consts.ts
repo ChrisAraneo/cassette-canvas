@@ -24,3 +24,12 @@ export const TEXT_UNKNOWN_ADVANCE = 3;
 
 /** The character that marks ink in the glyph art. */
 export const TEXT_INK = '#';
+
+/**
+ * The two characters the font draws that are not printable ASCII: a heart
+ * and a lightning bolt. They measure and place like any other character, so
+ * `HP ${TEXT_HEART}${TEXT_HEART}` is one line of text.
+ */
+export const TEXT_HEART = '\u2665';
+
+export const TEXT_BOLT = '\u26a1';

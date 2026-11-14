@@ -3,6 +3,8 @@ import { describe, expect, it } from 'vitest';
 import { addHudWindow } from '../add-hud-window';
 import { createHud } from '../create-hud';
 import type { Hud } from '../types/hud';
+import type { HudItemWidget } from '../types/hud-item-widget';
+import type { HudList } from '../types/hud-list';
 import type { HudWidget } from '../types/hud-widget';
 import { findHudHit } from './find-hud-hit';
 
@@ -36,6 +38,62 @@ const WIDGETS: readonly HudWidget[] = Object.freeze([
     text: 'LAMPS',
   },
 ]);
+
+/**
+ * A list whose first item carries a play button, with a label on the item
+ * under it. The item is as tall as the button on it.
+ */
+const PLAY: HudItemWidget = Object.freeze({
+  kind: 'button',
+  id: 'play-a',
+  page: '',
+  row: 0,
+  column: 40,
+  width: 20,
+  text: 'PLAY',
+});
+
+const SIDE_B: HudItemWidget = Object.freeze({
+  kind: 'label',
+  id: 'side-b',
+  page: '',
+  row: 1,
+  column: 2,
+  text: 'B',
+});
+
+const TRACKS: HudList = Object.freeze({
+  kind: 'list',
+  id: 'tracks',
+  page: '',
+  row: 0,
+  column: 0,
+  width: 80,
+  height: 40,
+  items: [
+    {
+      id: 'a',
+      lines: ['SIDE A'],
+      height: 0,
+      widgets: [PLAY],
+      selectable: true,
+    },
+    { id: 'b', lines: [], height: 0, widgets: [SIDE_B], selectable: true },
+  ],
+  scroll: 0,
+  selected: '',
+});
+
+const createTapeHud = (): Hud =>
+  addHudWindow(createHud(), {
+    id: 'tape',
+    title: 'TAPE',
+    row: 0,
+    column: 0,
+    width: 90,
+    height: 60,
+    widgets: [TRACKS],
+  });
 
 const createStreetHud = (): Hud =>
   addHudWindow(createHud(), {
@@ -120,6 +178,27 @@ describe('findHudHit', () => {
       window: 'street',
       part: 'body',
       widget: '',
+    });
+  });
+
+  it('should return the button when the point is over one that sits on an item of a list', () => {
+    expect(findHudHit(createTapeHud(), 20, 50)).toMatchObject({
+      part: 'widget',
+      widget: 'play-a',
+    });
+  });
+
+  it('should return the list when the point is over a label that sits on an item, so the item still takes the press', () => {
+    expect(findHudHit(createTapeHud(), 34, 9)).toMatchObject({
+      part: 'widget',
+      widget: 'tracks',
+    });
+  });
+
+  it('should return the list when the point is over an item and nothing on it', () => {
+    expect(findHudHit(createTapeHud(), 20, 10)).toMatchObject({
+      part: 'widget',
+      widget: 'tracks',
     });
   });
 

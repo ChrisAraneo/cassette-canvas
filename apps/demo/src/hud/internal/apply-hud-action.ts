@@ -11,17 +11,22 @@ import {
   NOTE_WINDOW,
   NOW_BUTTON,
   STREET_WINDOW,
+  TAPE_WINDOW,
 } from '../consts';
 import type { HudState } from '../types/hud-state';
 import { jumpClock } from './jump-clock';
 import { openNoteWindow } from './open-note-window';
+import { playTrack } from './play-track';
 import { renameNoteWindow } from './rename-note-window';
+import { toTrackId } from './to-track-id';
 
 /**
  * Handles one action the person caused: the buttons move the street clock or
- * bring the note window back, and a line typed into the field becomes the
- * title of the note window. Anything else, such as opening a tab or dragging
- * a window, the HUD has already handled by itself.
+ * bring the note window back, a line typed into the field becomes the title
+ * of the note window, and a track picked from the list, or the play button
+ * pressed on one, shows in the tape window's readout. Anything else, such as
+ * opening a tab, scrolling a list, or dragging a window, the HUD has already
+ * handled by itself.
  */
 export const applyHudAction = (
   state: HudState,
@@ -53,5 +58,13 @@ export const applyHudAction = (
     .with({ kind: 'submit', window: NOTE_WINDOW }, ({ value }) => ({
       ...state,
       hud: renameNoteWindow(state.hud, value),
+    }))
+    .with({ kind: 'select', window: TAPE_WINDOW }, ({ value }) => ({
+      ...state,
+      hud: playTrack(state.hud, value),
+    }))
+    .with({ kind: 'click', window: TAPE_WINDOW }, ({ widget }) => ({
+      ...state,
+      hud: playTrack(state.hud, toTrackId(widget)),
     }))
     .otherwise(() => state);

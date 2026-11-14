@@ -77,6 +77,33 @@ export const HUD_CARET_HEIGHT = TEXT_HEIGHT;
 /** How much a tab that is not open sits below the open one. */
 export const HUD_TAB_DROP = 2;
 
+/** The rows a divider takes: a shadow line with a light line under it. */
+export const HUD_DIVIDER_HEIGHT = 2;
+
+/**
+ * The rows one line of an item of a list takes: a line of text with a row to
+ * spare. An item is this tall for each of the lines it holds, so an item of
+ * one line takes this and an item of two lines twice as much.
+ */
+export const HUD_LIST_ITEM_HEIGHT = TEXT_HEIGHT + 2;
+
+/** The rows one item of a single line takes with the divider under it. */
+export const HUD_LIST_ITEM_PITCH = HUD_LIST_ITEM_HEIGHT + HUD_DIVIDER_HEIGHT;
+
+/**
+ * The scroll bar down the right side of a list. Its arrows are squares of
+ * this size, one at each end of it.
+ */
+export const HUD_LIST_BAR_WIDTH = 11;
+
+/** The shortest the thumb on a list's scroll bar gets. */
+export const HUD_LIST_THUMB_HEIGHT = 5;
+
+/** Where the text of a list item sits inside it. */
+export const HUD_LIST_TEXT_TOP = 1;
+
+export const HUD_LIST_TEXT_LEFT = 2;
+
 /** The id each window gets as an overlay: this, a dash, and the window id. */
 export const HUD_OVERLAY_PREFIX = 'hud';
 
@@ -87,6 +114,19 @@ export const HUD_CLOSE_ART: readonly string[] = Object.freeze([
   '..#..',
   '.#.#.',
   '#...#',
+]);
+
+/** The arrows at the ends of a list's scroll bar. */
+export const HUD_UP_ART: readonly string[] = Object.freeze([
+  '..#..',
+  '.###.',
+  '#####',
+]);
+
+export const HUD_DOWN_ART: readonly string[] = Object.freeze([
+  '#####',
+  '.###.',
+  '..#..',
 ]);
 
 /** The key that clears the focus, and the keys a field reads. */

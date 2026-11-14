@@ -1,14 +1,15 @@
 import { findIndex } from 'lodash-es';
 import { pipe } from 'remeda';
 import { match, P } from 'ts-pattern';
-import { findHudWidget } from '../find-hud-widget';
 import { patchHudWindow } from '../patch-hud-window';
 import type { Hud } from '../types/hud';
 import type { HudChange } from '../types/hud-change';
 import type { HudTab } from '../types/hud-tab';
 import type { HudTabs } from '../types/hud-tabs';
 import { computeTabRects } from './compute-tab-rects';
+import { findShownWidget } from './find-shown-widget';
 import { isInside } from './is-inside';
+import { pressHudList } from './press-hud-list';
 import { toIdleChange } from './to-idle-change';
 import type { HudHit } from './types/hud-hit';
 
@@ -44,9 +45,10 @@ const openHudTab = (
     .otherwise((): HudChange => ({ hud, actions: [] }));
 
 /**
- * Handles a pointer press on a widget: it grabs a button, sets the focus on
- * a field, opens a tab's page, and does nothing for a label. `row` and
- * `column` are measured from the window's top-left pixel.
+ * Handles a pointer press on a widget: it grabs a button, wherever the
+ * button sits, sets the focus on a field, opens a tab's page, scrolls or
+ * selects in a list, and does nothing for a label, a panel, or a divider.
+ * `row` and `column` are measured from the window's top-left pixel.
  */
 export const pressHudWidget = (
   hud: Hud,
@@ -54,7 +56,7 @@ export const pressHudWidget = (
   row: number,
   column: number,
 ): HudChange =>
-  match(findHudWidget(hud, hit.window, hit.widget))
+  match(findShownWidget(hud, hit.window, hit.widget))
     .with({ kind: 'button' }, (button): HudChange => ({
       hud: {
         ...hud,
@@ -79,5 +81,8 @@ export const pressHudWidget = (
     }))
     .with({ kind: 'tabs' }, (strip) =>
       openHudTab(hud, hit.window, strip, row, column),
+    )
+    .with({ kind: 'list' }, (list) =>
+      pressHudList(hud, hit.window, list, row, column),
     )
     .otherwise(() => toIdleChange(hud));

@@ -15,7 +15,7 @@ import type { HudInput } from '../types/hud-input';
 import type { HudWindow } from '../types/hud-window';
 import { computeWidgetRect } from './compute-widget-rect';
 import { isFocused } from './is-focused';
-import { paintBevel } from './paint-bevel';
+import { paintSunken } from './paint-sunken';
 import { toFieldText } from './to-field-text';
 import { toWindowTheme } from './to-window-theme';
 
@@ -37,18 +37,9 @@ export const paintHudInput = (
     .with(true, () => HUD_CARET_WIDTH)
     .otherwise(() => 0);
   const shown = toFieldText(widget.text, rect.width - 2 * HUD_PADDING - caret);
-  const edge = toPixel(theme.color, theme.edge);
 
   return [
-    { pixel: toPixel(theme.color, theme.highlight), ...rect },
-    ...paintBevel(rect, edge, edge),
-    {
-      pixel: toPixel(theme.color, theme.shadow),
-      row: rect.row + 1,
-      column: rect.column + 1,
-      width: rect.width - 2,
-      height: 1,
-    },
+    ...paintSunken(rect, theme),
     toTextPaint(
       shown,
       text,
