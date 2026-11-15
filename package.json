@@ -1,6 +1,6 @@
 {
   "name": "@chris.araneo/cassette-canvas",
-  "version": "0.3.0",
+  "version": "0.4.1",
   "description": "Retro rendering engine for the HTML canvas.",
   "keywords": [
     "canvas",
@@ -24,8 +24,8 @@
   },
   "license": "MIT",
   "author": "Krzysztof Pająk (Chris Araneo) <chris.araneo@gmail.com>",
-  "type": "module",
   "sideEffects": false,
+  "type": "module",
   "exports": {
     ".": {
       "types": "./dist/lib/index.d.ts",
@@ -40,23 +40,23 @@
     "dist/lib",
     "docs"
   ],
-  "publishConfig": {
-    "access": "public"
-  },
   "scripts": {
-    "dev": "vite",
     "build": "npm run build:lib && npm run build:demo",
-    "build:lib": "tsdown",
     "build:demo": "vite build",
-    "preview": "vite preview",
-    "typecheck": "tsc --noEmit",
+    "build:lib": "tsdown",
+    "check": "npm run typecheck && npm run lint && npm run test",
+    "dev": "vite",
+    "format": "sort-package-json && prettier --write .",
     "lint": "eslint .",
+    "prepack": "npm run build:lib",
+    "prepublishOnly": "npm run check",
+    "preview": "vite preview",
     "test": "vitest run",
     "test:watch": "vitest",
-    "format": "prettier --write .",
-    "check": "npm run typecheck && npm run lint && npm run test",
-    "prepack": "npm run build:lib",
-    "prepublishOnly": "npm run check"
+    "typecheck": "tsc --noEmit"
+  },
+  "overrides": {
+    "minimatch": "^11.0.8"
   },
   "dependencies": {
     "lodash-es": "^4.18.1",
@@ -72,13 +72,14 @@
     "@types/ramda": "^0.32.0",
     "eslint": "^10.14.0",
     "prettier": "^3.10.0",
+    "sort-package-json": "^4.1.0",
     "tsdown": "^0.23.7",
     "typescript": "^6.0.3",
     "typescript-eslint": "^8.72.2",
     "vite": "^8.3.8",
     "vitest": "^5.1.0"
   },
-  "overrides": {
-    "minimatch": "^11.0.8"
+  "publishConfig": {
+    "access": "public"
   }
 }
