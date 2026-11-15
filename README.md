@@ -21,17 +21,6 @@
   own, and its scroll bar drags.
 - Retro monitor effect: a soft glow around bright pixels, scanlines, film grain, and a surface texture.
 
-Full documentation is in [docs/](docs/README.md). The published package ships
-it as well, so after an install the same pages are in
-`node_modules/@chris.araneo/cassette-canvas/docs`, next to `dist/lib`.
-
-The repository holds an example app in [`apps/demo`](apps/demo): a city street
-with a day and night cycle, street lamps, shadows, and a HUD of movable windows
-over it. Clone the repository, run `npm install` and `npm run dev`, and open
-the page Vite prints. [Demo](docs/DEMO.md) describes what it shows, and
-[`apps/demo/src/main.ts`](apps/demo/src/main.ts) is a full animation loop to
-read.
-
 ## Installation
 
 ```sh
@@ -235,6 +224,19 @@ if (display) {
   requestAnimationFrame((time) => draw(display, time));
 }
 ```
+
+## Documentation
+
+Full documentation is in [docs/](docs/README.md). The published package ships
+it as well, so after an install the same pages are in
+`node_modules/@chris.araneo/cassette-canvas/docs`, next to `dist/lib`.
+
+## Demo
+
+The repository holds an example app in [`apps/demo`](apps/demo): a city street
+with a day and night cycle, street lamps, shadows, and a HUD of movable windows
+over it. Clone the repository, run `npm install` and `npm run dev`, and open
+the page Vite prints.
 
 ## License
 
