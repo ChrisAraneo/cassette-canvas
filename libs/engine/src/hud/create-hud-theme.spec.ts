@@ -6,7 +6,7 @@ import { DEFAULT_HUD_COLOR, HUD_TEXT_SHADE } from './consts';
 import { createHudTheme } from './create-hud-theme';
 
 describe('createHudTheme', () => {
-  it('should return DEFAULT_HUD_COLOR when no color is given', () => {
+  it('should return the default window color when no color is given', () => {
     expect(createHudTheme().color).toBe(DEFAULT_HUD_COLOR);
   });
 
@@ -14,7 +14,7 @@ describe('createHudTheme', () => {
     expect(createHudTheme(9).color).toBe(9);
   });
 
-  it('should return HUD_TEXT_SHADE for the text when it makes a theme', () => {
+  it('should return the darkest shade for the text when it makes a theme', () => {
     expect(createHudTheme().text).toBe(HUD_TEXT_SHADE);
   });
 

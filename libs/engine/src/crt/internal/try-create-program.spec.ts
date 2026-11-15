@@ -1,4 +1,4 @@
-import { filter, map } from 'lodash-es';
+import { filter, map, noop } from 'lodash-es';
 import { describe, expect, it } from 'vitest';
 
 import { FRAGMENT_SHADER_SOURCE } from './fragment-shader-source';
@@ -27,11 +27,11 @@ const createContext = (
     createShader: () => SHADER,
     shaderSource: (...values: unknown[]) =>
       calls.push({ name: 'shaderSource', values }),
-    compileShader: () => undefined,
+    compileShader: noop,
     getShaderParameter: () => compiles,
-    attachShader: () => undefined,
-    bindAttribLocation: () => undefined,
-    linkProgram: () => undefined,
+    attachShader: noop,
+    bindAttribLocation: noop,
+    linkProgram: noop,
     getProgramParameter: () => true,
   }) as unknown as WebGLRenderingContext;
 
@@ -53,7 +53,7 @@ describe('tryCreateProgram', () => {
     ).toEqual([VERTEX_SHADER_SOURCE, FRAGMENT_SHADER_SOURCE]);
   });
 
-  it('should return undefined when a shader does not compile', () => {
+  it('should return no program when a shader does not compile', () => {
     expect(tryCreateProgram(createContext([], false))).toBeUndefined();
   });
 });

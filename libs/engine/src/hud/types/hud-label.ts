@@ -5,7 +5,7 @@
  * page.
  */
 export interface HudLabel {
-  readonly kind: 'label';
+  readonly kind: 'LABEL';
   readonly id: string;
   readonly page: string;
   readonly row: number;

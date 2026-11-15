@@ -1,4 +1,3 @@
-import { runEffect } from '@cassette-canvas/common';
 import { pipe } from 'remeda';
 import { drawCrtTriangle } from './internal/draw-crt-triangle';
 import { patchCrtTexture } from './internal/patch-crt-texture';
@@ -24,8 +23,8 @@ export const drawCrt = (
   time: number,
 ): void =>
   pipe(
-    context,
-    (gl) => runEffect(gl, () => patchCrtTexture(gl, crt, picture)),
-    (gl) => runEffect(gl, () => patchCrtUniforms(gl, crt, picture, time)),
-    (gl) => drawCrtTriangle(gl, crt),
+    { context, crt, picture, time },
+    patchCrtTexture,
+    patchCrtUniforms,
+    drawCrtTriangle,
   );

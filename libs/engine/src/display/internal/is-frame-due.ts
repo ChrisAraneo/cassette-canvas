@@ -1,5 +1,6 @@
 import type { Display } from '../types/display';
-import { MILLISECONDS_PER_SECOND } from '../consts';
+
+const MILLISECONDS_PER_SECOND = 1000;
 
 /**
  * Returns `true` when enough time has passed since the display's last frame

@@ -2,13 +2,13 @@ import { map } from 'lodash-es';
 import { describe, expect, it } from 'vitest';
 
 import { createOverlay } from '../overlay/create-overlay';
-import { createScreen } from '../screen/create-screen';
 import { toPixel } from '../palette/to-pixel';
+import { createScreen } from '../screen/create-screen';
 import { addHud } from './add-hud';
 import { addHudWindow } from './add-hud-window';
-import { composeHud } from './compose-hud';
 import { HUD_OVERLAY_PREFIX } from './consts';
 import { createHud } from './create-hud';
+import { drawHud } from './draw-hud';
 import type { Hud } from './types/hud';
 
 const createStreetHud = (): Hud =>
@@ -25,7 +25,7 @@ describe('addHud', () => {
   it('should return the windows of the HUD as overlays when it adds them to the screen', () => {
     expect(
       addHud(createScreen(toPixel(8, 5)), createStreetHud()).overlays,
-    ).toEqual(composeHud(createStreetHud()));
+    ).toEqual(drawHud(createStreetHud()));
   });
 
   it('should return the overlays that were already there below the windows when it adds the HUD', () => {

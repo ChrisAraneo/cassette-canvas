@@ -3,7 +3,6 @@ import { describe, expect, it } from 'vitest';
 import type { Display } from '../types/display';
 import { isFrameDue } from './is-frame-due';
 
-/** A display that draws 50 frames a second, so one frame lasts 20 ms. */
 const createDisplay = (drawnAt: number): Display =>
   ({ fps: 50, drawnAt }) as unknown as Display;
 

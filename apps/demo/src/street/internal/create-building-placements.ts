@@ -4,13 +4,13 @@ import { match, P } from 'ts-pattern';
 import { FACADE_ARTS } from '../../art/city/consts';
 import { SPRITE_SIZE } from '../../consts';
 import type { Building } from '../types/building';
-import type { GridCell } from '../types/grid-cell';
 import { computeBuildingTop } from './compute-building-top';
 import { toGridCells } from './to-grid-cells';
+import type { GridCell } from './types/grid-cell';
 
 const { nonNullable } = P;
 
-const placeCell = (
+const createCellPlacements = (
   { id, column, legend }: Building,
   top: number,
   cell: GridCell,
@@ -36,5 +36,5 @@ export const createBuildingPlacements = (
   building: Building,
 ): SpritePlacement[] =>
   flatMap(toGridCells(building.grid), (cell) =>
-    placeCell(building, computeBuildingTop(building), cell),
+    createCellPlacements(building, computeBuildingTop(building), cell),
   );

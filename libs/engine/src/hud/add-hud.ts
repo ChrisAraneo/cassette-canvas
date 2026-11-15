@@ -1,5 +1,5 @@
 import type { Screen } from '../screen/types/screen';
-import { composeHud } from './compose-hud';
+import { drawHud } from './draw-hud';
 import type { Hud } from './types/hud';
 
 /**
@@ -8,5 +8,5 @@ import type { Hud } from './types/hud';
  */
 export const addHud = (screen: Screen, hud: Hud): Screen => ({
   ...screen,
-  overlays: [...screen.overlays, ...composeHud(hud)],
+  overlays: [...screen.overlays, ...drawHud(hud)],
 });

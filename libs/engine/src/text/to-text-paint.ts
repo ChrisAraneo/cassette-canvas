@@ -7,7 +7,7 @@ import type { TextPixels } from './types/text-pixels';
  * Returns a paint step that draws a line of text, with the top of a capital
  * at `row` and its first character at `column`. `pixels` is one pixel value
  * for the whole line, or one per character for a line of more than one
- * color. Use it with `composeOverlay`.
+ * color. Use it with `drawOverlay`.
  */
 export const toTextPaint = (
   text: string,

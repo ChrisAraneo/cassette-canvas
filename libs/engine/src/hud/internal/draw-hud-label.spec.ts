@@ -1,0 +1,54 @@
+import { describe, expect, it } from 'vitest';
+
+import { toPixel } from '../../palette/to-pixel';
+import { TEXT_ASCENT } from '../../text/consts';
+import { toTextOverlay } from '../../text/to-text-overlay';
+import { createHud } from '../create-hud';
+import type { HudLabel } from '../types/hud-label';
+import type { HudWindow } from '../types/hud-window';
+import { computeWidgetRect } from './compute-widget-rect';
+import { drawHudLabel } from './draw-hud-label';
+
+const LABEL: HudLabel = Object.freeze({
+  kind: 'LABEL',
+  id: 'fps',
+  page: '',
+  row: 4,
+  column: 6,
+  text: 'FPS 60',
+});
+
+const WINDOW: HudWindow = Object.freeze({
+  id: 'street',
+  title: 'STREET',
+  row: 0,
+  column: 0,
+  width: 90,
+  height: 76,
+  color: 15,
+  closable: true,
+  page: '',
+  widgets: [LABEL],
+});
+
+describe('drawHudLabel', () => {
+  it('should return the text in the dark shade of the theme when it paints a label', () => {
+    expect(drawHudLabel(createHud(), WINDOW, LABEL)).toEqual([
+      {
+        image: toTextOverlay('FPS 60', toPixel(15, createHud().theme.text)),
+        row: computeWidgetRect(LABEL).row - TEXT_ASCENT,
+        column: computeWidgetRect(LABEL).column,
+      },
+    ]);
+  });
+
+  it('should return the text in the color of the window when it paints a label', () => {
+    expect(drawHudLabel(createHud(), { ...WINDOW, color: 9 }, LABEL)).toEqual([
+      {
+        image: toTextOverlay('FPS 60', toPixel(9, createHud().theme.text)),
+        row: computeWidgetRect(LABEL).row - TEXT_ASCENT,
+        column: computeWidgetRect(LABEL).column,
+      },
+    ]);
+  });
+});

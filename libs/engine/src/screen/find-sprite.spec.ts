@@ -33,11 +33,11 @@ describe('findSprite', () => {
     expect(findSprite(createGameScreen([HERO, COIN]), 'coin')).toBe(COIN);
   });
 
-  it('should return undefined when no sprite carries the id', () => {
+  it('should return no sprite when no sprite carries the id', () => {
     expect(findSprite(createGameScreen([HERO, COIN]), 'ghost')).toBeUndefined();
   });
 
-  it('should return undefined when the screen is empty', () => {
+  it('should return no sprite when the screen is empty', () => {
     expect(findSprite(createGameScreen([]), 'hero')).toBeUndefined();
   });
 });

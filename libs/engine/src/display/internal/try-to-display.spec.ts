@@ -27,29 +27,29 @@ describe('tryToDisplay', () => {
     expect(tryToDisplay(draft)).toBe(draft);
   });
 
-  it('should return undefined when the canvas has no WebGL context', () => {
+  it('should return no display when the canvas has no WebGL context', () => {
     expect(
       tryToDisplay({ ...createDraft(), context: undefined }),
     ).toBeUndefined();
   });
 
-  it('should return undefined when the monitor effect could not be set up', () => {
+  it('should return no display when the monitor effect could not be set up', () => {
     expect(tryToDisplay({ ...createDraft(), crt: undefined })).toBeUndefined();
   });
 
-  it('should return undefined when the pixel size is zero', () => {
+  it('should return no display when the pixel size is zero', () => {
     expect(tryToDisplay({ ...createDraft(), pixelSize: 0 })).toBeUndefined();
   });
 
-  it('should return undefined when the sprite size is a fraction', () => {
+  it('should return no display when the sprite size is a fraction', () => {
     expect(tryToDisplay({ ...createDraft(), spriteSize: 1.5 })).toBeUndefined();
   });
 
-  it('should return undefined when the frame rate is zero', () => {
+  it('should return no display when the frame rate is zero', () => {
     expect(tryToDisplay({ ...createDraft(), fps: 0 })).toBeUndefined();
   });
 
-  it('should return undefined when the frame rate is negative', () => {
+  it('should return no display when the frame rate is negative', () => {
     expect(tryToDisplay({ ...createDraft(), fps: -60 })).toBeUndefined();
   });
 
@@ -59,7 +59,7 @@ describe('tryToDisplay', () => {
     expect(tryToDisplay(draft)).toBe(draft);
   });
 
-  it('should return undefined when the canvas is too small for one pixel', () => {
+  it('should return no display when the canvas is too small for one pixel', () => {
     expect(
       tryToDisplay({ ...createDraft(), width: 0, height: 0 }),
     ).toBeUndefined();

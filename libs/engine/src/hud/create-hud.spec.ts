@@ -16,7 +16,7 @@ describe('createHud', () => {
     ]);
   });
 
-  it('should return a theme of DEFAULT_HUD_COLOR when no color is given', () => {
+  it('should return a theme in the default window color when no color is given', () => {
     expect(createHud().theme).toEqual(createHudTheme(DEFAULT_HUD_COLOR));
   });
 

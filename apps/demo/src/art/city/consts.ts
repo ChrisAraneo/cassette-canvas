@@ -172,7 +172,6 @@ export const FACADE_ARTS: Readonly<Record<string, readonly string[]>> =
     ],
   });
 
-/** The glass of a lit window, drawn over the `W` and `V` tiles. */
 const LIT_WINDOW_ART: readonly string[] = Object.freeze([
   '........',
   '........',
@@ -192,7 +191,6 @@ const LIT_WINDOW_ART: readonly string[] = Object.freeze([
   '........',
 ]);
 
-/** The glass of a lit shop window, drawn over the `S` and `T` tiles. */
 const LIT_SHOP_ART: readonly string[] = Object.freeze([
   '........',
   '.LLLLLL.',

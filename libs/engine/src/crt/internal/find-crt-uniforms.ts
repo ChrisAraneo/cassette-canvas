@@ -1,4 +1,4 @@
-import { mapValues } from 'lodash-es';
+import { constant, mapValues } from 'lodash-es';
 import { match, P } from 'ts-pattern';
 import { CRT_UNIFORM_NAMES } from '../consts';
 import type { CrtUniforms } from '../types/crt-uniforms';
@@ -25,4 +25,4 @@ export const findCrtUniforms = (
       },
       (uniforms) => uniforms,
     )
-    .otherwise(() => undefined);
+    .otherwise(constant(undefined));

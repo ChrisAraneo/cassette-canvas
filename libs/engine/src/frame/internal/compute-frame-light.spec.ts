@@ -1,4 +1,4 @@
-import { toArray } from 'lodash-es';
+import { size, toArray } from 'lodash-es';
 import { describe, expect, it } from 'vitest';
 
 import type { Lighting } from '../../lighting/types/lighting';
@@ -14,17 +14,18 @@ const createLighting = (ambient: number, occluders: Uint8Array): Lighting => ({
   occluders,
 });
 
-const levelsOf = (ambient: number, occluders: Uint8Array): number[] =>
+const computeLevels = (ambient: number, occluders: Uint8Array): number[] =>
   toArray(
     computeFrameLight({
       pixels: PIXELS,
       lighting: createLighting(ambient, occluders),
+      overlays: [],
     }).levels,
   );
 
 describe('computeFrameLight', () => {
   it('should return each place lit by its distance from the light when nothing stands in the way', () => {
-    const levels = levelsOf(0, new Uint8Array(4));
+    const levels = computeLevels(0, new Uint8Array(4));
 
     expect(levels[0]).toBe(4);
     expect(levels[1] ?? 0).toBeLessThan(levels[0] ?? 0);
@@ -33,7 +34,7 @@ describe('computeFrameLight', () => {
   });
 
   it('should return every place above the ambient light when it lights the frame', () => {
-    const levels = levelsOf(-4, new Uint8Array(4));
+    const levels = computeLevels(-4, new Uint8Array(4));
 
     expect(levels[0] ?? 0).toBeGreaterThan(-4);
     expect(levels[3] ?? 0).toBeGreaterThan(-4);
@@ -41,7 +42,7 @@ describe('computeFrameLight', () => {
   });
 
   it('should return only the ambient light when a place sits behind a shadow caster', () => {
-    const levels = levelsOf(-1, Uint8Array.from([0, 1, 0, 0]));
+    const levels = computeLevels(-1, Uint8Array.from([0, 1, 0, 0]));
 
     expect(levels[0] ?? 0).toBeGreaterThan(-1);
     expect(levels[1] ?? 0).toBeGreaterThan(-1);
@@ -51,15 +52,18 @@ describe('computeFrameLight', () => {
 
   it('should return no levels when the frame is empty', () => {
     expect(
-      computeFrameLight({
-        pixels: new Int16Array(0),
-        lighting: {
-          ...createLighting(0, new Uint8Array(0)),
-          width: 0,
-          height: 0,
-        },
-      }).levels,
-    ).toHaveLength(0);
+      size(
+        computeFrameLight({
+          pixels: new Int16Array(0),
+          lighting: {
+            ...createLighting(0, new Uint8Array(0)),
+            width: 0,
+            height: 0,
+          },
+          overlays: [],
+        }).levels,
+      ),
+    ).toBe(0);
   });
 
   it('should return the very same pixels when it lights the frame', () => {
@@ -67,6 +71,7 @@ describe('computeFrameLight', () => {
       computeFrameLight({
         pixels: PIXELS,
         lighting: createLighting(0, new Uint8Array(4)),
+        overlays: [],
       }).pixels,
     ).toBe(PIXELS);
   });

@@ -16,43 +16,43 @@ const createEvent = (
 
 describe('toKeyEvent', () => {
   it('should return a key event when the key is a character', () => {
-    expect(toKeyEvent(createEvent('a'))).toEqual({ kind: 'key', key: 'a' });
+    expect(toKeyEvent(createEvent('a'))).toEqual({ kind: 'KEY', key: 'a' });
   });
 
   it('should return a key event when the key is a space', () => {
-    expect(toKeyEvent(createEvent(' '))).toEqual({ kind: 'key', key: ' ' });
+    expect(toKeyEvent(createEvent(' '))).toEqual({ kind: 'KEY', key: ' ' });
   });
 
   it('should return a key event when the key is Backspace', () => {
     expect(toKeyEvent(createEvent('Backspace'))).toEqual({
-      kind: 'key',
+      kind: 'KEY',
       key: 'Backspace',
     });
   });
 
   it('should return a key event when the key is Enter', () => {
     expect(toKeyEvent(createEvent('Enter'))).toEqual({
-      kind: 'key',
+      kind: 'KEY',
       key: 'Enter',
     });
   });
 
   it('should return a key event when the key is Escape', () => {
     expect(toKeyEvent(createEvent('Escape'))).toEqual({
-      kind: 'key',
+      kind: 'KEY',
       key: 'Escape',
     });
   });
 
-  it('should return undefined when the HUD does not read the key', () => {
-    expect(toKeyEvent(createEvent('ArrowLeft'))).toBeUndefined();
+  it('should give no event when the HUD does not read the key', () => {
+    expect(toKeyEvent(createEvent('ArrowLeft'))).toBe(undefined);
   });
 
-  it('should return undefined when the control key is held', () => {
-    expect(toKeyEvent(createEvent('r', { ctrlKey: true }))).toBeUndefined();
+  it('should give no event when the control key is held', () => {
+    expect(toKeyEvent(createEvent('r', { ctrlKey: true }))).toBe(undefined);
   });
 
-  it('should return undefined when the command key is held', () => {
-    expect(toKeyEvent(createEvent('r', { metaKey: true }))).toBeUndefined();
+  it('should give no event when the command key is held', () => {
+    expect(toKeyEvent(createEvent('r', { metaKey: true }))).toBe(undefined);
   });
 });

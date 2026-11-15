@@ -5,6 +5,8 @@ import { toOverlay } from './to-overlay';
 
 const LEGEND = Object.freeze({ o: 0x35, x: 0x17 });
 
+const createArt = (): string[] => ['ox', 'xo'];
+
 describe('toOverlay', () => {
   it('should return the art read row by row when it builds an overlay', () => {
     expect(toOverlay(['ox', 'xo'], LEGEND)).toEqual({
@@ -33,6 +35,14 @@ describe('toOverlay', () => {
       0x35,
       0x35,
     ]);
+  });
+
+  it('should not change the art it is given when it builds an overlay', () => {
+    const art = createArt();
+
+    toOverlay(art, LEGEND);
+
+    expect(art).toEqual(createArt());
   });
 
   it('should return an empty overlay when there is no art', () => {

@@ -11,7 +11,7 @@ import { computeControlWidth } from './compute-control-width';
 import { computeTabRects } from './compute-tab-rects';
 
 const TABS: HudTabs = Object.freeze({
-  kind: 'tabs',
+  kind: 'TABS',
   id: 'tabs',
   page: '',
   row: 4,

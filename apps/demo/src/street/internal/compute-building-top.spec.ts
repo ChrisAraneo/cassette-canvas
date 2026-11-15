@@ -10,4 +10,8 @@ describe('computeBuildingTop', () => {
       SIDEWALK_ROW - 3 * SPRITE_SIZE,
     );
   });
+
+  it('should return the sidewalk itself when the building has no rows of tiles', () => {
+    expect(computeBuildingTop({ grid: [] })).toBe(SIDEWALK_ROW);
+  });
 });

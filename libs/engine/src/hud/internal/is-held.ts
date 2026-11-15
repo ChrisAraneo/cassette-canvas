@@ -7,5 +7,5 @@ import type { Hud } from '../types/hud';
  */
 export const isHeld = (hud: Hud, window: string, widget: string): boolean =>
   match(hud.grab)
-    .with({ kind: 'press', window, widget }, () => true)
+    .with({ kind: 'PRESS', window, widget }, () => true)
     .otherwise(() => false);

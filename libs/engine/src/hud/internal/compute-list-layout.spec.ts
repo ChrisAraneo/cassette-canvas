@@ -4,15 +4,17 @@ import { describe, expect, it } from 'vitest';
 import {
   HUD_CONTENT_LEFT,
   HUD_CONTENT_TOP,
+  HUD_DIVIDER_HEIGHT,
   HUD_LIST_BAR_WIDTH,
   HUD_LIST_ITEM_HEIGHT,
   HUD_LIST_ITEM_PITCH,
+  HUD_PADDING,
 } from '../consts';
 import type { HudList } from '../types/hud-list';
 import type { HudListItem } from '../types/hud-list-item';
 import { computeListLayout } from './compute-list-layout';
 
-const toItems = (count: number): readonly HudListItem[] =>
+const createItems = (count: number): readonly HudListItem[] =>
   map(times(count), (index) => ({
     id: `${index}`,
     lines: [`TRACK ${index}`],
@@ -21,23 +23,21 @@ const toItems = (count: number): readonly HudListItem[] =>
     selectable: true,
   }));
 
-/** A list 48 rows tall, which shows four of its six items at once. */
 const LIST: HudList = Object.freeze({
-  kind: 'list',
+  kind: 'LIST',
   id: 'tracks',
   page: '',
   row: 0,
   column: 0,
   width: 80,
   height: 48,
-  items: toItems(6),
+  items: createItems(6),
   scroll: 0,
   selected: '',
 });
 
-/** Six tracks of two lines each, in the same list. */
 const TALL_ITEMS: readonly HudListItem[] = Object.freeze(
-  map(toItems(6), (item) => ({ ...item, lines: [...item.lines, '3:42'] })),
+  map(createItems(6), (item) => ({ ...item, lines: [...item.lines, '3:42'] })),
 );
 
 describe('computeListLayout', () => {
@@ -47,8 +47,8 @@ describe('computeListLayout', () => {
 
   it('should return the first item at the top left of the list when it lays one out', () => {
     expect(computeListLayout(LIST).items[0]?.rect).toEqual({
-      row: HUD_CONTENT_TOP + 2,
-      column: HUD_CONTENT_LEFT + 2,
+      row: HUD_CONTENT_TOP + HUD_PADDING,
+      column: HUD_CONTENT_LEFT + HUD_PADDING,
       width: 66,
       height: HUD_LIST_ITEM_HEIGHT,
     });
@@ -56,13 +56,16 @@ describe('computeListLayout', () => {
 
   it('should return the next item one item and one divider below the one before it', () => {
     expect(computeListLayout(LIST).items[1]?.rect.row).toBe(
-      HUD_CONTENT_TOP + 2 + HUD_LIST_ITEM_PITCH,
+      HUD_CONTENT_TOP + HUD_PADDING + HUD_LIST_ITEM_PITCH,
     );
   });
 
   it('should return the items the scroll starts at when the list is scrolled', () => {
     expect(
-      map(computeListLayout({ ...LIST, scroll: 2 }).items, 'item.id'),
+      map(
+        computeListLayout({ ...LIST, scroll: 2 }).items,
+        (placement) => placement.item.id,
+      ),
     ).toEqual(['2', '3', '4', '5']);
   });
 
@@ -112,14 +115,14 @@ describe('computeListLayout', () => {
   });
 
   it('should return no thumb at all when every item fits in the list', () => {
-    expect(computeListLayout({ ...LIST, items: toItems(4) }).thumb.height).toBe(
-      0,
-    );
+    expect(
+      computeListLayout({ ...LIST, items: createItems(4) }).thumb.height,
+    ).toBe(0);
   });
 
   it('should return no thumb at all when the list is too short for a track', () => {
     expect(
-      computeListLayout({ ...LIST, height: 26, items: toItems(9) }).thumb
+      computeListLayout({ ...LIST, height: 26, items: createItems(9) }).thumb
         .height,
     ).toBe(0);
   });
@@ -129,7 +132,9 @@ describe('computeListLayout', () => {
   });
 
   it('should return no last page at all when every item fits in the list', () => {
-    expect(computeListLayout({ ...LIST, items: toItems(4) }).lastPage).toBe(0);
+    expect(computeListLayout({ ...LIST, items: createItems(4) }).lastPage).toBe(
+      0,
+    );
   });
 
   it('should return an item as tall as its lines when one holds more than one', () => {
@@ -144,11 +149,13 @@ describe('computeListLayout', () => {
     );
   });
 
-  it('should return the item below a tall one a divider under it', () => {
+  it('should return the item below a tall one a divider lower when the one above it asks for two lines', () => {
     const layout = computeListLayout({ ...LIST, items: TALL_ITEMS });
 
     expect(layout.items[1]?.rect.row).toBe(
-      (layout.items[0]?.rect.row ?? 0) + 2 * HUD_LIST_ITEM_HEIGHT + 2,
+      (layout.items[0]?.rect.row ?? 0) +
+        2 * HUD_LIST_ITEM_HEIGHT +
+        HUD_DIVIDER_HEIGHT,
     );
   });
 
@@ -156,7 +163,7 @@ describe('computeListLayout', () => {
     expect(
       computeListLayout({
         ...LIST,
-        items: map(toItems(6), (item) => ({ ...item, height: 20 })),
+        items: map(createItems(6), (item) => ({ ...item, height: 20 })),
       }).items[0]?.rect.height,
     ).toBe(20);
   });

@@ -1,7 +1,7 @@
 import { flatMap, map, split } from 'lodash-es';
 import { TRANSPARENT } from '../palette/consts';
+import type { SpriteLegend } from '../palette/types/sprite-legend';
 import type { Sprite } from './types/sprite';
-import type { SpriteLegend } from './types/sprite-legend';
 
 /**
  * Builds a sprite from text art: one string per row, one character per

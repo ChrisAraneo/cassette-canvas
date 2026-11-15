@@ -5,6 +5,8 @@ import { toSprite } from './to-sprite';
 
 const LEGEND = Object.freeze({ r: 0x14, g: 0x54 });
 
+const createArt = (): string[] => ['rg', 'gr'];
+
 describe('toSprite', () => {
   it('should return the pixels left to right and top to bottom when it turns art into a sprite', () => {
     expect(toSprite(['rg', 'gr'], LEGEND)).toEqual([0x14, 0x54, 0x54, 0x14]);
@@ -17,6 +19,14 @@ describe('toSprite', () => {
       TRANSPARENT,
       0x54,
     ]);
+  });
+
+  it('should not change the art it is given when it turns it into a sprite', () => {
+    const art = createArt();
+
+    toSprite(art, LEGEND);
+
+    expect(art).toEqual(createArt());
   });
 
   it('should return an empty sprite when there are no rows', () => {

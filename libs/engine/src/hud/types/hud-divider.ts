@@ -9,7 +9,7 @@
  * is the tab it belongs to, or empty to show it on every page.
  */
 export interface HudDivider {
-  readonly kind: 'divider';
+  readonly kind: 'DIVIDER';
   readonly id: string;
   readonly page: string;
   readonly row: number;

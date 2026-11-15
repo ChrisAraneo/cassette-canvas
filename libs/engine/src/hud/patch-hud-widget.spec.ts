@@ -8,8 +8,8 @@ import type { Hud } from './types/hud';
 import type { HudWidget } from './types/hud-widget';
 
 const WIDGETS: readonly HudWidget[] = Object.freeze([
-  { kind: 'label', id: 'fps', page: '', row: 0, column: 0, text: 'FPS 60' },
-  { kind: 'label', id: 'clock', page: '', row: 8, column: 0, text: '12:00' },
+  { kind: 'LABEL', id: 'fps', page: '', row: 0, column: 0, text: 'FPS 60' },
+  { kind: 'LABEL', id: 'clock', page: '', row: 8, column: 0, text: '12:00' },
 ]);
 
 const createStreetHud = (): Hud =>

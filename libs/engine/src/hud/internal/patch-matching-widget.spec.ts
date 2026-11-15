@@ -10,7 +10,7 @@ import type { HudTabs } from '../types/hud-tabs';
 import { patchMatchingWidget } from './patch-matching-widget';
 
 const LABEL: HudLabel = Object.freeze({
-  kind: 'label',
+  kind: 'LABEL',
   id: 'fps',
   page: '',
   row: 0,
@@ -19,7 +19,7 @@ const LABEL: HudLabel = Object.freeze({
 });
 
 const BUTTON: HudButton = Object.freeze({
-  kind: 'button',
+  kind: 'BUTTON',
   id: 'skip',
   page: '',
   row: 0,
@@ -29,7 +29,7 @@ const BUTTON: HudButton = Object.freeze({
 });
 
 const INPUT: HudInput = Object.freeze({
-  kind: 'input',
+  kind: 'INPUT',
   id: 'note',
   page: '',
   row: 0,
@@ -39,7 +39,7 @@ const INPUT: HudInput = Object.freeze({
 });
 
 const TABS: HudTabs = Object.freeze({
-  kind: 'tabs',
+  kind: 'TABS',
   id: 'tabs',
   page: '',
   row: 0,
@@ -48,7 +48,7 @@ const TABS: HudTabs = Object.freeze({
 });
 
 const PANEL: HudPanel = Object.freeze({
-  kind: 'panel',
+  kind: 'PANEL',
   id: 'meters',
   page: '',
   row: 0,
@@ -58,7 +58,7 @@ const PANEL: HudPanel = Object.freeze({
 });
 
 const DIVIDER: HudDivider = Object.freeze({
-  kind: 'divider',
+  kind: 'DIVIDER',
   id: 'line',
   page: '',
   row: 0,
@@ -67,7 +67,7 @@ const DIVIDER: HudDivider = Object.freeze({
 });
 
 const LIST: HudList = Object.freeze({
-  kind: 'list',
+  kind: 'LIST',
   id: 'tracks',
   page: '',
   row: 0,
@@ -164,6 +164,19 @@ describe('patchMatchingWidget', () => {
 
   it('should return the same widget when the change names a field it does not have', () => {
     expect(patchMatchingWidget(LABEL, 'fps', { width: 40 })).toEqual(LABEL);
+  });
+
+  it('should not change the old widget when it changes one', () => {
+    patchMatchingWidget(LABEL, 'fps', { text: 'FPS 30' });
+
+    expect(LABEL).toEqual({
+      kind: 'LABEL',
+      id: 'fps',
+      page: '',
+      row: 0,
+      column: 0,
+      text: 'FPS 60',
+    });
   });
 
   it('should return the very same widget when the id does not match', () => {

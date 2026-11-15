@@ -1,4 +1,4 @@
-﻿import { map } from 'lodash-es';
+import { map } from 'lodash-es';
 import { describe, expect, it } from 'vitest';
 
 import { addSprite } from './add-sprite';

@@ -7,7 +7,7 @@ import { isHeld } from './is-held';
 const createPressingHud = (): Hud => ({
   ...createHud(),
   grab: {
-    kind: 'press',
+    kind: 'PRESS',
     window: 'street',
     widget: 'skip',
     row: 0,
@@ -34,7 +34,7 @@ describe('isHeld', () => {
         {
           ...createHud(),
           grab: {
-            kind: 'drag',
+            kind: 'DRAG',
             window: 'street',
             widget: 'skip',
             row: 0,

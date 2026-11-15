@@ -1,37 +1,8 @@
-import { match, P } from 'ts-pattern';
-import { findCrtUniforms } from './internal/find-crt-uniforms';
-import { tryCreateProgram } from './internal/try-create-program';
-import { tryCreateTexture } from './internal/try-create-texture';
-import { tryCreateVertices } from './internal/try-create-vertices';
-import type { CrtDraft } from './internal/types/crt-draft';
+import { pipe } from 'remeda';
+import { createCrtDraft } from './internal/create-crt-draft';
+import { createCrtProgram } from './internal/create-crt-program';
+import { tryToCrt } from './internal/try-to-crt';
 import type { Crt } from './types/crt';
-
-const { nonNullable } = P;
-
-const createCrtDraft = (
-  context: WebGLRenderingContext,
-  program: WebGLProgram | undefined,
-): CrtDraft => ({
-  program,
-  texture: tryCreateTexture(context),
-  vertices: tryCreateVertices(context),
-  uniforms: match(program)
-    .with(nonNullable, (linked) => findCrtUniforms(context, linked))
-    .otherwise(() => undefined),
-});
-
-const tryToCrt = (draft: CrtDraft): Crt | undefined =>
-  match(draft)
-    .with(
-      {
-        program: nonNullable,
-        texture: nonNullable,
-        vertices: nonNullable,
-        uniforms: nonNullable,
-      },
-      (crt) => crt,
-    )
-    .otherwise(() => undefined);
 
 /**
  * Sets up the monitor effect on a WebGL context: the shader program, the
@@ -41,8 +12,4 @@ const tryToCrt = (draft: CrtDraft): Crt | undefined =>
 export const tryCreateCrt = (
   context: WebGLRenderingContext | undefined,
 ): Crt | undefined =>
-  match(context)
-    .with(nonNullable, (ready) =>
-      tryToCrt(createCrtDraft(ready, tryCreateProgram(ready))),
-    )
-    .otherwise(() => undefined);
+  pipe({ context }, createCrtProgram, createCrtDraft, tryToCrt);

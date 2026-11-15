@@ -10,7 +10,7 @@ const ART = createSkylineArt([TOWER]);
 
 const WINDOWS: readonly (string | undefined)[] = Object.freeze(['w', 'l']);
 
-const symbolAt = (row: number, column: number): string | undefined =>
+const getSymbol = (row: number, column: number): string | undefined =>
   ART[row - SKYLINE_ROW]?.[column];
 
 describe('createSkylineArt', () => {
@@ -22,15 +22,15 @@ describe('createSkylineArt', () => {
   });
 
   it('should return a clear sky when there is no tower', () => {
-    expect(symbolAt(SKYLINE_ROW + 20, 40)).toBe('.');
+    expect(getSymbol(SKYLINE_ROW + 20, 40)).toBe('.');
   });
 
   it('should return a clear sky above a tower when it makes the art', () => {
-    expect(symbolAt(TOWER.top - 1, TOWER.column + 1)).toBe('.');
+    expect(getSymbol(TOWER.top - 1, TOWER.column + 1)).toBe('.');
   });
 
   it('should return the roof of a tower as a plain wall when it makes the art', () => {
-    expect(symbolAt(TOWER.top, TOWER.column + 1)).toBe('z');
+    expect(getSymbol(TOWER.top, TOWER.column + 1)).toBe('z');
   });
 
   it('should return no windows on the edges of a tower when it makes the art', () => {
@@ -40,7 +40,7 @@ describe('createSkylineArt', () => {
   });
 
   it('should return windows in the tower below its roof when it makes the art', () => {
-    expect(includes(WINDOWS, symbolAt(TOWER.top + 5, TOWER.column + 1))).toBe(
+    expect(includes(WINDOWS, getSymbol(TOWER.top + 5, TOWER.column + 1))).toBe(
       true,
     );
   });

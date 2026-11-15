@@ -4,7 +4,7 @@
  * display's `pixelSize`.
  */
 export interface HudPointerEvent {
-  readonly kind: 'press' | 'move' | 'release';
+  readonly kind: 'PRESS' | 'MOVE' | 'RELEASE';
   readonly row: number;
   readonly column: number;
 }

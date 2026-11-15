@@ -50,7 +50,6 @@ const PALETTE: Palette = Object.freeze({
   [toLitPixel(0x94, 0)]: { red: 20, green: 30, blue: 90 },
 });
 
-/** A display that draws 50 frames a second, so one frame lasts 20 ms. */
 const createStubDisplay = (calls: GlCall[], drawnAt = 0): Display => ({
   context: {
     drawingBufferWidth: 6,
@@ -72,7 +71,6 @@ const createStubDisplay = (calls: GlCall[], drawnAt = 0): Display => ({
   drawnAt,
 });
 
-/** A time far enough after the last frame for the next one to be due. */
 const DUE_TIME = 20;
 
 const createHeroScreen = (): Screen => ({

@@ -9,7 +9,8 @@ import { FACADE_LEGENDS } from '../art/city/consts';
 import { SKY, YELLOW } from '../art/consts';
 import { LOOKS, WALK_CYCLE } from '../art/people/consts';
 import { CLOUD_SHAPES } from '../art/sky/consts';
-import { orientArt } from '../tiles/orient-art';
+import { MILLISECONDS_PER_SECOND } from '../consts';
+import { toFacingArt } from '../tiles/to-facing-art';
 import { toTiles } from '../tiles/to-tiles';
 import type { Heading } from '../tiles/types/heading';
 import type { Building } from './types/building';
@@ -103,6 +104,9 @@ export const TV_SHARE = 0.2;
 
 /** Shops light up at dusk and close at 22:00. */
 export const SHOP_HOURS = Object.freeze({ dusk: 0.3, bedtime: 10 });
+
+/** Half a day, as a share of one whole day. */
+export const HALF_DAY = 0.5;
 
 /** The stars come out when it is at least this dark. */
 export const STARS_OUT = 0.6;
@@ -265,12 +269,11 @@ export const BUILDINGS: readonly Building[] = Object.freeze([
   },
 ]);
 
-/** A walking person moves the art forward by this much every frame. */
 const STRIDE = 3;
 
-const PERSON_ROWS = Object.freeze({ right: 124, left: 127 });
+const PERSON_ROWS = Object.freeze({ RIGHT: 124, LEFT: 127 });
 
-const PERSON_SPEEDS = Object.freeze({ right: 14, left: -11 });
+const PERSON_SPEEDS = Object.freeze({ RIGHT: 14, LEFT: -11 });
 
 const toPerson = (
   look: keyof typeof LOOKS,
@@ -279,35 +282,35 @@ const toPerson = (
 ): Mover => ({
   id: `person-${look}`,
   frames: map(WALK_CYCLE, (frame) =>
-    toTiles(orientArt(frame, heading), LOOKS[look]),
+    toTiles(toFacingArt(frame, heading), LOOKS[look]),
   ),
   row: PERSON_ROWS[heading],
   speed: PERSON_SPEEDS[heading],
   offset,
-  frameDuration: round((STRIDE * 1000) / Math.abs(PERSON_SPEEDS[heading])),
+  frameDuration: round(
+    (STRIDE * MILLISECONDS_PER_SECOND) / Math.abs(PERSON_SPEEDS[heading]),
+  ),
   castsShadow: true,
 });
 
 export const PEOPLE: readonly Mover[] = Object.freeze([
-  toPerson('jogger', 'right', 20),
-  toPerson('student', 'right', 150),
-  toPerson('courier', 'right', 290),
-  toPerson('artist', 'left', 60),
-  toPerson('gardener', 'left', 200),
-  toPerson('grandma', 'left', 330),
+  toPerson('jogger', 'RIGHT', 20),
+  toPerson('student', 'RIGHT', 150),
+  toPerson('courier', 'RIGHT', 290),
+  toPerson('artist', 'LEFT', 60),
+  toPerson('gardener', 'LEFT', 200),
+  toPerson('grandma', 'LEFT', 330),
 ]);
 
-const CAR_ROWS = Object.freeze({ right: 157, left: 142 });
+const CAR_ROWS = Object.freeze({ RIGHT: 157, LEFT: 142 });
 
-const CAR_SPEEDS = Object.freeze({ right: 56, left: -40 });
+const CAR_SPEEDS = Object.freeze({ RIGHT: 56, LEFT: -40 });
 
-/** Where the headlight is, from the top-left pixel of a car. */
 const HEADLIGHTS = Object.freeze({
-  right: { row: 11, column: 32 },
-  left: { row: 11, column: -9 },
+  RIGHT: { row: 11, column: 32 },
+  LEFT: { row: 11, column: -9 },
 });
 
-/** A turning wheel moves the car forward by this much every frame. */
 const WHEEL_STEP = 2;
 
 const toCar = (
@@ -317,22 +320,24 @@ const toCar = (
 ): Vehicle => ({
   id: `car-${paint}`,
   frames: map(CAR_FRAMES, (frame) =>
-    toTiles(orientArt(frame, heading), PAINTS[paint]),
+    toTiles(toFacingArt(frame, heading), PAINTS[paint]),
   ),
   row: CAR_ROWS[heading],
   speed: CAR_SPEEDS[heading],
   offset,
-  frameDuration: round((WHEEL_STEP * 1000) / Math.abs(CAR_SPEEDS[heading])),
+  frameDuration: round(
+    (WHEEL_STEP * MILLISECONDS_PER_SECOND) / Math.abs(CAR_SPEEDS[heading]),
+  ),
   castsShadow: true,
   headlight: HEADLIGHTS[heading],
 });
 
 export const VEHICLES: readonly Vehicle[] = Object.freeze([
-  toCar('red', 'left', 0),
-  toCar('taxi', 'left', 208),
-  toCar('blue', 'right', 30),
-  toCar('green', 'right', 169),
-  toCar('purple', 'right', 308),
+  toCar('red', 'LEFT', 0),
+  toCar('taxi', 'LEFT', 208),
+  toCar('blue', 'RIGHT', 30),
+  toCar('green', 'RIGHT', 169),
+  toCar('purple', 'RIGHT', 308),
 ]);
 
 const toCloud = (

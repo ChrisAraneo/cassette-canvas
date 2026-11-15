@@ -5,6 +5,6 @@
  */
 export interface HudHit {
   readonly window: string;
-  readonly part: 'close' | 'title' | 'body' | 'widget';
+  readonly part: 'CLOSE' | 'TITLE' | 'BODY' | 'WIDGET';
   readonly widget: string;
 }

@@ -1,10 +1,7 @@
 import { describe, expect, it } from 'vitest';
 
-import {
-  EXTENDED_SHADES_PER_STOP,
-  MIN_SHADE_OFFSET,
-  REFERENCE_EXPOSURE,
-} from '../consts';
+import { EXTENDED_SHADES_PER_SHADE } from '../../palette/consts';
+import { MIN_SHADE_OFFSET, REFERENCE_EXPOSURE } from '../consts';
 import { toExposure } from './to-exposure';
 import { toShadeOffset } from './to-shade-offset';
 
@@ -15,17 +12,17 @@ describe('toShadeOffset', () => {
 
   it('should return one stop up when the light doubles', () => {
     expect(toShadeOffset(2 * REFERENCE_EXPOSURE)).toBe(
-      EXTENDED_SHADES_PER_STOP,
+      EXTENDED_SHADES_PER_SHADE,
     );
   });
 
   it('should return one stop down when the light halves', () => {
     expect(toShadeOffset(REFERENCE_EXPOSURE / 2)).toBe(
-      -EXTENDED_SHADES_PER_STOP,
+      -EXTENDED_SHADES_PER_SHADE,
     );
   });
 
-  it('should return the shades toExposure turned into light when it undoes them', () => {
+  it('should return the shades the light was made from when it reads them back', () => {
     expect(toShadeOffset(toExposure(-7))).toBeCloseTo(-7);
     expect(toShadeOffset(toExposure(5))).toBeCloseTo(5);
   });

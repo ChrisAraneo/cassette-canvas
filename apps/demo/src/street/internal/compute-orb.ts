@@ -1,12 +1,12 @@
 import { round } from 'lodash-es';
-import { FULL_TURN } from '../../day/consts';
+import { FULL_TURN } from '../../consts';
 import {
   HORIZON_ROW,
   ORBIT_CENTER,
   ORBIT_HEIGHT,
   ORBIT_WIDTH,
 } from '../consts';
-import type { Orb } from '../types/orb';
+import type { Orb } from './types/orb';
 
 const NOON = 0.5;
 

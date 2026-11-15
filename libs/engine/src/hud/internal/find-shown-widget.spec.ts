@@ -9,7 +9,7 @@ import type { HudListItem } from '../types/hud-list-item';
 import { findShownWidget } from './find-shown-widget';
 
 const toPlay = (id: string): HudItemWidget => ({
-  kind: 'button',
+  kind: 'BUTTON',
   id: `play-${id}`,
   page: '',
   row: 3,
@@ -26,9 +26,8 @@ const toItem = (id: string): HudListItem => ({
   selectable: true,
 });
 
-/** A list 48 rows tall, which shows two of its three items at once. */
 const LIST: HudList = Object.freeze({
-  kind: 'list',
+  kind: 'LIST',
   id: 'tracks',
   page: '',
   row: 0,
@@ -54,27 +53,27 @@ const createTapeHud = (): Hud =>
 describe('findShownWidget', () => {
   it('should return the widget when the window holds it itself', () => {
     expect(findShownWidget(createTapeHud(), 'tape', 'tracks')).toMatchObject({
-      kind: 'list',
+      kind: 'LIST',
       id: 'tracks',
     });
   });
 
   it('should return the button when it sits on an item the list shows', () => {
     expect(findShownWidget(createTapeHud(), 'tape', 'play-b')).toMatchObject({
-      kind: 'button',
+      kind: 'BUTTON',
       text: 'PLAY',
     });
   });
 
-  it('should return undefined when the button sits on an item the list does not show', () => {
+  it('should return no widget when the button sits on an item the list does not show', () => {
     expect(findShownWidget(createTapeHud(), 'tape', 'play-c')).toBeUndefined();
   });
 
-  it('should return undefined when no widget has the id', () => {
+  it('should return no widget when no widget has the id', () => {
     expect(findShownWidget(createTapeHud(), 'tape', 'rewind')).toBeUndefined();
   });
 
-  it('should return undefined when no window has the id', () => {
+  it('should return no widget when no window has the id', () => {
     expect(findShownWidget(createTapeHud(), 'deck', 'tracks')).toBeUndefined();
   });
 });

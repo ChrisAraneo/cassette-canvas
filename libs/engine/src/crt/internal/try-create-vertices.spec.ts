@@ -10,13 +10,17 @@ interface BufferCall {
 
 const BUFFER = Object.freeze({ name: 'buffer' });
 
+const ARRAY_BUFFER = 1;
+
+const STATIC_DRAW = 2;
+
 const createContext = (
   calls: BufferCall[],
   buffer: object | null,
 ): WebGLRenderingContext =>
   ({
-    ARRAY_BUFFER: 1,
-    STATIC_DRAW: 2,
+    ARRAY_BUFFER,
+    STATIC_DRAW,
     createBuffer: () => buffer,
     bindBuffer: (...values: unknown[]) =>
       calls.push({ name: 'bindBuffer', values }),
@@ -35,15 +39,19 @@ describe('tryCreateVertices', () => {
     tryCreateVertices(createContext(calls, BUFFER));
 
     expect(calls).toEqual([
-      { name: 'bindBuffer', values: [1, BUFFER] },
+      { name: 'bindBuffer', values: [ARRAY_BUFFER, BUFFER] },
       {
         name: 'bufferData',
-        values: [1, new Float32Array(FULL_SCREEN_TRIANGLE), 2],
+        values: [
+          ARRAY_BUFFER,
+          new Float32Array(FULL_SCREEN_TRIANGLE),
+          STATIC_DRAW,
+        ],
       },
     ]);
   });
 
-  it('should return undefined when the context cannot make one', () => {
+  it('should return no buffer when the context cannot make one', () => {
     expect(tryCreateVertices(createContext([], null))).toBeUndefined();
   });
 });

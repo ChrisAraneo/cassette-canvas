@@ -7,6 +7,6 @@ import type { HudWidget } from '../types/hud-widget';
  * or an empty page when it has no tabs.
  */
 export const computeFirstPage = (widgets: readonly HudWidget[]): string =>
-  match(find(widgets, (widget) => widget.kind === 'tabs'))
-    .with({ kind: 'tabs' }, (strip) => first(strip.tabs)?.id ?? '')
+  match(find(widgets, (widget) => widget.kind === 'TABS'))
+    .with({ kind: 'TABS' }, (strip) => first(strip.tabs)?.id ?? '')
     .otherwise(() => '');

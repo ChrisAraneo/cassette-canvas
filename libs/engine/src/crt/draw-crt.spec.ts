@@ -36,6 +36,10 @@ const CRT = {
   },
 } as unknown as Crt;
 
+const TIME = 1500;
+
+const TIME_CALL_INDEX = 7;
+
 const PICTURE = Object.freeze({
   bytes: Uint8ClampedArray.from([10, 20, 30, 255]),
   width: 1,
@@ -59,7 +63,7 @@ describe('drawCrt', () => {
   it('should upload the frame, set up the shader, and then draw when it shows a picture', () => {
     const calls: CrtCall[] = [];
 
-    drawCrt(createContext(calls), CRT, PICTURE, 1500);
+    drawCrt(createContext(calls), CRT, PICTURE, TIME);
 
     expect(map(calls, (call) => call.name)).toEqual([
       'bindTexture',
@@ -81,16 +85,30 @@ describe('drawCrt', () => {
   it('should pass the time to the shader when it draws, so the grain moves', () => {
     const calls: CrtCall[] = [];
 
-    drawCrt(createContext(calls), CRT, PICTURE, 1500);
+    drawCrt(createContext(calls), CRT, PICTURE, TIME);
 
-    expect(calls[7]?.values).toEqual(['time', 1500]);
+    expect(calls[TIME_CALL_INDEX]?.values).toEqual(['time', TIME]);
   });
 
-  it('should call drawArrays last when it shows the frame', () => {
+  it('should draw the triangle last when it shows the frame', () => {
     const calls: CrtCall[] = [];
 
-    drawCrt(createContext(calls), CRT, PICTURE, 0);
+    drawCrt(createContext(calls), CRT, PICTURE, TIME);
 
     expect(last(calls)?.name).toBe('drawArrays');
+  });
+
+  it('should not change the monitor or the picture it was given when it shows a frame', () => {
+    drawCrt(createContext([]), CRT, PICTURE, TIME);
+
+    expect([CRT.uniforms.time, PICTURE]).toEqual([
+      'time',
+      {
+        bytes: Uint8ClampedArray.from([10, 20, 30, 255]),
+        width: 1,
+        height: 1,
+        pixelSize: 4,
+      },
+    ]);
   });
 });

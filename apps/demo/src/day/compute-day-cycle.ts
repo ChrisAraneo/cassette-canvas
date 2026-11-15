@@ -5,6 +5,9 @@ import { computeSunHeight } from './compute-sun-height';
 import { DAY_LENGTH, HOURS_PER_DAY, START_HOUR, TWILIGHT } from './consts';
 import type { DayCycle } from './types/day-cycle';
 
+const computeTotalPhase = (time: number): number =>
+  time / DAY_LENGTH + START_HOUR / HOURS_PER_DAY;
+
 const computeDarkness = (phase: number): number =>
   clamp((TWILIGHT - computeSunHeight(phase)) / (2 * TWILIGHT), 0, 1);
 
@@ -14,7 +17,7 @@ const computeDarkness = (phase: number): number =>
  * lasts `DAY_LENGTH`.
  */
 export const computeDayCycle = (time: number): DayCycle =>
-  pipe(time / DAY_LENGTH + START_HOUR / HOURS_PER_DAY, toFraction, (phase) => ({
+  pipe(time, computeTotalPhase, toFraction, (phase) => ({
     phase,
     darkness: computeDarkness(phase),
   }));

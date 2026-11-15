@@ -11,14 +11,19 @@ import { computeListLayout } from './compute-list-layout';
 import { computeWidgetRect } from './compute-widget-rect';
 import { toWindowWidgets } from './to-window-widgets';
 
-/** A play button three rows down an item and 40 columns across it. */
+const PLAY_ROW = 3;
+
+const PLAY_COLUMN = 40;
+
+const PLAY_WIDTH = 20;
+
 const toPlay = (id: string): HudItemWidget => ({
-  kind: 'button',
+  kind: 'BUTTON',
   id: `play-${id}`,
   page: '',
-  row: 3,
-  column: 40,
-  width: 20,
+  row: PLAY_ROW,
+  column: PLAY_COLUMN,
+  width: PLAY_WIDTH,
   text: 'PLAY',
 });
 
@@ -30,9 +35,8 @@ const toItem = (id: string): HudListItem => ({
   selectable: true,
 });
 
-/** A list 48 rows tall, which shows two of its three items at once. */
 const LIST: HudList = Object.freeze({
-  kind: 'list',
+  kind: 'LIST',
   id: 'tracks',
   page: '',
   row: 0,
@@ -44,9 +48,8 @@ const LIST: HudList = Object.freeze({
   selected: '',
 });
 
-/** A readout on the open page, and one on a page the window does not show. */
 const PLAYING: HudLabel = Object.freeze({
-  kind: 'label',
+  kind: 'LABEL',
   id: 'playing',
   page: 'deck',
   row: 0,
@@ -55,7 +58,7 @@ const PLAYING: HudLabel = Object.freeze({
 });
 
 const HIDDEN: HudLabel = Object.freeze({
-  kind: 'label',
+  kind: 'LABEL',
   id: 'hidden',
   page: 'sides',
   row: 0,
@@ -80,15 +83,15 @@ const toIds = (window: HudWindow): readonly string[] =>
   map(toWindowWidgets(window), (placed) => placed.widget.id);
 
 describe('toWindowWidgets', () => {
-  it('should return the list and the buttons of the items it shows after the widgets of the page', () => {
+  it('should return the list and the buttons of the items it shows after the widgets of the page when it lays a window out', () => {
     expect(toIds(WINDOW)).toEqual(['playing', 'tracks', 'play-a', 'play-b']);
   });
 
-  it('should leave out the widgets of a page the window does not show', () => {
+  it('should return no widget of a page when the window does not show that page', () => {
     expect(toIds(WINDOW)).not.toContain('hidden');
   });
 
-  it('should leave out the widgets of the items the list does not show', () => {
+  it('should return no widget of an item when the list does not show that item', () => {
     expect(toIds(WINDOW)).not.toContain('play-c');
   });
 
@@ -100,15 +103,15 @@ describe('toWindowWidgets', () => {
     ]);
   });
 
-  it('should return a widget of an item where it sits in the window', () => {
+  it('should return a widget of an item where it sits when the list shows that item', () => {
     const rect = computeListLayout(LIST).items[1]?.rect;
 
     expect(
       computeWidgetRect(toWindowWidgets(WINDOW)[3]?.widget ?? LIST),
     ).toEqual({
-      row: (rect?.row ?? 0) + 3,
-      column: (rect?.column ?? 0) + 40,
-      width: 20,
+      row: (rect?.row ?? 0) + PLAY_ROW,
+      column: (rect?.column ?? 0) + PLAY_COLUMN,
+      width: PLAY_WIDTH,
       height: HUD_CONTROL_HEIGHT,
     });
   });
@@ -119,6 +122,15 @@ describe('toWindowWidgets', () => {
       '',
       'a',
       'b',
+    ]);
+  });
+  it('should return no widgets when the window holds none', () => {
+    expect(toIds({ ...WINDOW, widgets: [] })).toEqual([]);
+  });
+
+  it('should return the list alone when it holds no items', () => {
+    expect(toIds({ ...WINDOW, widgets: [{ ...LIST, items: [] }] })).toEqual([
+      'tracks',
     ]);
   });
 });

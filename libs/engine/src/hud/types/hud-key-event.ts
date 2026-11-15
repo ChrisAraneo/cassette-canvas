@@ -4,6 +4,6 @@
  * `Escape`.
  */
 export interface HudKeyEvent {
-  readonly kind: 'key';
+  readonly kind: 'KEY';
   readonly key: string;
 }

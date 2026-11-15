@@ -3,8 +3,9 @@ import { keys, noop, size } from 'lodash-es';
 import { describe, expect, it } from 'vitest';
 
 import { CRT_CONTEXT_ATTRIBUTES } from '../crt/consts';
-import { DEFAULT_MAX_FPS } from './consts';
+import { COLOR_COUNT, EXTENDED_SHADE_COUNT } from '../palette/consts';
 import type { PaletteColors } from '../palette/types/palette-colors';
+import { DEFAULT_MAX_FPS } from './consts';
 import { tryCreateDisplay } from './try-create-display';
 
 const COLORS: PaletteColors = [
@@ -75,7 +76,9 @@ describe('tryCreateDisplay', () => {
       SETTINGS,
     );
 
-    expect(size(keys(display?.palette))).toBe(512);
+    expect(size(keys(display?.palette))).toBe(
+      COLOR_COUNT * EXTENDED_SHADE_COUNT,
+    );
   });
 
   it('should return the monitor effect set up when every part is ready', () => {
@@ -87,7 +90,7 @@ describe('tryCreateDisplay', () => {
     expect(display?.crt.uniforms.time).toEqual({ name: 'u_time' });
   });
 
-  it('should call getContext for a WebGL context without smoothing or depth when it creates a display', () => {
+  it('should ask the canvas for a WebGL surface without smoothing or depth when it creates a display', () => {
     const requests: unknown[][] = [];
 
     tryCreateDisplay(createCanvas(createContext(true), requests), SETTINGS);
@@ -95,11 +98,11 @@ describe('tryCreateDisplay', () => {
     expect(requests).toEqual([['webgl', CRT_CONTEXT_ATTRIBUTES]]);
   });
 
-  it('should return undefined when the canvas has no WebGL context', () => {
+  it('should return no display when the canvas has no WebGL context', () => {
     expect(tryCreateDisplay(createCanvas(null), SETTINGS)).toBeUndefined();
   });
 
-  it('should return undefined when the monitor shaders do not compile', () => {
+  it('should return no display when the monitor shaders do not compile', () => {
     expect(
       tryCreateDisplay(createCanvas(createContext(false)), SETTINGS),
     ).toBeUndefined();
@@ -132,7 +135,7 @@ describe('tryCreateDisplay', () => {
     expect(display?.drawnAt).toBe(Number.NEGATIVE_INFINITY);
   });
 
-  it('should return undefined when the frame rate is zero', () => {
+  it('should return no display when the frame rate is zero', () => {
     expect(
       tryCreateDisplay(createCanvas(createContext(true)), {
         ...SETTINGS,
@@ -141,7 +144,7 @@ describe('tryCreateDisplay', () => {
     ).toBeUndefined();
   });
 
-  it('should return undefined when the pixel size is zero', () => {
+  it('should return no display when the pixel size is zero', () => {
     expect(
       tryCreateDisplay(createCanvas(createContext(true)), {
         ...SETTINGS,
@@ -150,12 +153,18 @@ describe('tryCreateDisplay', () => {
     ).toBeUndefined();
   });
 
-  it('should return undefined when the sprite size is negative', () => {
+  it('should return no display when the sprite size is negative', () => {
     expect(
       tryCreateDisplay(createCanvas(createContext(true)), {
         ...SETTINGS,
         spriteSize: -8,
       }),
     ).toBeUndefined();
+  });
+
+  it('should not change the settings it was given when it creates a display', () => {
+    tryCreateDisplay(createCanvas(createContext(true)), SETTINGS);
+
+    expect(SETTINGS).toEqual({ colors: COLORS, pixelSize: 4, spriteSize: 8 });
   });
 });

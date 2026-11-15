@@ -12,6 +12,12 @@ describe('runEffect', () => {
     expect(result).toBe(SCENE);
   });
 
+  it('should leave the value it was given unchanged when it runs the effect', () => {
+    runEffect(SCENE, noop);
+
+    expect(SCENE).toEqual({ name: 'scene' });
+  });
+
   it('should pass the value to the effect when it runs', () => {
     const seen: string[] = [];
 

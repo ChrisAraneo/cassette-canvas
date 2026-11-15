@@ -5,6 +5,8 @@ export const MAX_FPS = 999;
 
 export const NO_FPS = '--';
 
+export const MINUTES_PER_HOUR = 60;
+
 /** The clock shows `HH:MM`, in steps of 10 minutes. */
 export const CLOCK_LENGTH = 5;
 

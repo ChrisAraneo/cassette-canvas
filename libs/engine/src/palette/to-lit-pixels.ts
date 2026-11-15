@@ -1,4 +1,5 @@
 /* eslint-disable no-restricted-syntax -- Appendix B exception 1, measured below */
+import { round, size } from 'lodash-es';
 import {
   DARKEST_EXTENDED_SHADE,
   LIGHTEST_EXTENDED_SHADE,
@@ -17,11 +18,12 @@ export const toLitPixels = (
   pixels: ArrayLike<number>,
   shadeOffsets: ArrayLike<number>,
 ): number[] => {
-  const litPixels = new Array<number>(pixels.length);
+  const count = size(pixels);
+  const litPixels = new Array<number>(count);
 
-  for (let index = 0; index < pixels.length; index += 1) {
+  for (let index = 0; index < count; index += 1) {
     const ramp = SHADE_RAMPS[pixels[index] ?? TRANSPARENT];
-    const extendedShade = Math.round(
+    const extendedShade = round(
       (ramp?.extendedShade ?? 0) + (shadeOffsets[index] ?? 0),
     );
 

@@ -132,9 +132,9 @@ let hud = addHudWindow(
     width: 92,
     height: 104,
     widgets: [
-      { kind: 'label', id: 'state', page: '', row: 1, column: 0, text: 'LIT' },
+      { kind: 'LABEL', id: 'state', page: '', row: 1, column: 0, text: 'LIT' },
       {
-        kind: 'button',
+        kind: 'BUTTON',
         id: 'blow',
         page: '',
         row: 14,
@@ -142,9 +142,9 @@ let hud = addHudWindow(
         width: 72,
         text: 'BLOW OUT',
       },
-      { kind: 'divider', id: 'line', page: '', row: 30, column: 0, width: 72 },
+      { kind: 'DIVIDER', id: 'line', page: '', row: 30, column: 0, width: 72 },
       {
-        kind: 'list',
+        kind: 'LIST',
         id: 'torches',
         page: '',
         row: 35,
@@ -158,7 +158,7 @@ let hud = addHudWindow(
             height: 0,
             widgets: [
               {
-                kind: 'button',
+                kind: 'BUTTON',
                 id: 'blow-hall',
                 page: '',
                 row: 3,
@@ -212,7 +212,7 @@ let hud = addHudWindow(
 canvas.addEventListener('pointerdown', (event) => {
   const rect = canvas.getBoundingClientRect();
   const change = handleHud(hud, {
-    kind: 'press',
+    kind: 'PRESS',
     row: Math.floor((event.clientY - rect.top) / PIXEL_SIZE),
     column: Math.floor((event.clientX - rect.left) / PIXEL_SIZE),
   });
@@ -225,7 +225,7 @@ canvas.addEventListener('pointerdown', (event) => {
 // milliseconds animates the film grain. Keep the display `drawScreen`
 // returns: it carries the time of the last frame, which is how the display
 // never draws more frames a second than its `fps`.
-const draw = (ready: Display, time: number) => {
+const draw = (ready: Display, time: number): void => {
   const drawn = drawScreen(ready, addHud(screen, hud), time);
 
   requestAnimationFrame((next) => draw(drawn, next));

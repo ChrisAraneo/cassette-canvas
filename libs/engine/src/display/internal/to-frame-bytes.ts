@@ -1,4 +1,5 @@
 /* eslint-disable no-restricted-syntax -- Appendix B exception 1, measured below */
+import { size } from 'lodash-es';
 import type { Frame } from '../../frame/types/frame';
 import { CHANNEL_MAX, TRANSPARENT } from '../../palette/consts';
 import type { Palette } from '../../palette/types/palette';
@@ -24,9 +25,10 @@ export const toFrameBytes = (
   frame: Frame,
   palette: Palette,
 ): Uint8ClampedArray => {
-  const bytes = new Uint8ClampedArray(frame.length * BYTES_PER_PIXEL);
+  const count = size(frame);
+  const bytes = new Uint8ClampedArray(count * BYTES_PER_PIXEL);
 
-  for (let index = 0; index < frame.length; index += 1) {
+  for (let index = 0; index < count; index += 1) {
     const rgb = palette[frame[index] ?? TRANSPARENT];
 
     if (rgb !== undefined) {

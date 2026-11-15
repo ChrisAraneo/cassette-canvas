@@ -10,18 +10,32 @@ interface TextureCall {
 
 const TEXTURE = Object.freeze({ name: 'texture' });
 
+const TEXTURE_2D = 1;
+
+const TEXTURE_MIN_FILTER = 2;
+
+const TEXTURE_MAG_FILTER = 3;
+
+const TEXTURE_WRAP_S = 4;
+
+const TEXTURE_WRAP_T = 5;
+
+const NEAREST = 6;
+
+const CLAMP_TO_EDGE = 7;
+
 const createContext = (
   calls: TextureCall[],
   texture: object | null,
 ): WebGLRenderingContext =>
   ({
-    TEXTURE_2D: 1,
-    TEXTURE_MIN_FILTER: 2,
-    TEXTURE_MAG_FILTER: 3,
-    TEXTURE_WRAP_S: 4,
-    TEXTURE_WRAP_T: 5,
-    NEAREST: 6,
-    CLAMP_TO_EDGE: 7,
+    TEXTURE_2D,
+    TEXTURE_MIN_FILTER,
+    TEXTURE_MAG_FILTER,
+    TEXTURE_WRAP_S,
+    TEXTURE_WRAP_T,
+    NEAREST,
+    CLAMP_TO_EDGE,
     createTexture: () => texture,
     bindTexture: (...values: unknown[]) =>
       calls.push({ name: 'bindTexture', values }),
@@ -40,15 +54,15 @@ describe('tryCreateTexture', () => {
     tryCreateTexture(createContext(calls, TEXTURE));
 
     expect(map(calls, (call) => call.values)).toEqual([
-      [1, TEXTURE],
-      [1, 2, 6],
-      [1, 3, 6],
-      [1, 4, 7],
-      [1, 5, 7],
+      [TEXTURE_2D, TEXTURE],
+      [TEXTURE_2D, TEXTURE_MIN_FILTER, NEAREST],
+      [TEXTURE_2D, TEXTURE_MAG_FILTER, NEAREST],
+      [TEXTURE_2D, TEXTURE_WRAP_S, CLAMP_TO_EDGE],
+      [TEXTURE_2D, TEXTURE_WRAP_T, CLAMP_TO_EDGE],
     ]);
   });
 
-  it('should return undefined when the context cannot make one', () => {
+  it('should return no texture when the context cannot make one', () => {
     expect(tryCreateTexture(createContext([], null))).toBeUndefined();
   });
 });

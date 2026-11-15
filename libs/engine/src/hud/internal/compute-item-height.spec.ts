@@ -5,9 +5,8 @@ import type { HudItemWidget } from '../types/hud-item-widget';
 import type { HudListItem } from '../types/hud-list-item';
 import { computeItemHeight } from './compute-item-height';
 
-/** A play button three rows down the item it sits on. */
 const PLAY: HudItemWidget = Object.freeze({
-  kind: 'button',
+  kind: 'BUTTON',
   id: 'play',
   page: '',
   row: 3,

@@ -3,8 +3,8 @@ import { match, P } from 'ts-pattern';
 import { describe, expect, it } from 'vitest';
 
 import { isPixel } from '../../palette/is-pixel';
+import { computeTextAdvance } from '../compute-text-advance';
 import { TEXT_ASCENT } from '../consts';
-import { measureText } from '../measure-text';
 import type { TextPixels } from '../types/text-pixels';
 import { toGlyphPaints } from './to-glyph-paints';
 
@@ -17,7 +17,6 @@ const OTHER_INK = 0x26;
 const toColumns = (text: string): number[] =>
   map(toGlyphPaints(text, INK), (paint) => paint.column);
 
-/** The pixel values each character of a line was drawn in. */
 const toInks = (text: string, pixels: TextPixels): number[][] =>
   map(toGlyphPaints(text, pixels), (paint) =>
     match(paint)
@@ -37,11 +36,11 @@ describe('toGlyphPaints', () => {
   });
 
   it('should return the next character moved on by the width of the one before when it paints a text', () => {
-    expect(toColumns('HI')[1]).toBe(measureText('H'));
+    expect(toColumns('HI')[1]).toBe(computeTextAdvance('H'));
   });
 
   it('should return a gap when it does not know a character', () => {
-    expect(toColumns('HéH')[1]).toBe(measureText('Hé'));
+    expect(toColumns('HéH')[1]).toBe(computeTextAdvance('Hé'));
   });
 
   it('should return no steps when it does not know the character', () => {

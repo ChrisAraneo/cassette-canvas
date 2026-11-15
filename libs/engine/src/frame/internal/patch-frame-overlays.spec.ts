@@ -18,14 +18,16 @@ describe('patchFrameOverlays', () => {
   it('should return the very same frame when there are no overlays', () => {
     const frame = createNightFrame();
 
-    expect(patchFrameOverlays(frame, [], 2, 2)).toBe(frame);
+    expect(
+      patchFrameOverlays({ frame, overlays: [], width: 2, height: 2 }),
+    ).toBe(frame);
   });
 
   it('should return an overlay in the colors it was authored in when the frame is dark', () => {
     expect(
-      patchFrameOverlays(
-        createNightFrame(),
-        [
+      patchFrameOverlays({
+        frame: createNightFrame(),
+        overlays: [
           {
             id: 'panel',
             overlay: createOverlay(2, 1, 0x35),
@@ -33,17 +35,17 @@ describe('patchFrameOverlays', () => {
             column: 0,
           },
         ],
-        2,
-        2,
-      ),
+        width: 2,
+        height: 2,
+      }),
     ).toEqual([PANEL, PANEL, DARK, DARK]);
   });
 
   it('should return the lit frame when an overlay is transparent there', () => {
     expect(
-      patchFrameOverlays(
-        createNightFrame(),
-        [
+      patchFrameOverlays({
+        frame: createNightFrame(),
+        overlays: [
           {
             id: 'panel',
             overlay: toOverlay(['.o'], { o: 0x35 }),
@@ -51,17 +53,17 @@ describe('patchFrameOverlays', () => {
             column: 0,
           },
         ],
-        2,
-        2,
-      ),
+        width: 2,
+        height: 2,
+      }),
     ).toEqual([DARK, PANEL, DARK, DARK]);
   });
 
   it('should return a later overlay over an earlier one when they overlap', () => {
     expect(
-      patchFrameOverlays(
-        createNightFrame(),
-        [
+      patchFrameOverlays({
+        frame: createNightFrame(),
+        overlays: [
           {
             id: 'panel',
             overlay: createOverlay(2, 2, 0x35),
@@ -75,17 +77,17 @@ describe('patchFrameOverlays', () => {
             column: 1,
           },
         ],
-        2,
-        2,
-      ),
+        width: 2,
+        height: 2,
+      }),
     ).toEqual([PANEL, PANEL, PANEL, BADGE]);
   });
 
   it('should return no parts of an overlay when they fall outside the frame', () => {
     expect(
-      patchFrameOverlays(
-        createNightFrame(),
-        [
+      patchFrameOverlays({
+        frame: createNightFrame(),
+        overlays: [
           {
             id: 'panel',
             overlay: createOverlay(4, 4, 0x35),
@@ -93,30 +95,32 @@ describe('patchFrameOverlays', () => {
             column: 1,
           },
         ],
-        2,
-        2,
-      ),
+        width: 2,
+        height: 2,
+      }),
     ).toEqual([DARK, PANEL, DARK, PANEL]);
   });
 
   it('should not change the frame it is given when it patches the overlays', () => {
     const frame = createNightFrame();
 
-    patchFrameOverlays(
+    patchFrameOverlays({
       frame,
-      [{ id: 'panel', overlay: createOverlay(2, 2, 0x35), row: 0, column: 0 }],
-      2,
-      2,
-    );
+      overlays: [
+        { id: 'panel', overlay: createOverlay(2, 2, 0x35), row: 0, column: 0 },
+      ],
+      width: 2,
+      height: 2,
+    });
 
     expect(frame).toEqual(createNightFrame());
   });
 
   it('should return a place unchanged when a pixel value cannot reach it', () => {
     expect(
-      patchFrameOverlays(
-        createNightFrame(),
-        [
+      patchFrameOverlays({
+        frame: createNightFrame(),
+        overlays: [
           {
             id: 'panel',
             overlay: { width: 1, height: 1, pixels: [TRANSPARENT] },
@@ -124,9 +128,9 @@ describe('patchFrameOverlays', () => {
             column: 0,
           },
         ],
-        2,
-        2,
-      ),
+        width: 2,
+        height: 2,
+      }),
     ).toEqual(createNightFrame());
   });
 });

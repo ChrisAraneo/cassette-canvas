@@ -1,6 +1,6 @@
 import { floor } from 'lodash-es';
 import { pipe } from 'remeda';
-import { MILLISECONDS_PER_SECOND } from '../../day/consts';
+import { MILLISECONDS_PER_SECOND } from '../../consts';
 import { TRACK_LENGTH, TRACK_MARGIN } from '../consts';
 import type { Mover } from '../types/mover';
 

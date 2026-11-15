@@ -7,7 +7,7 @@ import type { Hud } from './types/hud';
 import type { HudWidget } from './types/hud-widget';
 
 const WIDGETS: readonly HudWidget[] = Object.freeze([
-  { kind: 'label', id: 'fps', page: '', row: 0, column: 0, text: 'FPS 60' },
+  { kind: 'LABEL', id: 'fps', page: '', row: 0, column: 0, text: 'FPS 60' },
 ]);
 
 const createStreetHud = (): Hud =>
@@ -28,11 +28,19 @@ describe('findHudWidget', () => {
     });
   });
 
-  it('should return undefined when the window holds no such widget', () => {
+  it('should return no widget when the window holds none with the id', () => {
     expect(findHudWidget(createStreetHud(), 'street', 'ghost')).toBeUndefined();
   });
 
-  it('should return undefined when there is no such window', () => {
+  it('should return no widget when the HUD holds no window with the id', () => {
     expect(findHudWidget(createStreetHud(), 'ghost', 'fps')).toBeUndefined();
+  });
+
+  it('should not change the HUD it is given when it looks for a widget', () => {
+    const hud = createStreetHud();
+
+    findHudWidget(hud, 'street', 'fps');
+
+    expect(hud).toEqual(createStreetHud());
   });
 });

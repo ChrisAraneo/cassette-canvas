@@ -8,7 +8,6 @@ export { computeFrame } from './frame/compute-frame';
 export type { Frame } from './frame/types/frame';
 export { addHud } from './hud/add-hud';
 export { addHudWindow } from './hud/add-hud-window';
-export { composeHud } from './hud/compose-hud';
 export {
   DEFAULT_HUD_COLOR,
   HUD_BACKSPACE_KEY,
@@ -37,6 +36,7 @@ export {
 } from './hud/consts';
 export { createHud } from './hud/create-hud';
 export { createHudTheme } from './hud/create-hud-theme';
+export { drawHud } from './hud/draw-hud';
 export { findHudWidget } from './hud/find-hud-widget';
 export { findHudWindow } from './hud/find-hud-window';
 export { handleHud } from './hud/handle-hud';
@@ -69,19 +69,13 @@ export type { HudWidgetChanges } from './hud/types/hud-widget-changes';
 export type { HudWindow } from './hud/types/hud-window';
 export type { HudWindowChanges } from './hud/types/hud-window-changes';
 export type { HudWindowSettings } from './hud/types/hud-window-settings';
-export { addOverlay } from './overlay/add-overlay';
-export { composeOverlay } from './overlay/compose-overlay';
 export { createOverlay } from './overlay/create-overlay';
-export { findOverlay } from './overlay/find-overlay';
-export { patchOverlay } from './overlay/patch-overlay';
-export { removeOverlay } from './overlay/remove-overlay';
+export { drawOverlay } from './overlay/draw-overlay';
 export { toOverlay } from './overlay/to-overlay';
 export type { Overlay } from './overlay/types/overlay';
-export type { OverlayChanges } from './overlay/types/overlay-changes';
 export type { OverlayFill } from './overlay/types/overlay-fill';
 export type { OverlayImage } from './overlay/types/overlay-image';
 export type { OverlayPaint } from './overlay/types/overlay-paint';
-export type { OverlayPlacement } from './overlay/types/overlay-placement';
 export {
   BASE_SHADE,
   COLOR_COUNT,
@@ -99,27 +93,34 @@ export type { HexColor } from './palette/types/hex-color';
 export type { Palette } from './palette/types/palette';
 export type { PaletteColors } from './palette/types/palette-colors';
 export type { Rgb } from './palette/types/rgb';
+export type { SpriteLegend } from './palette/types/sprite-legend';
 export { addLight } from './screen/add-light';
+export { addOverlay } from './screen/add-overlay';
 export { addSprite } from './screen/add-sprite';
 export { createScreen } from './screen/create-screen';
 export { findLight } from './screen/find-light';
+export { findOverlay } from './screen/find-overlay';
 export { findSprite } from './screen/find-sprite';
 export { patchAmbient } from './screen/patch-ambient';
 export { patchLight } from './screen/patch-light';
 export { patchLightByOffset } from './screen/patch-light-by-offset';
+export { patchOverlay } from './screen/patch-overlay';
 export { patchSprite } from './screen/patch-sprite';
 export { patchSpriteByOffset } from './screen/patch-sprite-by-offset';
 export { removeLight } from './screen/remove-light';
+export { removeOverlay } from './screen/remove-overlay';
 export { removeSprite } from './screen/remove-sprite';
 export { toSprite } from './screen/to-sprite';
 export type { Light } from './screen/types/light';
 export type { LightChanges } from './screen/types/light-changes';
 export type { LightSettings } from './screen/types/light-settings';
+export type { OverlayChanges } from './screen/types/overlay-changes';
+export type { OverlayPlacement } from './screen/types/overlay-placement';
 export type { Screen } from './screen/types/screen';
 export type { Sprite } from './screen/types/sprite';
 export type { SpriteChanges } from './screen/types/sprite-changes';
-export type { SpriteLegend } from './screen/types/sprite-legend';
 export type { SpritePlacement } from './screen/types/sprite-placement';
+export { computeTextAdvance } from './text/compute-text-advance';
 export {
   TEXT_ASCENT,
   TEXT_BOLT,
@@ -129,7 +130,6 @@ export {
   TEXT_HEIGHT,
   TEXT_LINE_ROWS,
 } from './text/consts';
-export { measureText } from './text/measure-text';
 export { toTextOverlay } from './text/to-text-overlay';
 export { toTextPaint } from './text/to-text-paint';
 export type { TextPixels } from './text/types/text-pixels';

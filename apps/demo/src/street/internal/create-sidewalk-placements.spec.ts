@@ -7,32 +7,32 @@ import { SPRITE_SIZE } from '../../consts';
 import { LAMP_COLUMNS, SCREEN_WIDTH, TREE_COLUMNS } from '../consts';
 import { createSidewalkPlacements } from './create-sidewalk-placements';
 
-const withPrefix = (prefix: string): SpritePlacement[] =>
+const filterPrefixed = (prefix: string): SpritePlacement[] =>
   filter(createSidewalkPlacements(), ({ id }) => startsWith(id, prefix));
 
 describe('createSidewalkPlacements', () => {
   it('should return two rows of tiles across the screen when it places the sidewalk', () => {
-    expect(size(withPrefix('sidewalk-'))).toBe(
+    expect(size(filterPrefixed('sidewalk-'))).toBe(
       (2 * SCREEN_WIDTH) / SPRITE_SIZE,
     );
   });
 
   it('should return every tree when it lays the sidewalk', () => {
-    expect(size(withPrefix('tree-'))).toBe(size(TREE_COLUMNS) * size(TREE));
+    expect(size(filterPrefixed('tree-'))).toBe(size(TREE_COLUMNS) * size(TREE));
   });
 
   it('should return the trees as shadow casters when it plants them', () => {
-    expect(every(withPrefix('tree-'), { castsShadow: true })).toBe(true);
+    expect(every(filterPrefixed('tree-'), { castsShadow: true })).toBe(true);
   });
 
   it('should return every lamp post when it lays the sidewalk', () => {
-    expect(size(withPrefix('lamp-'))).toBe(
+    expect(size(filterPrefixed('lamp-'))).toBe(
       size(LAMP_COLUMNS) * size(LAMP_POST),
     );
   });
 
   it('should return the lamp posts as no shadow casters when it places the sidewalk, so they do not block their own light', () => {
-    expect(every(withPrefix('lamp-'), { castsShadow: false })).toBe(true);
+    expect(every(filterPrefixed('lamp-'), { castsShadow: false })).toBe(true);
   });
 
   it('should return the pavement before the trees and the lamps when it places the sidewalk', () => {

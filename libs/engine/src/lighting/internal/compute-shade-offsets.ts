@@ -1,4 +1,5 @@
 /* eslint-disable no-restricted-syntax -- Appendix B exception 1, measured below */
+import { size } from 'lodash-es';
 import type { Lighting } from '../types/lighting';
 import { toExposure } from './to-exposure';
 import { toShadeOffset } from './to-shade-offset';
@@ -26,15 +27,16 @@ export const computeShadeOffsets = (
   exposures: readonly Float32Array[],
 ): Float64Array => {
   const offsets = new Float64Array(Math.max(0, width * height));
+  const count = size(offsets);
   const ambientExposure = toExposure(ambient);
 
   for (const exposure of exposures) {
-    for (let index = 0; index < offsets.length; index += 1) {
+    for (let index = 0; index < count; index += 1) {
       offsets[index] = (offsets[index] ?? 0) + (exposure[index] ?? 0);
     }
   }
 
-  for (let index = 0; index < offsets.length; index += 1) {
+  for (let index = 0; index < count; index += 1) {
     const light = offsets[index] ?? 0;
 
     offsets[index] =

@@ -1,4 +1,5 @@
 import { runEffect } from '@cassette-canvas/common';
+import { constant } from 'lodash-es';
 import { pipe } from 'remeda';
 import { match, P } from 'ts-pattern';
 import { FULL_SCREEN_TRIANGLE } from '../consts';
@@ -30,4 +31,4 @@ export const tryCreateVertices = (
 ): WebGLBuffer | undefined =>
   match(context.createBuffer())
     .with(nonNullable, (vertices) => patchVertices(context, vertices))
-    .otherwise(() => undefined);
+    .otherwise(constant(undefined));

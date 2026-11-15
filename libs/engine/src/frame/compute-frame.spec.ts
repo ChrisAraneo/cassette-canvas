@@ -1,13 +1,22 @@
-﻿import { chunk, includes, invert, join, map, times, uniq } from 'lodash-es';
+import {
+  chunk,
+  includes,
+  invert,
+  join,
+  map,
+  size,
+  times,
+  uniq,
+} from 'lodash-es';
 import { describe, expect, it } from 'vitest';
 
+import { createOverlay } from '../overlay/create-overlay';
 import { LIGHTEST_EXTENDED_SHADE, TRANSPARENT } from '../palette/consts';
 import { toExtendedPixel } from '../palette/to-extended-pixel';
 import { toLitPixel } from '../palette/to-lit-pixel';
-import { createOverlay } from '../overlay/create-overlay';
-import type { OverlayPlacement } from '../overlay/types/overlay-placement';
 import { toSprite } from '../screen/to-sprite';
 import type { Light } from '../screen/types/light';
+import type { OverlayPlacement } from '../screen/types/overlay-placement';
 import type { Screen } from '../screen/types/screen';
 import type { SpritePlacement } from '../screen/types/sprite-placement';
 import { computeFrame } from './compute-frame';
@@ -55,14 +64,14 @@ const formatFrame = (frame: Frame, width: number): string[] =>
     ),
   );
 
-const placeSprite = (
+const createSpritePlacement = (
   id: string,
   sprite: readonly number[],
   row: number,
   column: number,
 ): SpritePlacement => ({ id, sprite, row, column, castsShadow: false });
 
-const placeOverlay = (
+const createOverlayPlacement = (
   pixel: number,
   row: number,
   column: number,
@@ -77,8 +86,8 @@ const createLayeredScreen = (): Screen => ({
   background: BACKGROUND,
   ambient: 0,
   sprites: [
-    placeSprite('corner', RED_CORNER, 0, 0),
-    placeSprite('block', GREEN_BLOCK, 1, 1),
+    createSpritePlacement('corner', RED_CORNER, 0, 0),
+    createSpritePlacement('block', GREEN_BLOCK, 1, 1),
   ],
   lights: [],
   overlays: [],
@@ -87,7 +96,7 @@ const createLayeredScreen = (): Screen => ({
 const createWallScreen = (castsShadow: boolean): Screen => ({
   background: 0x00,
   ambient: 0,
-  sprites: [{ ...placeSprite('wall', WALL, 0, 2), castsShadow }],
+  sprites: [{ ...createSpritePlacement('wall', WALL, 0, 2), castsShadow }],
   lights: [SUN],
   overlays: [],
 });
@@ -107,11 +116,10 @@ const GRAY_RAMP = toSprite(['abcd'], {
   d: 0x03,
 });
 
-/** The four darkest gray shades under one even light across the frame. */
 const createRampScreen = (ambient: number, intensity: number): Screen => ({
   background: TRANSPARENT,
   ambient,
-  sprites: [placeSprite('ramp', GRAY_RAMP, 0, 0)],
+  sprites: [createSpritePlacement('ramp', GRAY_RAMP, 0, 0)],
   lights: [{ id: 'lamp', row: 0, column: 2, radius: 1000, intensity }],
   overlays: [],
 });
@@ -128,8 +136,8 @@ describe('computeFrame', () => {
       {
         ...createLayeredScreen(),
         sprites: [
-          placeSprite('block', GREEN_BLOCK, 0, 0),
-          placeSprite('corner', RED_CORNER, 0, 0),
+          createSpritePlacement('block', GREEN_BLOCK, 0, 0),
+          createSpritePlacement('corner', RED_CORNER, 0, 0),
         ],
       },
       2,
@@ -145,8 +153,8 @@ describe('computeFrame', () => {
       {
         ...createLayeredScreen(),
         sprites: [
-          placeSprite('top-left', GREEN_BLOCK, -1, -1),
-          placeSprite('bottom-right', RED_CORNER, 2, 3),
+          createSpritePlacement('top-left', GREEN_BLOCK, -1, -1),
+          createSpritePlacement('bottom-right', RED_CORNER, 2, 3),
         ],
       },
       2,
@@ -204,7 +212,7 @@ describe('computeFrame', () => {
   it('should return the sprite shades apart when a lamp shines on a bright scene', () => {
     const frame = computeFrame(createRampScreen(8, 16), 4, 4, 1);
 
-    expect(uniq(frame)).toHaveLength(4);
+    expect(size(uniq(frame))).toBe(4);
   });
 
   it('should return no lightest extended shade when a lamp shines on a bright scene', () => {
@@ -254,7 +262,10 @@ describe('computeFrame', () => {
 
   it('should return an overlay in its own colors when the light darkens the screen', () => {
     const frame = computeFrame(
-      { ...createGrayScreen(-16), overlays: [placeOverlay(0x14, 0, 0)] },
+      {
+        ...createGrayScreen(-16),
+        overlays: [createOverlayPlacement(0x14, 0, 0)],
+      },
       1,
       2,
       1,
@@ -265,7 +276,10 @@ describe('computeFrame', () => {
 
   it('should return an overlay outside the shadows when a sprite casts one', () => {
     const frame = computeFrame(
-      { ...createWallScreen(true), overlays: [placeOverlay(0x14, 0, 6)] },
+      {
+        ...createWallScreen(true),
+        overlays: [createOverlayPlacement(0x14, 0, 6)],
+      },
       3,
       7,
       3,
@@ -276,7 +290,10 @@ describe('computeFrame', () => {
 
   it('should return an overlay over the sprites when it sits on one', () => {
     const frame = computeFrame(
-      { ...createLayeredScreen(), overlays: [placeOverlay(0x54, 1, 0)] },
+      {
+        ...createLayeredScreen(),
+        overlays: [createOverlayPlacement(0x54, 1, 0)],
+      },
       2,
       4,
       3,

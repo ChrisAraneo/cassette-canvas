@@ -70,6 +70,13 @@ describe('patchSprite', () => {
     ).toEqual([HERO, COIN]);
   });
 
+  it('should return an empty screen when the screen holds no sprites at all', () => {
+    expect(
+      patchSprite({ ...createGameScreen(), sprites: [] }, 'hero', { row: 10 })
+        .sprites,
+    ).toEqual([]);
+  });
+
   it('should return the same background when it changes a sprite', () => {
     expect(
       patchSprite(createGameScreen(), 'hero', { row: 10 }).background,

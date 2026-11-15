@@ -1,4 +1,5 @@
 /* eslint-disable no-restricted-syntax -- Appendix B exception 1, measured below */
+import { ceil, floor, max, round } from 'lodash-es';
 import type { Light } from '../../screen/types/light';
 import { REFERENCE_EXPOSURE, SHADOW_SOFTNESS } from '../consts';
 import type { Lighting } from '../types/lighting';
@@ -35,18 +36,19 @@ export const computeLightExposure = (
 ): Float32Array => {
   const exposures = new Float32Array(width * height);
   const visible = new Uint8Array(width * height);
-  const lightRow = Math.floor(light.row);
-  const lightColumn = Math.floor(light.column);
-  const reach = Math.ceil(light.radius);
+  const lightRow = floor(light.row);
+  const lightColumn = floor(light.column);
+  const reach = ceil(light.radius);
   const squaredRadius = light.radius * light.radius;
   const emission = toExposure(light.intensity) - REFERENCE_EXPOSURE;
-  const firstRing = Math.max(
-    0,
-    -lightRow,
-    lightRow - (height - 1),
-    -lightColumn,
-    lightColumn - (width - 1),
-  );
+  const firstRing =
+    max([
+      0,
+      -lightRow,
+      lightRow - (height - 1),
+      -lightColumn,
+      lightColumn - (width - 1),
+    ]) ?? 0;
 
   for (let ring = firstRing; ring <= reach; ring += 1) {
     const top = Math.max(-ring, -lightRow);
@@ -71,10 +73,8 @@ export const computeLightExposure = (
           continue;
         }
 
-        const parentRowOffset = Math.round((rowOffset * sideReach) / ring);
-        const parentColumnOffset = Math.round(
-          (columnOffset * sideReach) / ring,
-        );
+        const parentRowOffset = round((rowOffset * sideReach) / ring);
+        const parentColumnOffset = round((columnOffset * sideReach) / ring);
         const parentRow = lightRow + parentRowOffset;
         const parentColumn = lightColumn + parentColumnOffset;
         const parentIndex = parentRow * width + parentColumn;
@@ -90,9 +90,6 @@ export const computeLightExposure = (
             ? 1
             : 0;
 
-        // The two pixels beside the one ahead, along the ring it sits on.
-        // Past a corner of that ring, or off the screen, they fall back to
-        // the pixel ahead, so this only ever reads rings already swept.
         const runsAlongRow =
           Math.abs(parentRowOffset) >= Math.abs(parentColumnOffset);
         const sideStep = runsAlongRow ? 1 : width;

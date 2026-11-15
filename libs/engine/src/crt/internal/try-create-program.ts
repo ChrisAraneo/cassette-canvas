@@ -1,7 +1,8 @@
+import { constant } from 'lodash-es';
 import { match, P } from 'ts-pattern';
 import { FRAGMENT_SHADER_SOURCE } from './fragment-shader-source';
 import { tryCreateShader } from './try-create-shader';
-import { tryLinkProgram } from './try-link-program';
+import { tryPatchProgram } from './try-patch-program';
 import { VERTEX_SHADER_SOURCE } from './vertex-shader-source';
 
 const { nonNullable } = P;
@@ -29,6 +30,6 @@ export const tryCreateProgram = (
         fragmentShader: nonNullable,
       },
       ({ program, vertexShader, fragmentShader }) =>
-        tryLinkProgram(context, program, vertexShader, fragmentShader),
+        tryPatchProgram(context, program, vertexShader, fragmentShader),
     )
-    .otherwise(() => undefined);
+    .otherwise(constant(undefined));

@@ -4,14 +4,9 @@ import type { HudList } from '../types/hud-list';
 import type { HudListItem } from '../types/hud-list-item';
 import { computeItemPitch } from './compute-item-pitch';
 import { computeListRoom } from './compute-list-room';
+import type { LastPage } from './types/last-page';
 
-interface LastPage {
-  readonly start: number;
-  readonly used: number;
-  readonly full: boolean;
-}
-
-const addItem = (
+const computePageWithItem = (
   page: LastPage,
   index: number,
   pitch: number,
@@ -34,6 +29,11 @@ export const computeListLastPage = (widget: HudList): number =>
   reduceRight(
     widget.items,
     (page: LastPage, item: HudListItem, index: number) =>
-      addItem(page, index, computeItemPitch(item), computeListRoom(widget)),
+      computePageWithItem(
+        page,
+        index,
+        computeItemPitch(item),
+        computeListRoom(widget),
+      ),
     { start: size(widget.items), used: 0, full: false },
   ).start;

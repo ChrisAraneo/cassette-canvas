@@ -61,10 +61,10 @@ export const HUD_LABEL_PADDING = 4;
 /** The top of a capital letter inside a title bar, a button, or a field. */
 export const HUD_TEXT_TOP = 2;
 
-/** The close box is square, with one pixel of padding inside the title bar. */
-export const HUD_CLOSE_SIZE = HUD_TITLE_HEIGHT - 2;
-
 export const HUD_CLOSE_MARGIN = 1;
+
+/** The close box is square, with one pixel of padding inside the title bar. */
+export const HUD_CLOSE_SIZE = HUD_TITLE_HEIGHT - 2 * HUD_CLOSE_MARGIN;
 
 /** How far a pressed button and its text move down and right. */
 export const HUD_PRESS_SHIFT = 1;
@@ -80,12 +80,15 @@ export const HUD_TAB_DROP = 2;
 /** The rows a divider takes: a shadow line with a light line under it. */
 export const HUD_DIVIDER_HEIGHT = 2;
 
+/** Where the text of a list item sits inside it. */
+export const HUD_LIST_TEXT_TOP = 1;
+
 /**
  * The rows one line of an item of a list takes: a line of text with a row to
  * spare. An item is this tall for each of the lines it holds, so an item of
  * one line takes this and an item of two lines twice as much.
  */
-export const HUD_LIST_ITEM_HEIGHT = TEXT_HEIGHT + 2;
+export const HUD_LIST_ITEM_HEIGHT = TEXT_HEIGHT + 2 * HUD_LIST_TEXT_TOP;
 
 /** The rows one item of a single line takes with the divider under it. */
 export const HUD_LIST_ITEM_PITCH = HUD_LIST_ITEM_HEIGHT + HUD_DIVIDER_HEIGHT;
@@ -98,9 +101,6 @@ export const HUD_LIST_BAR_WIDTH = 11;
 
 /** The shortest the thumb on a list's scroll bar gets. */
 export const HUD_LIST_THUMB_HEIGHT = 5;
-
-/** Where the text of a list item sits inside it. */
-export const HUD_LIST_TEXT_TOP = 1;
 
 export const HUD_LIST_TEXT_LEFT = 2;
 

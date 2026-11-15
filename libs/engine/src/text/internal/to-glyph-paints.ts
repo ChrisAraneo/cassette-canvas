@@ -6,15 +6,34 @@ import type { TextPixels } from '../types/text-pixels';
 import { GLYPHS } from './glyphs';
 import { toGlyphOverlay } from './to-glyph-overlay';
 import { toTextPixel } from './to-text-pixel';
+import type { Glyph } from './types/glyph';
+import type { GlyphRun } from './types/glyph-run';
 
 const { nonNullable } = P;
 
-interface GlyphRun {
-  readonly column: number;
-  readonly paints: readonly OverlayPaint[];
-}
-
 const START: GlyphRun = Object.freeze({ column: 0, paints: [] });
+
+const toDrawnRun = (
+  run: GlyphRun,
+  glyph: Glyph,
+  pixels: TextPixels,
+  index: number,
+): GlyphRun => ({
+  column: run.column + glyph.advance,
+  paints: [
+    ...run.paints,
+    {
+      image: toGlyphOverlay(glyph, toTextPixel(pixels, index)),
+      row: TEXT_ASCENT + glyph.top,
+      column: run.column,
+    },
+  ],
+});
+
+const toSkippedRun = (run: GlyphRun): GlyphRun => ({
+  column: run.column + TEXT_UNKNOWN_ADVANCE,
+  paints: run.paints,
+});
 
 const addGlyph = (
   run: GlyphRun,
@@ -23,21 +42,8 @@ const addGlyph = (
   index: number,
 ): GlyphRun =>
   match(GLYPHS[character])
-    .with(nonNullable, (glyph) => ({
-      column: run.column + glyph.advance,
-      paints: [
-        ...run.paints,
-        {
-          image: toGlyphOverlay(glyph, toTextPixel(pixels, index)),
-          row: TEXT_ASCENT + glyph.top,
-          column: run.column,
-        },
-      ],
-    }))
-    .otherwise(() => ({
-      column: run.column + TEXT_UNKNOWN_ADVANCE,
-      paints: run.paints,
-    }));
+    .with(nonNullable, (glyph) => toDrawnRun(run, glyph, pixels, index))
+    .otherwise(() => toSkippedRun(run));
 
 /**
  * Lays a line of text out as paint steps, one per character the font knows,

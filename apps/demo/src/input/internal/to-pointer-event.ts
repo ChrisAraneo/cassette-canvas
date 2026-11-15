@@ -2,7 +2,6 @@ import type { HudPointerEvent } from '@cassette-canvas/engine';
 import { floor } from 'lodash-es';
 import { match } from 'ts-pattern';
 
-/** Returns how many canvas pixels one of the page's pixels is worth. */
 const computeScale = (canvasSize: number, pageSize: number): number =>
   match(pageSize > 0)
     .with(true, () => canvasSize / pageSize)

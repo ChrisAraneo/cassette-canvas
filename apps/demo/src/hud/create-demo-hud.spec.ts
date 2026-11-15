@@ -36,7 +36,7 @@ describe('createDemoHud', () => {
     expect(createDemoHud().theme.color).toBe(DEFAULT_HUD_COLOR);
   });
 
-  it('should return the street screen as the size no window can be dragged past', () => {
+  it('should return the street screen as the size no window can be dragged past when it makes the HUD', () => {
     expect(createDemoHud().size).toEqual({
       width: SCREEN_WIDTH,
       height: SCREEN_HEIGHT,

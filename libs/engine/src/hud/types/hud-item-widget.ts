@@ -10,7 +10,7 @@ import type { HudPanel } from './hud-panel';
  * shows whenever the list it sits in does.
  *
  * A button on an item works like any other button: it takes the press
- * instead of the item under it and returns a `click` action, so its id has
+ * instead of the item under it and returns a `CLICK` action, so its id has
  * to be one of a kind in the window. A label, a divider, and a panel take no
  * press at all, so pressing one selects the item they sit on.
  */

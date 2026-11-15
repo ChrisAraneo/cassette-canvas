@@ -32,7 +32,7 @@ const hud = addHudWindow(createHud(), {
   height: 88,
   widgets: [
     {
-      kind: 'tabs',
+      kind: 'TABS',
       id: 'pages',
       page: '',
       row: 0,
@@ -42,9 +42,9 @@ const hud = addHudWindow(createHud(), {
         { id: 'tape', text: 'TAPE' },
       ],
     },
-    { kind: 'label', id: 'level', page: 'deck', row: 17, column: 0, text: '' },
+    { kind: 'LABEL', id: 'level', page: 'deck', row: 17, column: 0, text: '' },
     {
-      kind: 'button',
+      kind: 'BUTTON',
       id: 'play',
       page: 'deck',
       row: 30,
@@ -53,7 +53,7 @@ const hud = addHudWindow(createHud(), {
       text: 'PLAY',
     },
     {
-      kind: 'input',
+      kind: 'INPUT',
       id: 'name',
       page: 'tape',
       row: 17,
@@ -62,7 +62,7 @@ const hud = addHudWindow(createHud(), {
       text: '',
     },
     {
-      kind: 'panel',
+      kind: 'PANEL',
       id: 'meters',
       page: 'deck',
       row: 46,
@@ -71,7 +71,7 @@ const hud = addHudWindow(createHud(), {
       height: 13,
     },
     {
-      kind: 'divider',
+      kind: 'DIVIDER',
       id: 'line',
       page: 'tape',
       row: 32,
@@ -79,7 +79,7 @@ const hud = addHudWindow(createHud(), {
       width: 100,
     },
     {
-      kind: 'list',
+      kind: 'LIST',
       id: 'tracks',
       page: 'tape',
       row: 37,
@@ -93,7 +93,7 @@ const hud = addHudWindow(createHud(), {
           height: 0,
           widgets: [
             {
-              kind: 'button',
+              kind: 'BUTTON',
               id: 'play-a',
               page: '',
               row: 3,
@@ -144,7 +144,7 @@ The three widgets that are surfaces rather than controls:
   `scroll` is the first item it shows, counted from 0. The up and down arrows
   move it one item at a time, the thumb between them drags to scroll as far
   as it goes, and it never scrolls past the last page. An item that is
-  pressed is selected, drawn inverted, and named in a `select` action.
+  pressed is selected, drawn inverted, and named in a `SELECT` action.
 
 An item of a list holds more than one line of text, and widgets of its own:
 
@@ -155,7 +155,7 @@ An item of a list holds more than one line of text, and widgets of its own:
   height: 0,
   widgets: [
     {
-      kind: 'button',
+      kind: 'BUTTON',
       id: 'play-neon',
       page: '',
       row: 3,
@@ -179,7 +179,7 @@ An item of a list holds more than one line of text, and widgets of its own:
   scroll bar, which is
   `width - HUD_PADDING - HUD_EDGE - HUD_LIST_BAR_WIDTH`.
 - A button on an item works like any other button: it takes the press
-  instead of the item under it and returns a `click` action naming it, so
+  instead of the item under it and returns a `CLICK` action naming it, so
   give it an id that is one of a kind in the window. A label, a divider, or a
   panel takes no press, so pressing one still selects the item it sits on.
 - `height` is the rows the item takes, or 0 for as many as its lines and the
@@ -199,25 +199,25 @@ offset inside the canvas divided by the display's `pixelSize`. Keys are the
 browser's `KeyboardEvent.key`.
 
 ```ts
-const pressed = handleHud(hud, { kind: 'press', row: 12, column: 30 });
-const dragged = handleHud(pressed.hud, { kind: 'move', row: 20, column: 60 });
-const typed = handleHud(dragged.hud, { kind: 'key', key: 'A' });
+const pressed = handleHud(hud, { kind: 'PRESS', row: 12, column: 30 });
+const dragged = handleHud(pressed.hud, { kind: 'MOVE', row: 20, column: 60 });
+const typed = handleHud(dragged.hud, { kind: 'KEY', key: 'A' });
 ```
 
 `handleHud` returns the HUD as it now is and the actions the person caused:
 
-- `click` a button was pressed and released, in the window or on an item of
+- `CLICK` a button was pressed and released, in the window or on an item of
   a list,
-- `close` a window was closed with its close box, and is gone,
-- `tab` a tab was opened; `value` is the page it opened,
-- `type` a field's text changed; `value` is the text it now holds,
-- `submit` Enter was pressed in a field,
-- `select` an item of a list was pressed; `value` is the item's id.
+- `CLOSE` a window was closed with its close box, and is gone,
+- `TAB` a tab was opened; `value` is the page it opened,
+- `TYPE` a field's text changed; `value` is the text it now holds,
+- `SUBMIT` Enter was pressed in a field,
+- `SELECT` an item of a list was pressed; `value` is the item's id.
 
 Scrolling a list causes no action: the list keeps its own `scroll`.
 
 Dragging a title bar moves a window, dragging the thumb of a list scrolls it
-(pass the `move` events along and the thumb follows the pointer), pressing a
+(pass the `MOVE` events along and the thumb follows the pointer), pressing a
 window brings it to the top, and the close box shows unless the window is
 built with `closable: false`.
 Fields scroll their text so the end and the caret stay visible. Everything
@@ -250,18 +250,18 @@ Text and overlays work on their own too, without a HUD:
 ```ts
 import {
   addOverlay,
-  composeOverlay,
-  measureText,
+  drawOverlay,
+  computeTextAdvance,
   toPixel,
   toTextPaint,
 } from '@chris.araneo/cassette-canvas';
 
-const banner = composeOverlay(measureText('GAME OVER') + 8, 15, [
+const banner = drawOverlay(computeTextAdvance('GAME OVER') + 8, 15, [
   {
     pixel: toPixel(0, 1),
     row: 0,
     column: 0,
-    width: measureText('GAME OVER') + 8,
+    width: computeTextAdvance('GAME OVER') + 8,
     height: 15,
   },
   toTextPaint('GAME OVER', toPixel(1, 6), 4, 4),

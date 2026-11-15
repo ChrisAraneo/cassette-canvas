@@ -4,7 +4,6 @@ import { toTiles } from '../../tiles/to-tiles';
 import type { Font } from '../../tiles/types/font';
 import { GRAY, LIME, YELLOW } from '../consts';
 
-/** Characters are 5 pixels wide and 7 tall. `#` is ink. */
 const GLYPHS: Readonly<Record<string, readonly string[]>> = Object.freeze({
   '0': ['.###.', '#...#', '#..##', '#.#.#', '##..#', '#...#', '.###.'],
   '1': ['..#..', '.##..', '..#..', '..#..', '..#..', '..#..', '.###.'],

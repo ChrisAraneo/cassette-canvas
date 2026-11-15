@@ -8,7 +8,11 @@ import { isFrameDue } from './internal/is-frame-due';
 import { toFrameBytes } from './internal/to-frame-bytes';
 import type { Display } from './types/display';
 
-const paintScreen = (display: Display, screen: Screen, time: number): Display =>
+const drawScreenFrame = (
+  display: Display,
+  screen: Screen,
+  time: number,
+): Display =>
   pipe(
     computeFrame(screen, display.spriteSize, display.width, display.height),
     (frame) => toFrameBytes(frame, display.palette),
@@ -36,5 +40,5 @@ export const drawScreen = (
   time: number,
 ): Display =>
   match(isFrameDue(display, time))
-    .with(true, () => paintScreen(display, screen, time))
+    .with(true, () => drawScreenFrame(display, screen, time))
     .otherwise(() => display);

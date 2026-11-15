@@ -1,4 +1,4 @@
-import { noop } from 'lodash-es';
+import { keys, noop } from 'lodash-es';
 import { describe, expect, it } from 'vitest';
 
 import { tryCreateCrt } from './try-create-crt';
@@ -58,19 +58,28 @@ describe('tryCreateCrt', () => {
     expect(crt?.uniforms.time).toEqual({ name: 'u_time' });
   });
 
-  it('should return undefined when the shaders do not compile', () => {
+  it('should return no monitor when the shaders do not compile', () => {
     expect(
       tryCreateCrt(createContext({ compiles: false, texture: TEXTURE })),
     ).toBeUndefined();
   });
 
-  it('should return undefined when the context cannot make a texture', () => {
+  it('should return no monitor when the context cannot make a texture', () => {
     expect(
       tryCreateCrt(createContext({ compiles: true, texture: null })),
     ).toBeUndefined();
   });
 
-  it('should return undefined when there is no context', () => {
+  it('should return no monitor when there is no context', () => {
     expect(tryCreateCrt(undefined)).toBeUndefined();
+  });
+
+  it('should not change the context it was given when it sets up the monitor', () => {
+    const context = createContext({ compiles: true, texture: TEXTURE });
+    const methods = keys(context);
+
+    tryCreateCrt(context);
+
+    expect(keys(context)).toEqual(methods);
   });
 });

@@ -11,5 +11,5 @@ export const isScrolling = (
   widget: string,
 ): boolean =>
   match(hud.grab)
-    .with({ kind: 'scroll', window, widget }, () => true)
+    .with({ kind: 'SCROLL', window, widget }, () => true)
     .otherwise(() => false);

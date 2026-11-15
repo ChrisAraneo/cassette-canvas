@@ -4,34 +4,34 @@ import type { HudWidgetChanges } from '../types/hud-widget-changes';
 
 const patchWidget = (widget: HudWidget, changes: HudWidgetChanges): HudWidget =>
   match(widget)
-    .with({ kind: 'label' }, (label) => ({
+    .with({ kind: 'LABEL' }, (label) => ({
       ...label,
       text: changes.text ?? label.text,
     }))
-    .with({ kind: 'button' }, (button) => ({
+    .with({ kind: 'BUTTON' }, (button) => ({
       ...button,
       text: changes.text ?? button.text,
       width: changes.width ?? button.width,
     }))
-    .with({ kind: 'input' }, (input) => ({
+    .with({ kind: 'INPUT' }, (input) => ({
       ...input,
       text: changes.text ?? input.text,
       width: changes.width ?? input.width,
     }))
-    .with({ kind: 'tabs' }, (strip) => ({
+    .with({ kind: 'TABS' }, (strip) => ({
       ...strip,
       tabs: changes.tabs ?? strip.tabs,
     }))
-    .with({ kind: 'panel' }, (panel) => ({
+    .with({ kind: 'PANEL' }, (panel) => ({
       ...panel,
       width: changes.width ?? panel.width,
       height: changes.height ?? panel.height,
     }))
-    .with({ kind: 'divider' }, (divider) => ({
+    .with({ kind: 'DIVIDER' }, (divider) => ({
       ...divider,
       width: changes.width ?? divider.width,
     }))
-    .with({ kind: 'list' }, (list) => ({
+    .with({ kind: 'LIST' }, (list) => ({
       ...list,
       width: changes.width ?? list.width,
       height: changes.height ?? list.height,

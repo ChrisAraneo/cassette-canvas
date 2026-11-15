@@ -5,8 +5,8 @@ import type { HudWindow } from '../types/hud-window';
 import { patchWindowWidgets } from './patch-window-widgets';
 
 const WIDGETS: readonly HudWidget[] = Object.freeze([
-  { kind: 'label', id: 'fps', page: '', row: 0, column: 0, text: 'FPS 60' },
-  { kind: 'label', id: 'clock', page: '', row: 8, column: 0, text: '12:00' },
+  { kind: 'LABEL', id: 'fps', page: '', row: 0, column: 0, text: 'FPS 60' },
+  { kind: 'LABEL', id: 'clock', page: '', row: 8, column: 0, text: '12:00' },
 ]);
 
 const WINDOW: HudWindow = Object.freeze({
@@ -41,6 +41,12 @@ describe('patchWindowWidgets', () => {
     expect(patchWindowWidgets(WINDOW, 'notes', 'fps', { text: 'X' })).toBe(
       WINDOW,
     );
+  });
+
+  it('should not change the old window when it changes a widget', () => {
+    patchWindowWidgets(WINDOW, 'street', 'fps', { text: 'FPS 30' });
+
+    expect(WINDOW.widgets).toEqual(WIDGETS);
   });
 
   it('should return the same widgets when no widget has the id', () => {

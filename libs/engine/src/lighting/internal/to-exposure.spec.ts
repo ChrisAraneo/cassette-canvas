@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 
-import { EXTENDED_SHADES_PER_STOP, REFERENCE_EXPOSURE } from '../consts';
+import { EXTENDED_SHADES_PER_SHADE } from '../../palette/consts';
+import { REFERENCE_EXPOSURE } from '../consts';
 import { toExposure } from './to-exposure';
 
 describe('toExposure', () => {
@@ -9,15 +10,15 @@ describe('toExposure', () => {
   });
 
   it('should return double the light when the shade is one stop up', () => {
-    expect(toExposure(EXTENDED_SHADES_PER_STOP)).toBe(2 * REFERENCE_EXPOSURE);
+    expect(toExposure(EXTENDED_SHADES_PER_SHADE)).toBe(2 * REFERENCE_EXPOSURE);
   });
 
   it('should return half the light when the shade is one stop down', () => {
-    expect(toExposure(-EXTENDED_SHADES_PER_STOP)).toBe(REFERENCE_EXPOSURE / 2);
+    expect(toExposure(-EXTENDED_SHADES_PER_SHADE)).toBe(REFERENCE_EXPOSURE / 2);
   });
 
   it('should return double the light again when the shade is a further stop up', () => {
-    expect(toExposure(4 * EXTENDED_SHADES_PER_STOP)).toBe(16);
+    expect(toExposure(4 * EXTENDED_SHADES_PER_SHADE)).toBe(16);
   });
 
   it('should return more light when the shade is one in between', () => {

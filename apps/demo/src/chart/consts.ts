@@ -1,15 +1,9 @@
-import { COLOR_COUNT, TRANSPARENT } from '@cassette-canvas/engine';
+import { COLOR_COUNT } from '@cassette-canvas/engine';
 import { SPRITE_SIZE } from '../consts';
 
 export const CHART_WIDTH = 320;
 
 export const CHART_HEIGHT = 72;
-
-/**
- * The chart has no background, so the page shows between the swatches. Any
- * background color would hide the swatch of the same color.
- */
-export const CHART_BACKGROUND = TRANSPARENT;
 
 /** The color chart sits in the middle: one column per color. */
 export const SWATCH_TOP = 4;

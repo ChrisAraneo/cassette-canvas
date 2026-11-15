@@ -4,7 +4,7 @@ import type { HudWidget } from '../types/hud-widget';
 import { computeFirstPage } from './compute-first-page';
 
 const TABS: HudWidget = Object.freeze({
-  kind: 'tabs',
+  kind: 'TABS',
   id: 'tabs',
   page: '',
   row: 0,
@@ -16,7 +16,7 @@ const TABS: HudWidget = Object.freeze({
 });
 
 const LABEL: HudWidget = Object.freeze({
-  kind: 'label',
+  kind: 'LABEL',
   id: 'fps',
   page: '',
   row: 0,

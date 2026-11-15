@@ -1,43 +1,41 @@
+import { runEffect } from '@cassette-canvas/common';
 import {
   addHud,
   type Display,
   drawScreen,
   tryCreateDisplay,
 } from '@cassette-canvas/engine';
-import { noop } from 'lodash-es';
+import { constant, noop } from 'lodash-es';
 import { pipe } from 'remeda';
 import { match, P } from 'ts-pattern';
-import { composeChartScreen } from './chart/compose-chart-screen';
 import { createChartScenery } from './chart/create-chart-scenery';
+import { createChartScreen } from './chart/create-chart-screen';
 import { DEMO_SETTINGS, PIXEL_SIZE } from './consts';
 import { computeDayCycle } from './day/compute-day-cycle';
+import type { Demo } from './demo/types/demo';
 import { createFpsMeter } from './fps/create-fps-meter';
 import { patchFpsMeter } from './fps/patch-fps-meter';
-import { applyHudEvents } from './hud/apply-hud-events';
+import { START_CLOCK } from './hud/consts';
 import { createDemoHud } from './hud/create-demo-hud';
 import { patchDemoHud } from './hud/patch-demo-hud';
+import { patchHudState } from './hud/patch-hud-state';
 import { createInputMailbox } from './input/create-input-mailbox';
-import { listenToKeys } from './input/listen-to-keys';
-import { listenToPointer } from './input/listen-to-pointer';
+import { readInputEvents } from './input/read-input-events';
 import type { InputMailbox } from './input/types/input-mailbox';
-import { composeStreetScreen } from './street/compose-street-screen';
+import { watchKeys } from './input/watch-keys';
+import { watchPointer } from './input/watch-pointer';
 import { createStreetScenery } from './street/create-street-scenery';
-import type { Demo } from './types/demo';
+import { createStreetScreen } from './street/create-street-screen';
 
 const { instanceOf, nonNullable } = P;
 
-/**
- * Returns the scene's time: the scene runs `clock` milliseconds ahead of the
- * animation.
- */
 const toSceneTime = (demo: Demo, time: number): number => time + demo.clock;
 
-/** Draws the street with the HUD on it, where no light reaches the HUD. */
 const drawStreet = (demo: Demo, time: number): Display =>
   drawScreen(
     demo.street,
     addHud(
-      composeStreetScreen(demo.streetScenery, toSceneTime(demo, time)),
+      createStreetScreen(demo.streetScenery, toSceneTime(demo, time)),
       demo.hud,
     ),
     time,
@@ -46,7 +44,7 @@ const drawStreet = (demo: Demo, time: number): Display =>
 const drawChart = (demo: Demo, time: number): Display =>
   drawScreen(
     demo.chart,
-    composeChartScreen(
+    createChartScreen(
       demo.chartScenery,
       demo.meter.fps,
       toSceneTime(demo, time),
@@ -54,43 +52,76 @@ const drawChart = (demo: Demo, time: number): Display =>
     time,
   );
 
-const drawDemo = (demo: Demo, time: number): Demo =>
-  pipe(
-    patchDemoHud(
-      demo.hud,
-      demo.meter.fps,
-      computeDayCycle(toSceneTime(demo, time)),
-    ),
-    (hud) => ({ ...demo, hud }),
-    (patched) => ({
-      ...patched,
-      street: drawStreet(patched, time),
-      chart: drawChart(patched, time),
-    }),
-  );
+const patchDemoFace = (demo: Demo, time: number): Demo => ({
+  ...demo,
+  hud: patchDemoHud(
+    demo.hud,
+    demo.meter.fps,
+    computeDayCycle(toSceneTime(demo, time)),
+  ),
+});
 
-const answerInput = (
+const patchDemoInput = (
   demo: Demo,
   mailbox: InputMailbox,
   time: number,
 ): Demo => ({
   ...demo,
-  ...applyHudEvents(
+  ...patchHudState(
     { hud: demo.hud, clock: demo.clock },
-    mailbox.drain(),
+    readInputEvents(mailbox),
     time,
   ),
 });
 
-const handleFrame = (demo: Demo, mailbox: InputMailbox, time: number): number =>
+const patchDemoFrame = (
+  demo: Demo,
+  mailbox: InputMailbox,
+  time: number,
+): Demo =>
   pipe(
     { ...demo, meter: patchFpsMeter(demo.meter, time) },
-    (measured) => answerInput(measured, mailbox, time),
-    (answered) => drawDemo(answered, time),
-    (drawn) =>
-      requestAnimationFrame((nextTime) =>
-        handleFrame(drawn, mailbox, nextTime),
-      ),
+    (measured) => patchDemoInput(measured, mailbox, time),
+    (answered) => patchDemoFace(answered, time),
+  );
+
+const drawDemo = (demo: Demo, time: number): Demo => ({
+  ...demo,
+  street: drawStreet(demo, time),
+  chart: drawChart(demo, time),
+});
+
+const handleFrame = (
+  demo: Demo,
+  mailbox: InputMailbox,
+  time: number,
+): number => {
+  const drawn = drawDemo(patchDemoFrame(demo, mailbox, time), time);
+
+  return requestAnimationFrame((nextTime) =>
+    handleFrame(drawn, mailbox, nextTime),
+  );
+};
+
+const createDemo = (street: Display, chart: Display, time: number): Demo => ({
+  street,
+  chart,
+  streetScenery: createStreetScenery(),
+  chartScenery: createChartScenery(),
+  meter: createFpsMeter(time),
+  hud: createDemoHud(),
+  clock: START_CLOCK,
+});
+
+const watchDemoInput = (
+  streetCanvas: HTMLCanvasElement,
+  mailbox: InputMailbox,
+): InputMailbox =>
+  pipe(
+    mailbox,
+    (watched) =>
+      runEffect(watched, (box) => watchPointer(streetCanvas, PIXEL_SIZE, box)),
+    (watched) => runEffect(watched, (box) => watchKeys(document, box)),
   );
 
 const startLoop = (
@@ -98,25 +129,10 @@ const startLoop = (
   chart: Display,
   streetCanvas: HTMLCanvasElement,
 ): number => {
-  const mailbox = createInputMailbox();
-
-  listenToPointer(streetCanvas, PIXEL_SIZE, mailbox);
-  listenToKeys(document, mailbox);
+  const mailbox = watchDemoInput(streetCanvas, createInputMailbox());
 
   return requestAnimationFrame((time) =>
-    handleFrame(
-      {
-        street,
-        chart,
-        streetScenery: createStreetScenery(),
-        chartScenery: createChartScenery(),
-        meter: createFpsMeter(time),
-        hud: createDemoHud(),
-        clock: 0,
-      },
-      mailbox,
-      time,
-    ),
+    handleFrame(createDemo(street, chart, time), mailbox, time),
   );
 };
 
@@ -131,7 +147,7 @@ const startDemo = (
     .with({ street: nonNullable, chart: nonNullable }, ({ street, chart }) =>
       startLoop(street, chart, streetCanvas),
     )
-    .otherwise(() => undefined);
+    .otherwise(constant(undefined));
 
 match([document.getElementById('street'), document.getElementById('chart')])
   .with(

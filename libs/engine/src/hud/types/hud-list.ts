@@ -16,12 +16,12 @@ import type { HudListItem } from './hud-list-item';
  * goes, and it never scrolls past the last page or below the first item.
  *
  * Pressing an item that is selectable selects it: it is drawn inverted and
- * the press returns a `select` action with the item's id. `selected` is that
+ * the press returns a `SELECT` action with the item's id. `selected` is that
  * id, or empty when nothing is selected. `page` is the tab it belongs to, or
  * empty to show it on every page.
  */
 export interface HudList {
-  readonly kind: 'list';
+  readonly kind: 'LIST';
   readonly id: string;
   readonly page: string;
   readonly row: number;

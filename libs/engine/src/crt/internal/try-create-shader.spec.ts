@@ -47,13 +47,13 @@ describe('tryCreateShader', () => {
     ]);
   });
 
-  it('should return undefined when the source does not compile', () => {
+  it('should return no shader when the source does not compile', () => {
     expect(
       tryCreateShader(createContext([], SHADER, false), VERTEX_SHADER, 'oops'),
     ).toBeUndefined();
   });
 
-  it('should return undefined when the context cannot make one', () => {
+  it('should return no shader when the context cannot make one', () => {
     expect(
       tryCreateShader(createContext([], null, true), VERTEX_SHADER, 'main'),
     ).toBeUndefined();

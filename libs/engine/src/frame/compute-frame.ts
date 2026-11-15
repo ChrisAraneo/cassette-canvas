@@ -31,5 +31,5 @@ export const computeFrame = (
     computeFramePixels,
     computeFrameLight,
     patchFrameShades,
-    (frame) => patchFrameOverlays(frame, screen.overlays, width, height),
+    patchFrameOverlays,
   );

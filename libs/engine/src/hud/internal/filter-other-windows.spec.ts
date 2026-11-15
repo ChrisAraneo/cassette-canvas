@@ -32,4 +32,8 @@ describe('filterOtherWindows', () => {
   it('should return every window when none has the id', () => {
     expect(filterOtherWindows(WINDOWS, 'ghost')).toEqual(WINDOWS);
   });
+
+  it('should return no windows when it is given none', () => {
+    expect(filterOtherWindows([], 'street')).toEqual([]);
+  });
 });

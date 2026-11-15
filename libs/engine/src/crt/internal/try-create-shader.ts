@@ -1,23 +1,40 @@
 import { runEffect } from '@cassette-canvas/common';
+import { constant } from 'lodash-es';
 import { pipe } from 'remeda';
 import { match, P } from 'ts-pattern';
 
 const { nonNullable } = P;
 
-const tryCompileShader = (
+const writeShaderSource = (
+  context: WebGLRenderingContext,
+  shader: WebGLShader,
+  source: string,
+): WebGLShader =>
+  runEffect(shader, (target) => context.shaderSource(target, source));
+
+const runShaderCompiler = (
+  context: WebGLRenderingContext,
+  shader: WebGLShader,
+): WebGLShader => runEffect(shader, (target) => context.compileShader(target));
+
+const tryGetCompiledShader = (
+  context: WebGLRenderingContext,
+  shader: WebGLShader,
+): WebGLShader | undefined =>
+  match(context.getShaderParameter(shader, context.COMPILE_STATUS))
+    .with(true, () => shader)
+    .otherwise(constant(undefined));
+
+const tryPatchShader = (
   context: WebGLRenderingContext,
   shader: WebGLShader,
   source: string,
 ): WebGLShader | undefined =>
   pipe(
     shader,
-    (created) =>
-      runEffect(created, (target) => context.shaderSource(target, source)),
-    (sourced) => runEffect(sourced, (target) => context.compileShader(target)),
-    (compiled) =>
-      match(context.getShaderParameter(compiled, context.COMPILE_STATUS))
-        .with(true, () => compiled)
-        .otherwise(() => undefined),
+    (created) => writeShaderSource(context, created, source),
+    (sourced) => runShaderCompiler(context, sourced),
+    (compiled) => tryGetCompiledShader(context, compiled),
   );
 
 export const tryCreateShader = (
@@ -26,5 +43,5 @@ export const tryCreateShader = (
   source: string,
 ): WebGLShader | undefined =>
   match(context.createShader(type))
-    .with(nonNullable, (shader) => tryCompileShader(context, shader, source))
-    .otherwise(() => undefined);
+    .with(nonNullable, (shader) => tryPatchShader(context, shader, source))
+    .otherwise(constant(undefined));

@@ -1,4 +1,4 @@
-import { FULL_TURN } from './consts';
+import { FULL_TURN } from '../consts';
 
 /**
  * Returns how high the sun is at a time of day: -1 at midnight, 0 at 6:00

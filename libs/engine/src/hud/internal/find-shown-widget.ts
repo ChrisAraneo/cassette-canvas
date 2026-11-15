@@ -1,4 +1,4 @@
-import { find } from 'lodash-es';
+import { constant, find } from 'lodash-es';
 import { match, P } from 'ts-pattern';
 import { findHudWindow } from '../find-hud-window';
 import type { Hud } from '../types/hud';
@@ -25,4 +25,4 @@ export const findShownWidget = (
         find(toWindowWidgets(found), (placed) => placed.widget.id === widget)
           ?.widget,
     )
-    .otherwise(() => undefined);
+    .otherwise(constant(undefined));

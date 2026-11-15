@@ -11,7 +11,7 @@
  * it on every page.
  */
 export interface HudPanel {
-  readonly kind: 'panel';
+  readonly kind: 'PANEL';
   readonly id: string;
   readonly page: string;
   readonly row: number;

@@ -27,43 +27,43 @@ const toLeft = (widget: HudWidget): number => HUD_CONTENT_LEFT + widget.column;
  */
 export const computeWidgetRect = (widget: HudWidget): HudRect =>
   match(widget)
-    .with({ kind: 'label' }, (label) => ({
+    .with({ kind: 'LABEL' }, (label) => ({
       row: toTop(label),
       column: toLeft(label),
       width: computeTextWidth(label.text),
       height: TEXT_HEIGHT,
     }))
-    .with({ kind: 'button', width: number.gt(0) }, (button) => ({
+    .with({ kind: 'BUTTON', width: number.gt(0) }, (button) => ({
       row: toTop(button),
       column: toLeft(button),
       width: button.width,
       height: HUD_CONTROL_HEIGHT,
     }))
-    .with({ kind: 'button' }, (button) => ({
+    .with({ kind: 'BUTTON' }, (button) => ({
       row: toTop(button),
       column: toLeft(button),
       width: computeControlWidth(button.text),
       height: HUD_CONTROL_HEIGHT,
     }))
-    .with({ kind: 'input' }, (input) => ({
+    .with({ kind: 'INPUT' }, (input) => ({
       row: toTop(input),
       column: toLeft(input),
       width: input.width,
       height: HUD_CONTROL_HEIGHT,
     }))
-    .with({ kind: 'tabs' }, (tabs) => ({
+    .with({ kind: 'TABS' }, (tabs) => ({
       row: toTop(tabs),
       column: toLeft(tabs),
       width: sumBy(computeTabRects(tabs), 'width'),
       height: HUD_CONTROL_HEIGHT,
     }))
-    .with({ kind: 'divider' }, (divider) => ({
+    .with({ kind: 'DIVIDER' }, (divider) => ({
       row: toTop(divider),
       column: toLeft(divider),
       width: divider.width,
       height: HUD_DIVIDER_HEIGHT,
     }))
-    .with(union({ kind: 'panel' }, { kind: 'list' }), (surface) => ({
+    .with(union({ kind: 'PANEL' }, { kind: 'LIST' }), (surface) => ({
       row: toTop(surface),
       column: toLeft(surface),
       width: surface.width,

@@ -10,7 +10,7 @@ import { findHudHit } from './find-hud-hit';
 
 const WIDGETS: readonly HudWidget[] = Object.freeze([
   {
-    kind: 'tabs',
+    kind: 'TABS',
     id: 'tabs',
     page: '',
     row: 0,
@@ -21,7 +21,7 @@ const WIDGETS: readonly HudWidget[] = Object.freeze([
     ],
   },
   {
-    kind: 'button',
+    kind: 'BUTTON',
     id: 'skip',
     page: 'scene',
     row: 16,
@@ -30,7 +30,7 @@ const WIDGETS: readonly HudWidget[] = Object.freeze([
     text: 'SKIP',
   },
   {
-    kind: 'label',
+    kind: 'LABEL',
     id: 'lamps',
     page: 'light',
     row: 16,
@@ -39,12 +39,8 @@ const WIDGETS: readonly HudWidget[] = Object.freeze([
   },
 ]);
 
-/**
- * A list whose first item carries a play button, with a label on the item
- * under it. The item is as tall as the button on it.
- */
 const PLAY: HudItemWidget = Object.freeze({
-  kind: 'button',
+  kind: 'BUTTON',
   id: 'play-a',
   page: '',
   row: 0,
@@ -54,7 +50,7 @@ const PLAY: HudItemWidget = Object.freeze({
 });
 
 const SIDE_B: HudItemWidget = Object.freeze({
-  kind: 'label',
+  kind: 'LABEL',
   id: 'side-b',
   page: '',
   row: 1,
@@ -63,7 +59,7 @@ const SIDE_B: HudItemWidget = Object.freeze({
 });
 
 const TRACKS: HudList = Object.freeze({
-  kind: 'list',
+  kind: 'LIST',
   id: 'tracks',
   page: '',
   row: 0,
@@ -107,14 +103,14 @@ const createStreetHud = (): Hud =>
   });
 
 describe('findHudHit', () => {
-  it('should return undefined when the point is over no window', () => {
+  it('should return no hit at all when the point is over no window', () => {
     expect(findHudHit(createStreetHud(), 0, 0)).toBeUndefined();
   });
 
   it('should return the title bar when the point is in the top band of the window', () => {
     expect(findHudHit(createStreetHud(), 16, 30)).toEqual({
       window: 'street',
-      part: 'title',
+      part: 'TITLE',
       widget: '',
     });
   });
@@ -122,7 +118,7 @@ describe('findHudHit', () => {
   it('should return the close box when the point is at the right of the title bar', () => {
     expect(findHudHit(createStreetHud(), 16, 101)).toEqual({
       window: 'street',
-      part: 'close',
+      part: 'CLOSE',
       widget: '',
     });
   });
@@ -143,13 +139,13 @@ describe('findHudHit', () => {
         16,
         101,
       ),
-    ).toMatchObject({ part: 'title' });
+    ).toMatchObject({ part: 'TITLE' });
   });
 
   it('should return the widget when the point is over one on the open page', () => {
     expect(findHudHit(createStreetHud(), 46, 30)).toEqual({
       window: 'street',
-      part: 'widget',
+      part: 'WIDGET',
       widget: 'skip',
     });
   });
@@ -170,34 +166,34 @@ describe('findHudHit', () => {
         46,
         30,
       ),
-    ).toMatchObject({ part: 'widget', widget: 'lamps' });
+    ).toMatchObject({ part: 'WIDGET', widget: 'lamps' });
   });
 
   it('should return the body when the window holds nothing there', () => {
     expect(findHudHit(createStreetHud(), 80, 100)).toEqual({
       window: 'street',
-      part: 'body',
+      part: 'BODY',
       widget: '',
     });
   });
 
   it('should return the button when the point is over one that sits on an item of a list', () => {
     expect(findHudHit(createTapeHud(), 20, 50)).toMatchObject({
-      part: 'widget',
+      part: 'WIDGET',
       widget: 'play-a',
     });
   });
 
   it('should return the list when the point is over a label that sits on an item, so the item still takes the press', () => {
     expect(findHudHit(createTapeHud(), 34, 9)).toMatchObject({
-      part: 'widget',
+      part: 'WIDGET',
       widget: 'tracks',
     });
   });
 
   it('should return the list when the point is over an item and nothing on it', () => {
     expect(findHudHit(createTapeHud(), 20, 10)).toMatchObject({
-      part: 'widget',
+      part: 'WIDGET',
       widget: 'tracks',
     });
   });

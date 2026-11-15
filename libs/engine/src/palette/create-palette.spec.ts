@@ -93,6 +93,14 @@ describe('createPalette', () => {
     });
   });
 
+  it('should not change the colors it is given when it expands them', () => {
+    const colors: PaletteColors = [...COLORS];
+
+    createPalette(colors);
+
+    expect(colors).toEqual(COLORS);
+  });
+
   it('should return black when a color is not written as a full hex color', () => {
     const palette = createPalette(COLORS_WITH_A_TYPO);
 

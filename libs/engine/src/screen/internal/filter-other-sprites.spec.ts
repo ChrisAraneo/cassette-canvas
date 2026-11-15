@@ -3,7 +3,7 @@ import { describe, expect, it } from 'vitest';
 import type { SpritePlacement } from '../types/sprite-placement';
 import { filterOtherSprites } from './filter-other-sprites';
 
-const placeSprite = (id: string, pixel: number): SpritePlacement => ({
+const createSpritePlacement = (id: string, pixel: number): SpritePlacement => ({
   id,
   sprite: [pixel],
   row: 0,
@@ -11,11 +11,11 @@ const placeSprite = (id: string, pixel: number): SpritePlacement => ({
   castsShadow: false,
 });
 
-const HERO = placeSprite('hero', 0x14);
+const HERO = createSpritePlacement('hero', 0x14);
 
-const COIN = placeSprite('coin', 0x34);
+const COIN = createSpritePlacement('coin', 0x34);
 
-const BAT = placeSprite('bat', 0x04);
+const BAT = createSpritePlacement('bat', 0x04);
 
 describe('filterOtherSprites', () => {
   it('should return the other sprites when one carries the id', () => {

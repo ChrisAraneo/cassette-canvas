@@ -4,7 +4,7 @@ import {
   HUD_ESCAPE_KEY,
   type HudKeyEvent,
 } from '@cassette-canvas/engine';
-import { includes, size } from 'lodash-es';
+import { constant, includes, size } from 'lodash-es';
 import { match, P } from 'ts-pattern';
 
 const { when } = P;
@@ -15,10 +15,6 @@ const NAMED_KEYS: readonly string[] = Object.freeze([
   HUD_ESCAPE_KEY,
 ]);
 
-/**
- * Returns `true` for one character to type, or for a key a HUD handles by
- * name.
- */
 const isHudKey = (key: string): boolean =>
   size(key) === 1 || includes(NAMED_KEYS, key);
 
@@ -41,6 +37,6 @@ export const toKeyEvent = ({
         altKey: false,
         metaKey: false,
       },
-      (pressed): HudKeyEvent => ({ kind: 'key', key: pressed.key }),
+      (pressed): HudKeyEvent => ({ kind: 'KEY', key: pressed.key }),
     )
-    .otherwise(() => undefined);
+    .otherwise(constant(undefined));

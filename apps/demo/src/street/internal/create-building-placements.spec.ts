@@ -45,6 +45,10 @@ describe('createBuildingPlacements', () => {
     );
   });
 
+  it('should return no tile when the building has an empty grid', () => {
+    expect(createBuildingPlacements({ ...BUILDING, grid: [] })).toEqual([]);
+  });
+
   it('should return no shadow casters when it places a building, so the lamp light reaches the walls', () => {
     expect(
       every(createBuildingPlacements(BUILDING), { castsShadow: false }),

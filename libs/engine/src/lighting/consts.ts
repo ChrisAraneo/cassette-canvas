@@ -3,29 +3,20 @@ import {
   EXTENDED_SHADES_PER_SHADE,
 } from '../palette/consts';
 
-/**
- * How many extended shades one doubling of light moves a pixel: one sprite
- * shade per doubling. Lights add up as light and are read off this scale
- * afterwards, so every doubling costs the same number of shades, the way the
- * eye sees brightness.
- */
-export const EXTENDED_SHADES_PER_STOP = EXTENDED_SHADES_PER_SHADE;
-
 /** The amount of light that shows a pixel in its authored color. */
 export const REFERENCE_EXPOSURE = 1;
 
 /**
- * The most light can move a pixel, in extended shades. A whole ramp in
- * either direction is more than any pixel needs: every pixel stops at the
- * darkest or the lightest extended shade well before this.
+ * The most light can move a pixel, in extended shades: a whole ramp in either
+ * direction, which is more than any pixel needs, because every pixel stops at
+ * the darkest or the lightest extended shade well before this.
  */
-export const MAX_SHADE_OFFSET = EXTENDED_SHADE_COUNT;
+export const MIN_SHADE_OFFSET = -EXTENDED_SHADE_COUNT;
 
-export const MIN_SHADE_OFFSET = -MAX_SHADE_OFFSET;
+export const MIN_EXPOSURE = 2 ** (MIN_SHADE_OFFSET / EXTENDED_SHADES_PER_SHADE);
 
-export const MIN_EXPOSURE = 2 ** (MIN_SHADE_OFFSET / EXTENDED_SHADES_PER_STOP);
-
-export const MAX_EXPOSURE = 2 ** (MAX_SHADE_OFFSET / EXTENDED_SHADES_PER_STOP);
+export const MAX_EXPOSURE =
+  2 ** (EXTENDED_SHADE_COUNT / EXTENDED_SHADES_PER_SHADE);
 
 /**
  * How much of the light at a pixel comes from each side of the pixel ahead

@@ -1,6 +1,6 @@
 import { flatMap, map, max, size, times } from 'lodash-es';
 import { TRANSPARENT } from '../palette/consts';
-import type { SpriteLegend } from '../screen/types/sprite-legend';
+import type { SpriteLegend } from '../palette/types/sprite-legend';
 import type { Overlay } from './types/overlay';
 
 const toWidth = (rows: readonly string[]): number => max(map(rows, size)) ?? 0;

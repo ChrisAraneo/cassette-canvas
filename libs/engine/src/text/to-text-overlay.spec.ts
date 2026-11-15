@@ -3,6 +3,7 @@ import { match } from 'ts-pattern';
 import { describe, expect, it } from 'vitest';
 
 import { isPixel } from '../palette/is-pixel';
+import { computeTextAdvance } from './compute-text-advance';
 import {
   TEXT_ASCENT,
   TEXT_BOLT,
@@ -11,10 +12,15 @@ import {
   TEXT_HEIGHT,
   TEXT_LINE_ROWS,
 } from './consts';
-import { measureText } from './measure-text';
 import { toTextOverlay } from './to-text-overlay';
 
 const INK = 0x15;
+
+const OTHER_INK = 0x26;
+
+const HEART_ROWS_TO_WIDEST = 2;
+
+const createInks = (): number[] => [INK, OTHER_INK];
 
 const toMark = (pixel: number): string =>
   match(isPixel(pixel))
@@ -22,7 +28,7 @@ const toMark = (pixel: number): string =>
     .otherwise(() => '.');
 
 const toRows = (text: string): string[] =>
-  map(chunk(toTextOverlay(text, INK).pixels, measureText(text)), (row) =>
+  map(chunk(toTextOverlay(text, INK).pixels, computeTextAdvance(text)), (row) =>
     join(map(row, toMark), ''),
   );
 
@@ -41,7 +47,7 @@ describe('toTextOverlay', () => {
   });
 
   it('should return an overlay as wide as the text moves the pen when it draws one', () => {
-    expect(toTextOverlay('HI', INK).width).toBe(measureText('HI'));
+    expect(toTextOverlay('HI', INK).width).toBe(computeTextAdvance('HI'));
   });
 
   it('should return a capital starting in the row below the ascent when it draws one', () => {
@@ -69,17 +75,27 @@ describe('toTextOverlay', () => {
   });
 
   it('should return the letters in their own pixels when the line has a list of them', () => {
-    expect(toTextOverlay('HI', [INK, 0x26]).pixels).toEqual(
-      expect.arrayContaining([INK, 0x26]),
+    expect(toTextOverlay('HI', createInks()).pixels).toEqual(
+      expect.arrayContaining([INK, OTHER_INK]),
     );
   });
 
   it('should return a heart as wide as the capitals are tall when it draws one', () => {
-    expect(toRows(TEXT_HEART)[TEXT_ASCENT + 2]).toBe('#####.');
+    expect(toRows(TEXT_HEART)[TEXT_ASCENT + HEART_ROWS_TO_WIDEST]).toBe(
+      '#####.',
+    );
   });
 
   it('should return a bolt reaching the top of the capitals when it draws one', () => {
     expect(toInkedRows(TEXT_BOLT)[0]).toBe(TEXT_ASCENT + 1);
+  });
+
+  it('should not change the pixels it is given when it draws a text', () => {
+    const inks = createInks();
+
+    toTextOverlay('HI', inks);
+
+    expect(inks).toEqual(createInks());
   });
 
   it('should return an empty overlay when the text is empty', () => {

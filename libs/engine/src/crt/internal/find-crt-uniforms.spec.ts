@@ -2,8 +2,8 @@ import { match } from 'ts-pattern';
 import { describe, expect, it } from 'vitest';
 
 import { CRT_UNIFORM_NAMES } from '../consts';
-import { FRAGMENT_SHADER_SOURCE } from './fragment-shader-source';
 import { findCrtUniforms } from './find-crt-uniforms';
+import { FRAGMENT_SHADER_SOURCE } from './fragment-shader-source';
 
 const PROGRAM = Object.freeze({ name: 'program' });
 
@@ -26,7 +26,7 @@ describe('findCrtUniforms', () => {
     });
   });
 
-  it('should return undefined when the program lacks one of them', () => {
+  it('should return no uniforms when the program lacks one of them', () => {
     expect(
       findCrtUniforms(createContext(CRT_UNIFORM_NAMES.time), PROGRAM),
     ).toBeUndefined();

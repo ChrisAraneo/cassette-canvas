@@ -30,12 +30,12 @@ Text, overlays and the HUD:
 
 | Function                                       | What it does                                                                |
 | ---------------------------------------------- | --------------------------------------------------------------------------- |
-| `measureText(text)`                            | Returns how far a line of text moves the pen, in logical pixels             |
+| `computeTextAdvance(text)`                     | Returns how far a line of text moves the pen, in logical pixels             |
 | `toTextOverlay(text, pixels)`                  | Draws a line of text as an overlay, in one pixel value or one per character |
-| `toTextPaint(text, pixels, row, column)`       | Returns a text step for `composeOverlay`, placed by the top of its capitals |
+| `toTextPaint(text, pixels, row, column)`       | Returns a text step for `drawOverlay`, placed by the top of its capitals    |
 | `createOverlay(width, height, pixel?)`         | Creates an overlay filled with one pixel value (transparent by default)     |
 | `toOverlay(rows, legend)`                      | Builds an overlay from text art, as wide as its longest row                 |
-| `composeOverlay(width, height, paints)`        | Paints fills, images, and text into a new overlay, in order                 |
+| `drawOverlay(width, height, paints)`           | Draws fills, images, and text into a new overlay, in order                  |
 | `addOverlay(screen, id, overlay, row, column)` | Adds an overlay over everything light touches                               |
 | `patchOverlay(screen, id, changes)`            | Changes an overlay's image or place                                         |
 | `removeOverlay(screen, id)`                    | Removes an overlay                                                          |
@@ -50,7 +50,7 @@ Text, overlays and the HUD:
 | `findHudWidget(hud, window, widget)`           | Returns a widget, or `undefined`                                            |
 | `handleHud(hud, event)`                        | Handles a pointer or key event: returns the new HUD and the actions         |
 | `addHud(screen, hud)`                          | Puts the HUD's windows on a screen as overlays                              |
-| `composeHud(hud)`                              | Draws the HUD as one overlay placement per window, from the bottom up       |
+| `drawHud(hud)`                                 | Draws the HUD as one overlay placement per window, from the bottom up       |
 
 HUD and overlay functions never change what you pass in either.
 

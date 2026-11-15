@@ -9,7 +9,7 @@ describe('toIdleChange', () => {
       toIdleChange({
         ...createHud(),
         grab: {
-          kind: 'drag',
+          kind: 'DRAG',
           window: 'street',
           widget: '',
           row: 0,

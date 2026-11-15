@@ -14,7 +14,7 @@ import {
   type HudTabs,
   type HudWidget,
   type HudWindowSettings,
-  measureText,
+  computeTextAdvance,
   TEXT_BOLT,
   TEXT_HEART,
   TEXT_HEIGHT,
@@ -131,44 +131,43 @@ export const DUSK_HOUR = 20;
 
 export const NOON_HOUR = 12;
 
-/**
- * Returns how wide a button or a tab is: its text, with padding on both
- * sides.
- */
-const toControlWidth = (text: string): number =>
-  measureText(text) + 2 * HUD_LABEL_PADDING;
+/** The clock the street starts at, which follows the animation's own time. */
+export const START_CLOCK = 0;
 
-/** The gap between two controls that sit side by side. */
+const toControlWidth = (text: string): number =>
+  computeTextAdvance(text) + 2 * HUD_LABEL_PADDING;
+
 const CONTROL_GAP = 3;
 
-/** The rows one line of text takes, with a blank row below it. */
-const LINE_ROWS = TEXT_HEIGHT + 3;
+const LINE_GAP = 3;
 
-/** The frame and the padding inside it: the margin left, right, and below. */
+const TABS_GAP = 5;
+
+const BUTTONS_GAP = 2;
+
+const PANEL_PADDING = 1;
+
+const SCREEN_MARGIN = 8;
+
+const LINE_ROWS = TEXT_HEIGHT + LINE_GAP;
+
 const MARGIN = HUD_FRAME + HUD_PADDING;
 
-/**
- * Where the widgets of the street window sit, measured from the top-left
- * pixel of the window's content: the tabs, two lines of readouts, a row of
- * two buttons, and the button that opens the note window.
- */
 const TABS_ROW = 0;
 
-const FIRST_LINE_ROW = HUD_CONTROL_HEIGHT + 5;
+const FIRST_LINE_ROW = HUD_CONTROL_HEIGHT + TABS_GAP;
 
 const SECOND_LINE_ROW = FIRST_LINE_ROW + LINE_ROWS;
 
-const BUTTON_ROW = SECOND_LINE_ROW + LINE_ROWS + 2;
+const BUTTON_ROW = SECOND_LINE_ROW + LINE_ROWS + BUTTONS_GAP;
 
 const NOTE_BUTTON_ROW = BUTTON_ROW + HUD_CONTROL_HEIGHT + CONTROL_GAP;
 
-/** Every button is as wide as the widest of them, so they line up. */
 const BUTTON_WIDTH =
   max(map([HOUR_TEXT, NOW_TEXT, DUSK_TEXT, NOON_TEXT], toControlWidth)) ?? 0;
 
 const SECOND_BUTTON_COLUMN = BUTTON_WIDTH + CONTROL_GAP;
 
-/** The widest a readout gets, so the window is wide enough for all of them. */
 const STREET_LINES: readonly string[] = Object.freeze([
   `${FPS_LABEL} 999`,
   `${TIME_LABEL} 00:00`,
@@ -181,15 +180,19 @@ const STREET_CONTENT_WIDTH =
     2 * BUTTON_WIDTH + CONTROL_GAP,
     toControlWidth(TIME_TAB) + toControlWidth(SKY_TAB),
     toControlWidth(NOTE_TEXT),
-    ...map(STREET_LINES, measureText),
+    ...map(STREET_LINES, computeTextAdvance),
   ]) ?? 0;
 
-const NOTE_CONTENT_WIDTH = measureText(NOTE_HINT);
+const NOTE_CONTENT_WIDTH = computeTextAdvance(NOTE_HINT);
 
 const NOTE_FIELD_ROW = LINE_ROWS;
 
+const NOTE_WINDOW_ROW = 128;
+
+const NOTE_WINDOW_COLUMN = 160;
+
 const TABS: HudTabs = Object.freeze({
-  kind: 'tabs',
+  kind: 'TABS',
   id: PAGES_WIDGET,
   page: '',
   row: TABS_ROW,
@@ -200,15 +203,10 @@ const TABS: HudTabs = Object.freeze({
   ]),
 });
 
-/**
- * What the street window holds. The readouts start out empty: the frame loop
- * fills them with `patchDemoHud` before the first frame is drawn. The tabs
- * and the note button have no page of their own, so they show on both pages.
- */
 const STREET_WIDGETS: readonly HudWidget[] = Object.freeze([
   TABS,
   {
-    kind: 'label',
+    kind: 'LABEL',
     id: FPS_WIDGET,
     page: TIME_PAGE,
     row: FIRST_LINE_ROW,
@@ -216,7 +214,7 @@ const STREET_WIDGETS: readonly HudWidget[] = Object.freeze([
     text: '',
   },
   {
-    kind: 'label',
+    kind: 'LABEL',
     id: CLOCK_WIDGET,
     page: TIME_PAGE,
     row: SECOND_LINE_ROW,
@@ -224,7 +222,7 @@ const STREET_WIDGETS: readonly HudWidget[] = Object.freeze([
     text: '',
   },
   {
-    kind: 'label',
+    kind: 'LABEL',
     id: DARKNESS_WIDGET,
     page: SKY_PAGE,
     row: FIRST_LINE_ROW,
@@ -232,7 +230,7 @@ const STREET_WIDGETS: readonly HudWidget[] = Object.freeze([
     text: '',
   },
   {
-    kind: 'label',
+    kind: 'LABEL',
     id: SUN_WIDGET,
     page: SKY_PAGE,
     row: SECOND_LINE_ROW,
@@ -240,7 +238,7 @@ const STREET_WIDGETS: readonly HudWidget[] = Object.freeze([
     text: '',
   },
   {
-    kind: 'button',
+    kind: 'BUTTON',
     id: HOUR_BUTTON,
     page: TIME_PAGE,
     row: BUTTON_ROW,
@@ -249,7 +247,7 @@ const STREET_WIDGETS: readonly HudWidget[] = Object.freeze([
     text: HOUR_TEXT,
   },
   {
-    kind: 'button',
+    kind: 'BUTTON',
     id: NOW_BUTTON,
     page: TIME_PAGE,
     row: BUTTON_ROW,
@@ -258,7 +256,7 @@ const STREET_WIDGETS: readonly HudWidget[] = Object.freeze([
     text: NOW_TEXT,
   },
   {
-    kind: 'button',
+    kind: 'BUTTON',
     id: DUSK_BUTTON,
     page: SKY_PAGE,
     row: BUTTON_ROW,
@@ -267,7 +265,7 @@ const STREET_WIDGETS: readonly HudWidget[] = Object.freeze([
     text: DUSK_TEXT,
   },
   {
-    kind: 'button',
+    kind: 'BUTTON',
     id: NOON_BUTTON,
     page: SKY_PAGE,
     row: BUTTON_ROW,
@@ -276,7 +274,7 @@ const STREET_WIDGETS: readonly HudWidget[] = Object.freeze([
     text: NOON_TEXT,
   },
   {
-    kind: 'button',
+    kind: 'BUTTON',
     id: NOTE_BUTTON,
     page: '',
     row: NOTE_BUTTON_ROW,
@@ -286,10 +284,9 @@ const STREET_WIDGETS: readonly HudWidget[] = Object.freeze([
   },
 ]);
 
-/** What the note window holds: a hint, and a field that reads the keys. */
 const NOTE_WIDGETS: readonly HudWidget[] = Object.freeze([
   {
-    kind: 'label',
+    kind: 'LABEL',
     id: NOTE_HINT_WIDGET,
     page: '',
     row: 0,
@@ -297,7 +294,7 @@ const NOTE_WIDGETS: readonly HudWidget[] = Object.freeze([
     text: NOTE_HINT,
   },
   {
-    kind: 'input',
+    kind: 'INPUT',
     id: NOTE_FIELD,
     page: '',
     row: NOTE_FIELD_ROW,
@@ -315,8 +312,8 @@ const NOTE_WIDGETS: readonly HudWidget[] = Object.freeze([
 export const STREET_WINDOW_SETTINGS: HudWindowSettings = Object.freeze({
   id: STREET_WINDOW,
   title: STREET_TITLE,
-  row: 8,
-  column: 8,
+  row: SCREEN_MARGIN,
+  column: SCREEN_MARGIN,
   width: STREET_CONTENT_WIDTH + 2 * MARGIN,
   height: HUD_CONTENT_TOP + NOTE_BUTTON_ROW + HUD_CONTROL_HEIGHT + MARGIN,
   closable: false,
@@ -324,14 +321,9 @@ export const STREET_WINDOW_SETTINGS: HudWindowSettings = Object.freeze({
   widgets: STREET_WIDGETS,
 });
 
-/**
- * Where the widgets of the tape window sit: the readout on its panel, the
- * divider under it, and the list of tracks below that. The list shows its
- * heading and three tracks at a time, so the rest scroll into view.
- */
-const TAPE_PANEL_HEIGHT = TEXT_HEIGHT + 2 * (HUD_FRAME + 1);
+const TAPE_PANEL_HEIGHT = TEXT_HEIGHT + 2 * (HUD_FRAME + PANEL_PADDING);
 
-const TAPE_LABEL_ROW = HUD_FRAME + 1;
+const TAPE_LABEL_ROW = HUD_FRAME + PANEL_PADDING;
 
 const TAPE_LABEL_COLUMN = 4;
 
@@ -341,12 +333,10 @@ const TAPE_LIST_ROW = TAPE_DIVIDER_ROW + HUD_DIVIDER_HEIGHT + CONTROL_GAP;
 
 const TAPE_PAGE_TRACKS = 3;
 
-/** A track takes two lines: its title, and how long it runs. */
 const TRACK_HEIGHT = 2 * HUD_LIST_ITEM_HEIGHT;
 
 const TRACK_PITCH = TRACK_HEIGHT + HUD_DIVIDER_HEIGHT;
 
-/** The heading and three tracks, with a divider between each two. */
 const TAPE_LIST_HEIGHT =
   HUD_LIST_ITEM_PITCH +
   TAPE_PAGE_TRACKS * TRACK_PITCH -
@@ -355,17 +345,11 @@ const TAPE_LIST_HEIGHT =
 
 const PLAY_WIDTH = toControlWidth(PLAY_TEXT);
 
-/** The play button sits in the middle of the two lines of its track. */
 const PLAY_ROW = floor((TRACK_HEIGHT - HUD_CONTROL_HEIGHT) / 2);
 
 const TITLE_WIDTH =
-  max(map(TAPE_TRACKS, (track) => measureText(track.title))) ?? 0;
+  max(map(TAPE_TRACKS, (track) => computeTextAdvance(track.title))) ?? 0;
 
-/**
- * The widest the tape window gets: the longest title with the play button
- * beside it and room for the scroll bar, or the hint in the readout,
- * whichever asks for more.
- */
 const TAPE_CONTENT_WIDTH =
   max([
     HUD_LIST_TEXT_LEFT +
@@ -375,25 +359,19 @@ const TAPE_CONTENT_WIDTH =
       HUD_PADDING +
       HUD_EDGE +
       HUD_LIST_BAR_WIDTH,
-    measureText(TAPE_HINT) + 2 * TAPE_LABEL_COLUMN,
+    computeTextAdvance(TAPE_HINT) + 2 * TAPE_LABEL_COLUMN,
   ]) ?? 0;
 
-/**
- * The columns one item of the list takes: the list without the padding down
- * its left side, the dark line down its right side, and the scroll bar
- * inside that line. The play button ends where the item does.
- */
 const TRACK_WIDTH =
   TAPE_CONTENT_WIDTH - HUD_PADDING - HUD_EDGE - HUD_LIST_BAR_WIDTH;
 
-/** One track of the tape as an item of the list: two lines and a button. */
 const toTrackItem = (track: TapeTrack): HudListItem => ({
   id: track.id,
   lines: [track.title, track.time],
   height: 0,
   widgets: [
     {
-      kind: 'button',
+      kind: 'BUTTON',
       id: `${PLAY_BUTTON}-${track.id}`,
       page: '',
       row: PLAY_ROW,
@@ -405,10 +383,6 @@ const toTrackItem = (track: TapeTrack): HudListItem => ({
   selectable: true,
 });
 
-/**
- * What the track list holds: a heading that cannot be selected, and one item
- * for each track, two lines tall and with a play button of its own.
- */
 const TAPE_ITEMS: readonly HudListItem[] = Object.freeze([
   {
     id: TAPE_HEADING,
@@ -420,14 +394,9 @@ const TAPE_ITEMS: readonly HudListItem[] = Object.freeze([
   ...map(TAPE_TRACKS, toTrackItem),
 ]);
 
-/**
- * What the tape window holds: a panel with the readout on it, a divider, and
- * the list of tracks. The panel comes first, so the readout is painted on
- * top of it.
- */
 const TAPE_WIDGETS: readonly HudWidget[] = Object.freeze([
   {
-    kind: 'panel',
+    kind: 'PANEL',
     id: TAPE_PANEL,
     page: '',
     row: 0,
@@ -436,7 +405,7 @@ const TAPE_WIDGETS: readonly HudWidget[] = Object.freeze([
     height: TAPE_PANEL_HEIGHT,
   },
   {
-    kind: 'label',
+    kind: 'LABEL',
     id: TAPE_LABEL,
     page: '',
     row: TAPE_LABEL_ROW,
@@ -444,7 +413,7 @@ const TAPE_WIDGETS: readonly HudWidget[] = Object.freeze([
     text: TAPE_HINT,
   },
   {
-    kind: 'divider',
+    kind: 'DIVIDER',
     id: TAPE_DIVIDER,
     page: '',
     row: TAPE_DIVIDER_ROW,
@@ -452,7 +421,7 @@ const TAPE_WIDGETS: readonly HudWidget[] = Object.freeze([
     width: TAPE_CONTENT_WIDTH,
   },
   {
-    kind: 'list',
+    kind: 'LIST',
     id: TAPE_LIST,
     page: '',
     row: TAPE_LIST_ROW,
@@ -473,8 +442,8 @@ const TAPE_WIDGETS: readonly HudWidget[] = Object.freeze([
 export const NOTE_WINDOW_SETTINGS: HudWindowSettings = Object.freeze({
   id: NOTE_WINDOW,
   title: NOTE_TITLE,
-  row: 128,
-  column: 160,
+  row: NOTE_WINDOW_ROW,
+  column: NOTE_WINDOW_COLUMN,
   width: NOTE_CONTENT_WIDTH + 2 * MARGIN,
   height: HUD_CONTENT_TOP + NOTE_FIELD_ROW + HUD_CONTROL_HEIGHT + MARGIN,
   closable: true,
@@ -489,8 +458,8 @@ export const NOTE_WINDOW_SETTINGS: HudWindowSettings = Object.freeze({
 export const TAPE_WINDOW_SETTINGS: HudWindowSettings = Object.freeze({
   id: TAPE_WINDOW,
   title: TAPE_TITLE,
-  row: 8,
-  column: SCREEN_WIDTH - TAPE_CONTENT_WIDTH - 2 * MARGIN - 8,
+  row: SCREEN_MARGIN,
+  column: SCREEN_WIDTH - TAPE_CONTENT_WIDTH - 2 * MARGIN - SCREEN_MARGIN,
   width: TAPE_CONTENT_WIDTH + 2 * MARGIN,
   height: HUD_CONTENT_TOP + TAPE_LIST_ROW + TAPE_LIST_HEIGHT + MARGIN,
   closable: true,

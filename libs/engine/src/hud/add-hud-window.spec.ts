@@ -1,4 +1,4 @@
-import { map } from 'lodash-es';
+import { map, size } from 'lodash-es';
 import { describe, expect, it } from 'vitest';
 
 import { addHudWindow } from './add-hud-window';
@@ -41,8 +41,10 @@ describe('addHudWindow', () => {
 
   it('should return only the new window when one with the same id is added', () => {
     expect(
-      addHudWindow(createStreetHud(), { ...STREET, title: 'AGAIN' }).windows,
-    ).toHaveLength(1);
+      size(
+        addHudWindow(createStreetHud(), { ...STREET, title: 'AGAIN' }).windows,
+      ),
+    ).toBe(1);
   });
 
   it('should return the same theme when it adds a window', () => {

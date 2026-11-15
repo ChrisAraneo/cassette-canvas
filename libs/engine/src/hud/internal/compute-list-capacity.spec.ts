@@ -1,11 +1,12 @@
 import { map, times } from 'lodash-es';
 import { describe, expect, it } from 'vitest';
 
+import { HUD_LIST_ITEM_PITCH } from '../consts';
 import type { HudList } from '../types/hud-list';
 import type { HudListItem } from '../types/hud-list-item';
 import { computeListCapacity } from './compute-list-capacity';
 
-const toItems = (count: number, lines = 1): readonly HudListItem[] =>
+const createItems = (count: number, lines = 1): readonly HudListItem[] =>
   map(times(count), (index) => ({
     id: `${index}`,
     lines: map(times(lines), (line) => `TRACK ${index} ${line}`),
@@ -16,9 +17,9 @@ const toItems = (count: number, lines = 1): readonly HudListItem[] =>
 
 const createList = (
   height: number,
-  items: readonly HudListItem[] = toItems(9),
+  items: readonly HudListItem[] = createItems(9),
 ): HudList => ({
-  kind: 'list',
+  kind: 'LIST',
   id: 'tracks',
   page: '',
   row: 0,
@@ -40,7 +41,9 @@ describe('computeListCapacity', () => {
   });
 
   it('should return one more item when the list grows by a whole item', () => {
-    expect(computeListCapacity(createList(48 + 11), 0)).toBe(5);
+    expect(computeListCapacity(createList(48 + HUD_LIST_ITEM_PITCH), 0)).toBe(
+      5,
+    );
   });
 
   it('should return no items when the list is too short for one', () => {
@@ -64,16 +67,16 @@ describe('computeListCapacity', () => {
   });
 
   it('should return half as many items when each one holds two lines', () => {
-    expect(computeListCapacity(createList(48, toItems(9, 2)), 0)).toBe(2);
+    expect(computeListCapacity(createList(48, createItems(9, 2)), 0)).toBe(2);
   });
 
   it('should return as many items as fit when they are not all the same height', () => {
     expect(
       computeListCapacity(
         createList(48, [
-          ...toItems(1),
-          ...map(toItems(1, 2), (item) => ({ ...item, id: 'tall' })),
-          ...toItems(3),
+          ...createItems(1),
+          ...map(createItems(1, 2), (item) => ({ ...item, id: 'tall' })),
+          ...createItems(3),
         ]),
         0,
       ),
@@ -85,7 +88,7 @@ describe('computeListCapacity', () => {
       computeListCapacity(
         createList(
           48,
-          map(toItems(9), (item) => ({ ...item, height: 20 })),
+          map(createItems(9), (item) => ({ ...item, height: 20 })),
         ),
         0,
       ),

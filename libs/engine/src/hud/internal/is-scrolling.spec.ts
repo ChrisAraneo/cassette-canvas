@@ -7,7 +7,7 @@ import { isScrolling } from './is-scrolling';
 const createScrollingHud = (): Hud => ({
   ...createHud(),
   grab: {
-    kind: 'scroll',
+    kind: 'SCROLL',
     window: 'tape',
     widget: 'tracks',
     row: 2,
@@ -34,7 +34,7 @@ describe('isScrolling', () => {
         {
           ...createHud(),
           grab: {
-            kind: 'press',
+            kind: 'PRESS',
             window: 'tape',
             widget: 'tracks',
             row: 0,

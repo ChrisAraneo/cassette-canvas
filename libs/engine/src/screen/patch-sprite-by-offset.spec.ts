@@ -38,6 +38,13 @@ describe('patchSpriteByOffset', () => {
     expect(patchSpriteByOffset(screen, 'ghost', 2, 5)).toBe(screen);
   });
 
+  it('should return an empty screen when the screen holds no sprites at all', () => {
+    expect(
+      patchSpriteByOffset({ ...createHeroScreen(), sprites: [] }, 'hero', 2, 5)
+        .sprites,
+    ).toEqual([]);
+  });
+
   it('should not change the old screen when it moves a sprite', () => {
     const screen = createHeroScreen();
 

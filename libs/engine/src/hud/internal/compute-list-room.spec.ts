@@ -4,7 +4,7 @@ import type { HudList } from '../types/hud-list';
 import { computeListRoom } from './compute-list-room';
 
 const createList = (height: number): HudList => ({
-  kind: 'list',
+  kind: 'LIST',
   id: 'tracks',
   page: '',
   row: 0,

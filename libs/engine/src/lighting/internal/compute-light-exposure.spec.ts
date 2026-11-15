@@ -1,4 +1,4 @@
-import { chunk, includes, join, map, times, toArray } from 'lodash-es';
+import { chunk, includes, join, map, size, times, toArray } from 'lodash-es';
 import { match } from 'ts-pattern';
 import { describe, expect, it } from 'vitest';
 
@@ -28,7 +28,6 @@ const TORCH_EMISSION = toExposure(TORCH.intensity) - REFERENCE_EXPOSURE;
 
 const WIDE_SUN: Light = Object.freeze({ ...SUN, row: 3 });
 
-/** A wall 3 pixels tall, at column 3 of a 9 by 7 screen. */
 const WALL: readonly number[] = Object.freeze([
   2 * 9 + 3,
   3 * 9 + 3,
@@ -215,8 +214,6 @@ describe('computeLightExposure', () => {
   });
 
   it('should return an empty field when the screen has no places', () => {
-    expect(computeLightExposure(createLighting(0, 0, []), TORCH)).toHaveLength(
-      0,
-    );
+    expect(size(computeLightExposure(createLighting(0, 0, []), TORCH))).toBe(0);
   });
 });

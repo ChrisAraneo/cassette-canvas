@@ -32,11 +32,12 @@ export const CRT_UNIFORM_NAMES: CrtUniformNames = Object.freeze({
   time: 'u_time',
 });
 
-export const CRT_CONTEXT_ATTRIBUTES: WebGLContextAttributes = Object.freeze({
-  alpha: true,
-  antialias: false,
-  depth: false,
-  stencil: false,
-  premultipliedAlpha: true,
-  preserveDrawingBuffer: false,
-});
+export const CRT_CONTEXT_ATTRIBUTES: Readonly<WebGLContextAttributes> =
+  Object.freeze({
+    alpha: true,
+    antialias: false,
+    depth: false,
+    stencil: false,
+    premultipliedAlpha: true,
+    preserveDrawingBuffer: false,
+  });

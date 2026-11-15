@@ -30,6 +30,18 @@ describe('patchMatchingLight', () => {
     });
   });
 
+  it('should not change the old light when it changes one', () => {
+    patchMatchingLight(TORCH, 'torch', { row: 8 });
+
+    expect(TORCH).toEqual({
+      id: 'torch',
+      row: 4,
+      column: 4,
+      radius: 10,
+      intensity: 3,
+    });
+  });
+
   it('should return the very same light when it carries another id', () => {
     expect(patchMatchingLight(TORCH, 'lantern', { row: 8 })).toBe(TORCH);
   });

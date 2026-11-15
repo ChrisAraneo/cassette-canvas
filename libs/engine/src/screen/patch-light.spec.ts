@@ -55,6 +55,13 @@ describe('patchLight', () => {
     ]);
   });
 
+  it('should return an empty screen when the screen holds no lights at all', () => {
+    expect(
+      patchLight({ ...createLitScreen(), lights: [] }, 'torch', { row: 7 })
+        .lights,
+    ).toEqual([]);
+  });
+
   it('should not change the old screen when it changes a light', () => {
     const screen = createLitScreen();
 

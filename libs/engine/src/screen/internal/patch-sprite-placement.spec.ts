@@ -40,6 +40,18 @@ describe('patchSpritePlacement', () => {
     });
   });
 
+  it('should not change the old sprite when it changes one', () => {
+    patchSpritePlacement(HERO, 'hero', { column: 20 });
+
+    expect(HERO).toEqual({
+      id: 'hero',
+      sprite: HERO_STANDING,
+      row: 3,
+      column: 4,
+      castsShadow: false,
+    });
+  });
+
   it('should return the very same sprite when it carries another id', () => {
     expect(patchSpritePlacement(HERO, 'coin', { column: 20 })).toBe(HERO);
   });

@@ -51,6 +51,23 @@ describe('patchMatchingWindow', () => {
     });
   });
 
+  it('should not change the old window when it changes one', () => {
+    patchMatchingWindow(WINDOW, 'street', { row: 1, title: 'NOTES' });
+
+    expect(WINDOW).toEqual({
+      id: 'street',
+      title: 'STREET',
+      row: 10,
+      column: 20,
+      width: 90,
+      height: 76,
+      color: 15,
+      closable: true,
+      page: 'scene',
+      widgets: [],
+    });
+  });
+
   it('should return the very same window when the id does not match', () => {
     expect(patchMatchingWindow(WINDOW, 'notes', { row: 1 })).toBe(WINDOW);
   });

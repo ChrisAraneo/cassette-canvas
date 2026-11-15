@@ -1,7 +1,7 @@
 import type { HudItemWidget } from './hud-item-widget';
 
 /**
- * One item of a list. `id` names it in a `select` action, and `lines` are the
+ * One item of a list. `id` names it in a `SELECT` action, and `lines` are the
  * lines of text it shows, one under the other, each cut off where the item
  * ends. An item is `HUD_LIST_ITEM_HEIGHT` tall for each of its lines, so one
  * line of text is an ordinary row and two make a taller item.

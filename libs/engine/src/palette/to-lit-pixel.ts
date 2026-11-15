@@ -1,11 +1,7 @@
-import { clamp, round } from 'lodash-es';
 import { match, P } from 'ts-pattern';
-import {
-  DARKEST_EXTENDED_SHADE,
-  LIGHTEST_EXTENDED_SHADE,
-  TRANSPARENT,
-} from './consts';
+import { TRANSPARENT } from './consts';
 import { SHADE_RAMPS } from './internal/shade-ramps';
+import { toRampPixel } from './internal/to-ramp-pixel';
 
 const { nonNullable } = P;
 
@@ -19,15 +15,5 @@ const { nonNullable } = P;
  */
 export const toLitPixel = (pixel: number, shadeOffset: number): number =>
   match(SHADE_RAMPS[pixel])
-    .with(
-      nonNullable,
-      ({ pixels, extendedShade }) =>
-        pixels[
-          clamp(
-            round(extendedShade + shadeOffset),
-            DARKEST_EXTENDED_SHADE,
-            LIGHTEST_EXTENDED_SHADE,
-          )
-        ] ?? TRANSPARENT,
-    )
+    .with(nonNullable, (ramp) => toRampPixel(ramp, shadeOffset))
     .otherwise(() => TRANSPARENT);

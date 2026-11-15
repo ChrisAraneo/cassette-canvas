@@ -62,4 +62,12 @@ describe('patchHudWindow', () => {
       createTwoWindows(),
     );
   });
+
+  it('should not change the old HUD when it changes a window', () => {
+    const hud = createTwoWindows();
+
+    patchHudWindow(hud, 'street', { row: 1, column: 2 });
+
+    expect(hud).toEqual(createTwoWindows());
+  });
 });

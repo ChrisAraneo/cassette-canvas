@@ -1,4 +1,4 @@
-import { findLast } from 'lodash-es';
+import { constant, findLast } from 'lodash-es';
 import { match, P } from 'ts-pattern';
 import type { Hud } from '../types/hud';
 import type { HudWindow } from '../types/hud-window';
@@ -13,15 +13,10 @@ import type { HudPlacedWidget } from './types/hud-placed-widget';
 
 const { nonNullable } = P;
 
-/**
- * A widget that sits on an item of a list takes the pointer only when it is
- * a button. Anything else on an item lets the press through to the item
- * under it, so a label or a panel never costs an item its selection.
- */
 const isPressable = ({ widget, item }: HudPlacedWidget): boolean =>
-  item === '' || widget.kind === 'button';
+  item === '' || widget.kind === 'BUTTON';
 
-const findShownWidget = (
+const findPressedWidget = (
   window: HudWindow,
   row: number,
   column: number,
@@ -37,24 +32,24 @@ const toWindowHit = (window: HudWindow, row: number, column: number): HudHit =>
   match({
     close: window.closable && isInside(computeCloseRect(window), row, column),
     title: isInside(computeTitleRect(window), row, column),
-    widget: findShownWidget(window, row, column),
+    widget: findPressedWidget(window, row, column),
   })
     .with({ close: true }, (): HudHit => ({
       window: window.id,
-      part: 'close',
+      part: 'CLOSE',
       widget: '',
     }))
     .with({ widget: nonNullable }, ({ widget }): HudHit => ({
       window: window.id,
-      part: 'widget',
+      part: 'WIDGET',
       widget: widget.widget.id,
     }))
     .with({ title: true }, (): HudHit => ({
       window: window.id,
-      part: 'title',
+      part: 'TITLE',
       widget: '',
     }))
-    .otherwise((): HudHit => ({ window: window.id, part: 'body', widget: '' }));
+    .otherwise((): HudHit => ({ window: window.id, part: 'BODY', widget: '' }));
 
 /**
  * Returns what the logical pixel at `row` and `column` is over, or
@@ -76,4 +71,4 @@ export const findHudHit = (
     .with(nonNullable, (window) =>
       toWindowHit(window, row - window.row, column - window.column),
     )
-    .otherwise(() => undefined);
+    .otherwise(constant(undefined));

@@ -1,4 +1,5 @@
 import { runEffect } from '@cassette-canvas/common';
+import { constant } from 'lodash-es';
 import { pipe } from 'remeda';
 import { match, P } from 'ts-pattern';
 
@@ -53,4 +54,4 @@ export const tryCreateTexture = (
 ): WebGLTexture | undefined =>
   match(context.createTexture())
     .with(nonNullable, (texture) => patchTextureSampling(context, texture))
-    .otherwise(() => undefined);
+    .otherwise(constant(undefined));

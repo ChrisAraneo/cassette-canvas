@@ -3,6 +3,7 @@ import {
   findHudWindow,
   type Hud,
 } from '@cassette-canvas/engine';
+import { constant } from 'lodash-es';
 import { match } from 'ts-pattern';
 import { describe, expect, it } from 'vitest';
 
@@ -17,15 +18,14 @@ import {
 import { createDemoHud } from './create-demo-hud';
 import { patchDemoHud } from './patch-demo-hud';
 
-/** The time of day the animation starts at: 9:00, with the sun rising. */
 const MORNING: DayCycle = Object.freeze({ phase: 9 / 24, darkness: 0 });
 
 const NIGHT: DayCycle = Object.freeze({ phase: 0, darkness: 1 });
 
 const toText = (hud: Hud, widget: string): string | undefined =>
   match(findHudWidget(hud, STREET_WINDOW, widget))
-    .with({ kind: 'label' }, ({ text }) => text)
-    .otherwise(() => undefined);
+    .with({ kind: 'LABEL' }, ({ text }) => text)
+    .otherwise(constant(undefined));
 
 describe('patchDemoHud', () => {
   it('should return the frame rate on the time page when it patches the HUD', () => {

@@ -36,7 +36,7 @@ describe('drawCrtTriangle', () => {
   it('should draw one triangle that covers the whole canvas when it draws the monitor', () => {
     const calls: DrawCall[] = [];
 
-    drawCrtTriangle(createContext(calls), CRT);
+    drawCrtTriangle({ context: createContext(calls), crt: CRT });
 
     expect(calls).toEqual([
       { name: 'viewport', values: [0, 0, 768, 512] },

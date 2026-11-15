@@ -1,3 +1,4 @@
+import { constant } from 'lodash-es';
 import { match, P } from 'ts-pattern';
 import type { Display } from '../types/display';
 import type { DisplayDraft } from './types/display-draft';
@@ -22,4 +23,4 @@ export const tryToDisplay = (draft: DisplayDraft): Display | undefined =>
       },
       (display) => display,
     )
-    .otherwise(() => undefined);
+    .otherwise(constant(undefined));

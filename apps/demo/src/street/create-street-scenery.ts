@@ -1,6 +1,6 @@
 import type { SpritePlacement, SpriteLegend } from '@cassette-canvas/engine';
 import { flatMap } from 'lodash-es';
-import { placeTiles } from '../tiles/place-tiles';
+import { toTilePlacements } from '../tiles/to-tile-placements';
 import { toTiles } from '../tiles/to-tiles';
 import {
   BUILDINGS,
@@ -14,16 +14,16 @@ import { createLitWindows } from './internal/create-lit-windows';
 import { createRoadPlacements } from './internal/create-road-placements';
 import { createSidewalkPlacements } from './internal/create-sidewalk-placements';
 import { createSkylineArt } from './internal/create-skyline-art';
-import { rejectCovered } from './internal/reject-covered';
+import { filterUncovered } from './internal/filter-uncovered';
 import type { StreetScenery } from './types/street-scenery';
 
-const placeSkyline = (
+const createSkylinePlacements = (
   art: readonly string[],
   legend: SpriteLegend,
   buildings: readonly SpritePlacement[],
 ): SpritePlacement[] =>
-  rejectCovered(
-    placeTiles(toTiles(art, legend), {
+  filterUncovered(
+    toTilePlacements(toTiles(art, legend), {
       id: 'skyline',
       row: SKYLINE_ROW,
       column: 0,
@@ -36,8 +36,12 @@ const toScenery = (
   skylineArt: readonly string[],
   buildings: readonly SpritePlacement[],
 ): StreetScenery => ({
-  skyline: placeSkyline(skylineArt, SKYLINE_DAY_LEGEND, buildings),
-  nightSkyline: placeSkyline(skylineArt, SKYLINE_NIGHT_LEGEND, buildings),
+  skyline: createSkylinePlacements(skylineArt, SKYLINE_DAY_LEGEND, buildings),
+  nightSkyline: createSkylinePlacements(
+    skylineArt,
+    SKYLINE_NIGHT_LEGEND,
+    buildings,
+  ),
   buildings,
   windows: createLitWindows(BUILDINGS),
   sidewalk: createSidewalkPlacements(),
@@ -47,7 +51,7 @@ const toScenery = (
 /**
  * Builds the parts of the street that do not move: the skyline by day and
  * by night, the buildings and their windows, the sidewalk, and the road.
- * Build it once and pass it to `composeStreetScreen` on every frame.
+ * Build it once and pass it to `createStreetScreen` on every frame.
  */
 export const createStreetScenery = (): StreetScenery =>
   toScenery(

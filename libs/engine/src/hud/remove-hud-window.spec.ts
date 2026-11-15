@@ -35,7 +35,7 @@ describe('removeHudWindow', () => {
         {
           ...createTwoWindows(),
           grab: {
-            kind: 'drag',
+            kind: 'DRAG',
             window: 'street',
             widget: '',
             row: 0,
@@ -53,7 +53,7 @@ describe('removeHudWindow', () => {
         {
           ...createTwoWindows(),
           grab: {
-            kind: 'drag',
+            kind: 'DRAG',
             window: 'notes',
             widget: '',
             row: 0,
@@ -81,5 +81,13 @@ describe('removeHudWindow', () => {
     expect(removeHudWindow(createTwoWindows(), 'ghost')).toEqual(
       createTwoWindows(),
     );
+  });
+
+  it('should not change the old HUD when it removes a window', () => {
+    const hud = createTwoWindows();
+
+    removeHudWindow(hud, 'street');
+
+    expect(hud).toEqual(createTwoWindows());
   });
 });

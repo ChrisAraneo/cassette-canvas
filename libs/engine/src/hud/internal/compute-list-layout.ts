@@ -22,19 +22,14 @@ const { nonNullable } = P;
 
 const NO_PLACEMENTS: readonly HudListPlacement[] = Object.freeze([]);
 
-/** The scroll bar down the right side of a list, inside its dark line. */
-const toBarRect = (rect: HudRect): HudRect => ({
+const computeBarRect = (rect: HudRect): HudRect => ({
   row: rect.row + HUD_EDGE,
   column: rect.column + rect.width - HUD_EDGE - HUD_LIST_BAR_WIDTH,
   width: HUD_LIST_BAR_WIDTH,
   height: rect.height - 2 * HUD_EDGE,
 });
 
-/**
- * Where the next item starts: a divider below the last item placed, or, for
- * the first one, `HUD_PADDING` rows inside the top of the list.
- */
-const toItemRow = (
+const computeItemRow = (
   rect: HudRect,
   placed: readonly HudListPlacement[],
 ): number =>
@@ -46,11 +41,7 @@ const toItemRow = (
     )
     .otherwise(() => rect.row + HUD_PADDING);
 
-/**
- * The columns an item takes: the list without its padding, the dark line
- * down its right side, and the scroll bar inside that line.
- */
-const toItemWidth = (rect: HudRect): number =>
+const computeItemWidth = (rect: HudRect): number =>
   rect.width - HUD_PADDING - HUD_EDGE - HUD_LIST_BAR_WIDTH;
 
 const addPlacement = (
@@ -62,9 +53,9 @@ const addPlacement = (
   {
     item,
     rect: {
-      row: toItemRow(rect, placed),
+      row: computeItemRow(rect, placed),
       column: rect.column + HUD_PADDING,
-      width: toItemWidth(rect),
+      width: computeItemWidth(rect),
       height: computeItemHeight(item),
     },
   },
@@ -81,13 +72,42 @@ const toPlacements = (
     NO_PLACEMENTS,
   );
 
-/**
- * The thumb on the track, as tall a part of it as the items it shows are of
- * the items it holds, and as far down it as the scroll is through the pages.
- * A list that shows everything it holds, or one too short for a thumb, has
- * none: its height is 0, which paints nothing and takes no press.
- */
-const toThumbRect = (
+const computeTrackRect = (bar: HudRect): HudRect => ({
+  ...bar,
+  row: bar.row + HUD_LIST_BAR_WIDTH,
+  height: bar.height - 2 * HUD_LIST_BAR_WIDTH,
+});
+
+const computeUpRect = (bar: HudRect): HudRect => ({
+  ...bar,
+  height: HUD_LIST_BAR_WIDTH,
+});
+
+const computeDownRect = (bar: HudRect): HudRect => ({
+  ...bar,
+  row: bar.row + bar.height - HUD_LIST_BAR_WIDTH,
+  height: HUD_LIST_BAR_WIDTH,
+});
+
+const computeThumbHeight = (
+  track: HudRect,
+  capacity: number,
+  total: number,
+): number =>
+  Math.max(HUD_LIST_THUMB_HEIGHT, floor((track.height * capacity) / total));
+
+const computeScrolledThumb = (
+  track: HudRect,
+  height: number,
+  scroll: number,
+  lastPage: number,
+): HudRect => ({
+  ...track,
+  row: track.row + floor(((track.height - height) * scroll) / lastPage),
+  height,
+});
+
+const computeThumbRect = (
   track: HudRect,
   capacity: number,
   total: number,
@@ -96,18 +116,14 @@ const toThumbRect = (
 ): HudRect =>
   match(lastPage <= 0 || track.height < HUD_LIST_THUMB_HEIGHT)
     .with(true, () => ({ ...track, height: 0 }))
-    .otherwise(() => {
-      const height = Math.max(
-        HUD_LIST_THUMB_HEIGHT,
-        floor((track.height * capacity) / total),
-      );
-
-      return {
-        ...track,
-        row: track.row + floor(((track.height - height) * scroll) / lastPage),
-        height,
-      };
-    });
+    .otherwise(() =>
+      computeScrolledThumb(
+        track,
+        computeThumbHeight(track, capacity, total),
+        scroll,
+        lastPage,
+      ),
+    );
 
 /**
  * Returns where everything in a list sits, measured from the window's
@@ -119,25 +135,23 @@ export const computeListLayout = (widget: HudList): HudListLayout => {
   const scroll = computeListScroll(widget, widget.scroll);
   const capacity = computeListCapacity(widget, scroll);
   const lastPage = computeListLastPage(widget);
-  const bar = toBarRect(rect);
-  const track = {
-    ...bar,
-    row: bar.row + HUD_LIST_BAR_WIDTH,
-    height: bar.height - 2 * HUD_LIST_BAR_WIDTH,
-  };
+  const bar = computeBarRect(rect);
+  const track = computeTrackRect(bar);
 
   return {
     capacity,
     scroll,
     lastPage,
     items: toPlacements(rect, slice(widget.items, scroll, scroll + capacity)),
-    up: { ...bar, height: HUD_LIST_BAR_WIDTH },
-    down: {
-      ...bar,
-      row: bar.row + bar.height - HUD_LIST_BAR_WIDTH,
-      height: HUD_LIST_BAR_WIDTH,
-    },
+    up: computeUpRect(bar),
+    down: computeDownRect(bar),
     track,
-    thumb: toThumbRect(track, capacity, size(widget.items), scroll, lastPage),
+    thumb: computeThumbRect(
+      track,
+      capacity,
+      size(widget.items),
+      scroll,
+      lastPage,
+    ),
   };
 };

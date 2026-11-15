@@ -1,5 +1,5 @@
-import type { OverlayPlacement } from '../../overlay/types/overlay-placement';
 import type { Light } from './light';
+import type { OverlayPlacement } from './overlay-placement';
 import type { SpritePlacement } from './sprite-placement';
 
 /**

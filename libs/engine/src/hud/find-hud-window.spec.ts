@@ -22,11 +22,19 @@ describe('findHudWindow', () => {
     });
   });
 
-  it('should return undefined when no window has the id', () => {
+  it('should return no window when none has the id', () => {
     expect(findHudWindow(createStreetHud(), 'ghost')).toBeUndefined();
   });
 
-  it('should return undefined when the HUD holds no windows', () => {
+  it('should return no window when the HUD holds none', () => {
     expect(findHudWindow(createHud(), 'street')).toBeUndefined();
+  });
+
+  it('should not change the HUD it is given when it looks for a window', () => {
+    const hud = createStreetHud();
+
+    findHudWindow(hud, 'street');
+
+    expect(hud).toEqual(createStreetHud());
   });
 });

@@ -1,0 +1,20 @@
+import type { HudEvent } from '@cassette-canvas/engine';
+import { reduce } from 'lodash-es';
+import { patchHudStateEvent } from './internal/patch-hud-state-event';
+import type { HudState } from './types/hud-state';
+
+/**
+ * Handles everything the person did since the last frame, in the order it
+ * happened. `time` is the time of the frame, which the street clock is
+ * measured from. Returns a new state.
+ */
+export const patchHudState = (
+  state: HudState,
+  events: readonly HudEvent[],
+  time: number,
+): HudState =>
+  reduce(
+    events,
+    (current, event) => patchHudStateEvent(current, event, time),
+    state,
+  );

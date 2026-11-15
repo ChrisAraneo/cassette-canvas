@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 
 import { findLight } from './find-light';
 import type { Light } from './types/light';
+import type { Screen } from './types/screen';
 
 const TORCH: Light = {
   id: 'torch',
@@ -19,7 +20,7 @@ const LANTERN: Light = {
   intensity: 4,
 };
 
-const createLitScreen = (lights: Light[]) => ({
+const createLitScreen = (lights: Light[]): Screen => ({
   background: 0x91,
   ambient: -3,
   sprites: [],
@@ -34,11 +35,11 @@ describe('findLight', () => {
     );
   });
 
-  it('should return undefined when no light carries the id', () => {
+  it('should return no light when no light carries the id', () => {
     expect(findLight(createLitScreen([TORCH, LANTERN]), 'sun')).toBeUndefined();
   });
 
-  it('should return undefined when the screen has no lights', () => {
+  it('should return no light when the screen has no lights', () => {
     expect(findLight(createLitScreen([]), 'torch')).toBeUndefined();
   });
 });

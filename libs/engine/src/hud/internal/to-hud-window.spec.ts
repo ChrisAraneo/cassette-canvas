@@ -14,7 +14,7 @@ const SETTINGS = Object.freeze({
 });
 
 const TABS: HudWidget = Object.freeze({
-  kind: 'tabs',
+  kind: 'TABS',
   id: 'tabs',
   page: '',
   row: 0,

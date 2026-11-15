@@ -14,7 +14,7 @@ import { computeTextWidth } from './compute-text-width';
 import { computeWidgetRect } from './compute-widget-rect';
 
 const LABEL: HudLabel = Object.freeze({
-  kind: 'label',
+  kind: 'LABEL',
   id: 'fps',
   page: '',
   row: 4,
@@ -23,7 +23,7 @@ const LABEL: HudLabel = Object.freeze({
 });
 
 const BUTTON: HudButton = Object.freeze({
-  kind: 'button',
+  kind: 'BUTTON',
   id: 'skip',
   page: '',
   row: 4,
@@ -61,7 +61,7 @@ describe('computeWidgetRect', () => {
   it('should return the width a field asks for when it has one', () => {
     expect(
       computeWidgetRect({
-        kind: 'input',
+        kind: 'INPUT',
         id: 'note',
         page: '',
         row: 0,
@@ -75,7 +75,7 @@ describe('computeWidgetRect', () => {
   it('should return the size a panel asks for when the widget is a panel', () => {
     expect(
       computeWidgetRect({
-        kind: 'panel',
+        kind: 'PANEL',
         id: 'meters',
         page: '',
         row: 4,
@@ -94,7 +94,7 @@ describe('computeWidgetRect', () => {
   it('should return a divider two rows tall when the widget is a divider', () => {
     expect(
       computeWidgetRect({
-        kind: 'divider',
+        kind: 'DIVIDER',
         id: 'line',
         page: '',
         row: 4,
@@ -112,7 +112,7 @@ describe('computeWidgetRect', () => {
   it('should return the size a list asks for when the widget is a list', () => {
     expect(
       computeWidgetRect({
-        kind: 'list',
+        kind: 'LIST',
         id: 'tracks',
         page: '',
         row: 4,
@@ -134,7 +134,7 @@ describe('computeWidgetRect', () => {
   it('should return a tab strip as wide as its tabs together when the widget is a strip', () => {
     expect(
       computeWidgetRect({
-        kind: 'tabs',
+        kind: 'TABS',
         id: 'tabs',
         page: '',
         row: 0,

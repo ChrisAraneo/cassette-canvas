@@ -6,10 +6,10 @@ import type { HudWindow } from '../types/hud-window';
 import { filterPageWidgets } from './filter-page-widgets';
 
 const WIDGETS: readonly HudWidget[] = Object.freeze([
-  { kind: 'label', id: 'always', page: '', row: 0, column: 0, text: 'FPS' },
-  { kind: 'label', id: 'scene', page: 'scene', row: 8, column: 0, text: 'DAY' },
+  { kind: 'LABEL', id: 'always', page: '', row: 0, column: 0, text: 'FPS' },
+  { kind: 'LABEL', id: 'scene', page: 'scene', row: 8, column: 0, text: 'DAY' },
   {
-    kind: 'label',
+    kind: 'LABEL',
     id: 'light',
     page: 'light',
     row: 8,

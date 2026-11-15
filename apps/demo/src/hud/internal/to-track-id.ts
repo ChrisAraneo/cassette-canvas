@@ -2,7 +2,6 @@ import { replace, startsWith } from 'lodash-es';
 import { match } from 'ts-pattern';
 import { PLAY_BUTTON } from '../consts';
 
-/** What the id of every play button starts with. */
 const PLAY_PREFIX = `${PLAY_BUTTON}-`;
 
 /**

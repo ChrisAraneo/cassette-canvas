@@ -14,7 +14,21 @@ const createTorchScreen = (): Screen => ({
   overlays: [],
 });
 
+const createDarkScreen = (): Screen => ({
+  background: 0x91,
+  ambient: -3,
+  sprites: [],
+  lights: [],
+  overlays: [],
+});
+
 describe('addLight', () => {
+  it('should return the one light when the screen holds none', () => {
+    expect(addLight(createDarkScreen(), 'lantern', TORCH).lights).toEqual([
+      { id: 'lantern', ...TORCH },
+    ]);
+  });
+
   it('should return the light at the row and column from its settings when it adds one', () => {
     expect(
       addLight(createTorchScreen(), 'lantern', {

@@ -10,12 +10,6 @@ import { filterPageWidgets } from './filter-page-widgets';
 import type { HudListPlacement } from './types/hud-list-placement';
 import type { HudPlacedWidget } from './types/hud-placed-widget';
 
-/**
- * Returns a widget that sits on an item where it sits in the window. A
- * widget of an item is placed from the item's top-left pixel and a widget of
- * a window from the top-left pixel of the window's content, so moving one
- * from the first to the second is the item's own place less the content's.
- */
 const toPlacedWidget = (widget: HudItemWidget, rect: HudRect): HudWidget => ({
   ...widget,
   row: widget.row + rect.row - HUD_CONTENT_TOP,
@@ -30,10 +24,9 @@ const toItemWidgets = (
     item: placement.item.id,
   }));
 
-/** A list, and then the widgets of the items it shows right now. */
 const toShownWidgets = (widget: HudWidget): readonly HudPlacedWidget[] =>
   match(widget)
-    .with({ kind: 'list' }, (list): readonly HudPlacedWidget[] => [
+    .with({ kind: 'LIST' }, (list): readonly HudPlacedWidget[] => [
       { widget: list, item: '' },
       ...flatMap(computeListLayout(list).items, toItemWidgets),
     ])
