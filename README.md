@@ -16,7 +16,7 @@
 - Sprites use 16 colors with 8 shades each (128 colors).
 - Large retro pixels.
 - Dynamic lighting and shadows.
-- HUD: Text, windows, buttons, text fields, tabs, panels, dividers, scrolling lists.
+- HUD: text, windows, buttons, text fields, tabs, panels, dividers, scrolling lists.
 - Retro monitor effect: soft glow, scanlines, film grain, surface texture.
 
 ## Installation
