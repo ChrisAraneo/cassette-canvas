@@ -1,8 +1,9 @@
-import { find, some } from 'lodash-es';
+import { find, has, some } from 'lodash-es';
 import { match } from 'ts-pattern';
 import { describe, expect, it } from 'vitest';
 
 import { toPixel } from '../../palette/to-pixel';
+import { DEFAULT_HUD_COLOR } from '../consts';
 import { createHud } from '../create-hud';
 import type { HudWindow } from '../types/hud-window';
 import { computeTitleRect } from './compute-title-rect';
@@ -15,7 +16,7 @@ const WINDOW: HudWindow = Object.freeze({
   column: 20,
   width: 90,
   height: 76,
-  color: 15,
+  color: DEFAULT_HUD_COLOR,
   closable: true,
   page: '',
   widgets: [],
@@ -23,10 +24,12 @@ const WINDOW: HudWindow = Object.freeze({
 
 const THEME = createHud().theme;
 
+const NOTE_COLOR = 9;
+
 describe('drawHudWindowFrame', () => {
   it('should return the whole window filled with its body shade first when it paints one', () => {
     expect(drawHudWindowFrame(createHud(), WINDOW)[0]).toEqual({
-      pixel: toPixel(15, THEME.body),
+      pixel: toPixel(DEFAULT_HUD_COLOR, THEME.body),
       row: 0,
       column: 0,
       width: 90,
@@ -45,7 +48,7 @@ describe('drawHudWindowFrame', () => {
     expect(
       find(drawHudWindowFrame(createHud(), WINDOW), (paint) =>
         match(paint)
-          .with({ pixel: toPixel(15, THEME.title) }, () => true)
+          .with({ pixel: toPixel(DEFAULT_HUD_COLOR, THEME.title) }, () => true)
           .otherwise(() => false),
       ),
     ).toMatchObject(computeTitleRect(WINDOW));
@@ -53,16 +56,15 @@ describe('drawHudWindowFrame', () => {
 
   it('should return the title in the bar when it paints a window', () => {
     expect(
-      some(
-        drawHudWindowFrame(createHud(), WINDOW),
-        (paint) => 'image' in paint,
+      some(drawHudWindowFrame(createHud(), WINDOW), (paint) =>
+        has(paint, 'image'),
       ),
     ).toBe(true);
   });
 
   it('should return the color of the window when it paints one', () => {
     expect(
-      drawHudWindowFrame(createHud(), { ...WINDOW, color: 9 })[0],
-    ).toMatchObject({ pixel: toPixel(9, THEME.body) });
+      drawHudWindowFrame(createHud(), { ...WINDOW, color: NOTE_COLOR })[0],
+    ).toMatchObject({ pixel: toPixel(NOTE_COLOR, THEME.body) });
   });
 });

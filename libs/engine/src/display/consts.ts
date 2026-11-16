@@ -4,3 +4,6 @@
  * skipped: pass `fps` to `tryCreateDisplay` to draw fewer.
  */
 export const DEFAULT_MAX_FPS = 640;
+
+/** How many bytes one pixel takes in a frame: red, green, blue and alpha. */
+export const BYTES_PER_PIXEL = 4;

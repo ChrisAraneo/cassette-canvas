@@ -34,10 +34,16 @@ const WALL: readonly number[] = Object.freeze([
   4 * 9 + 3,
 ]);
 
+const TALL_WALL: readonly number[] = Object.freeze([
+  0 * 7 + 3,
+  1 * 7 + 3,
+  2 * 7 + 3,
+]);
+
 const createLighting = (
   width: number,
   height: number,
-  casters: readonly number[],
+  occluders: readonly number[],
 ): Lighting => ({
   ambient: 0,
   lights: [],
@@ -45,7 +51,7 @@ const createLighting = (
   height,
   occluders: Uint8Array.from(
     times(width * height, (place) =>
-      match(includes(casters, place))
+      match(includes(occluders, place))
         .with(true, () => 1)
         .otherwise(() => 0),
     ),
@@ -168,7 +174,7 @@ describe('computeLightExposure', () => {
 
   it('should return a wedge of shadow behind a wall when the light shines across the screen', () => {
     const exposures = computeLightExposure(
-      createLighting(7, 3, [3, 10, 17]),
+      createLighting(7, 3, TALL_WALL),
       SUN,
     );
 

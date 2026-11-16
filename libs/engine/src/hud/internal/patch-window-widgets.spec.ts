@@ -4,12 +4,14 @@ import type { HudWidget } from '../types/hud-widget';
 import type { HudWindow } from '../types/hud-window';
 import { patchWindowWidgets } from './patch-window-widgets';
 
-const WIDGETS: readonly HudWidget[] = Object.freeze([
+const createWidgets = (): readonly HudWidget[] => [
   { kind: 'LABEL', id: 'fps', page: '', row: 0, column: 0, text: 'FPS 60' },
   { kind: 'LABEL', id: 'clock', page: '', row: 8, column: 0, text: '12:00' },
-]);
+];
 
-const WINDOW: HudWindow = Object.freeze({
+const WIDGETS: readonly HudWidget[] = Object.freeze(createWidgets());
+
+const createWindow = (widgets: readonly HudWidget[]): HudWindow => ({
   id: 'street',
   title: 'STREET',
   row: 0,
@@ -19,8 +21,10 @@ const WINDOW: HudWindow = Object.freeze({
   color: 15,
   closable: true,
   page: '',
-  widgets: WIDGETS,
+  widgets,
 });
+
+const WINDOW: HudWindow = Object.freeze(createWindow(WIDGETS));
 
 describe('patchWindowWidgets', () => {
   it('should return the widget changed when it carries the id', () => {
@@ -44,9 +48,11 @@ describe('patchWindowWidgets', () => {
   });
 
   it('should not change the old window when it changes a widget', () => {
-    patchWindowWidgets(WINDOW, 'street', 'fps', { text: 'FPS 30' });
+    const window = createWindow(createWidgets());
 
-    expect(WINDOW.widgets).toEqual(WIDGETS);
+    patchWindowWidgets(window, 'street', 'fps', { text: 'FPS 30' });
+
+    expect(window).toEqual(createWindow(createWidgets()));
   });
 
   it('should return the same widgets when no widget has the id', () => {

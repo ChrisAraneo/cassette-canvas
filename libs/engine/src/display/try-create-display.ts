@@ -1,9 +1,7 @@
 import { pipe } from 'remeda';
 import { CRT_CONTEXT_ATTRIBUTES } from '../crt/consts';
-import { tryCreateCrt } from '../crt/try-create-crt';
-import { createPalette } from '../palette/create-palette';
-import { DEFAULT_MAX_FPS } from './consts';
 import { computeDisplaySize } from './internal/compute-display-size';
+import { toDisplayDraft } from './internal/to-display-draft';
 import { tryToDisplay } from './internal/try-to-display';
 import type { Display } from './types/display';
 import type { DisplaySettings } from './types/display-settings';
@@ -29,23 +27,13 @@ import type { DisplaySettings } from './types/display-settings';
  */
 export const tryCreateDisplay = (
   canvas: HTMLCanvasElement,
-  { colors, pixelSize, spriteSize, fps = DEFAULT_MAX_FPS }: DisplaySettings,
+  settings: DisplaySettings,
 ): Display | undefined =>
   pipe(
     {
       context: canvas.getContext('webgl', CRT_CONTEXT_ATTRIBUTES) ?? undefined,
-      size: computeDisplaySize(canvas, pixelSize),
+      size: computeDisplaySize(canvas, settings.pixelSize),
     },
-    ({ context, size }) => ({
-      context,
-      crt: tryCreateCrt(context),
-      palette: createPalette(colors),
-      pixelSize,
-      spriteSize,
-      width: size.width,
-      height: size.height,
-      fps,
-      drawnAt: Number.NEGATIVE_INFINITY,
-    }),
+    ({ context, size }) => toDisplayDraft(context, size, settings),
     tryToDisplay,
   );

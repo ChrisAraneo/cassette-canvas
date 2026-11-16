@@ -14,12 +14,12 @@ import { toShadeOffset } from './to-shade-offset';
  * scene keeps its shading instead of washing out to white.
  */
 // Style guide - Appendix B exception 1 (hot numeric kernel).
-// As a pipeline (`times`, with a `sumBy` over the lights for every place),
-// the demo screen at night (320x180, 11 lights) took 6.8 ms per frame (Vite
-// bundle, Node 24). This loop takes 1.2 ms, and 0.28 ms at noon, where one
-// light covers a small part of the screen. Places that no light reaches skip
-// the shade scale: the ambient light on its own always reads back as itself,
-// so skipping it saves 0.4 ms a frame at night and keeps the value exact. It
+// As a pipeline (`times`, with a `sumBy` over the lights for every place), a
+// 320x180 night scene (11 lights) took 6.8 ms per frame (Vite bundle, Node
+// 24). This loop takes 1.2 ms, and 0.28 ms at noon, where one light covers a
+// small part of the screen. Places that no light reaches skip the shade
+// scale: the ambient light on its own always reads back as itself, so
+// skipping it saves 0.4 ms a frame at night and keeps the value exact. It
 // only changes the typed array it creates itself, and the array does not
 // change after it returns it.
 export const computeShadeOffsets = (

@@ -1,24 +1,10 @@
 import { reduceRight, size } from 'lodash-es';
-import { match } from 'ts-pattern';
 import type { HudList } from '../types/hud-list';
 import type { HudListItem } from '../types/hud-list-item';
 import { computeItemPitch } from './compute-item-pitch';
 import { computeListRoom } from './compute-list-room';
-import type { LastPage } from './types/last-page';
-
-const computePageWithItem = (
-  page: LastPage,
-  index: number,
-  pitch: number,
-  room: number,
-): LastPage =>
-  match(!page.full && page.used + pitch <= room)
-    .with(true, () => ({
-      start: index,
-      used: page.used + pitch,
-      full: false,
-    }))
-    .otherwise(() => ({ ...page, full: true }));
+import { computePageWithItem } from './compute-page-with-item';
+import type { HudListLastPage } from './types/hud-list-last-page';
 
 /**
  * Returns the item the last page of a list starts at, which is as far as it
@@ -28,7 +14,7 @@ const computePageWithItem = (
 export const computeListLastPage = (widget: HudList): number =>
   reduceRight(
     widget.items,
-    (page: LastPage, item: HudListItem, index: number) =>
+    (page: HudListLastPage, item: HudListItem, index: number) =>
       computePageWithItem(
         page,
         index,

@@ -3,8 +3,7 @@ import { size } from 'lodash-es';
 import type { Frame } from '../../frame/types/frame';
 import { CHANNEL_MAX, TRANSPARENT } from '../../palette/consts';
 import type { Palette } from '../../palette/types/palette';
-
-const BYTES_PER_PIXEL = 4;
+import { BYTES_PER_PIXEL } from '../consts';
 
 const RED_OFFSET = 0;
 
@@ -15,8 +14,8 @@ const BLUE_OFFSET = 2;
 const ALPHA_OFFSET = 3;
 
 // Style guide - Appendix B exception 1 (hot numeric kernel).
-// As a pipeline (`flatMap` to four bytes per place, one `match` per place),
-// the demo screen (320x180) took 16.5 ms per frame (Vite bundle, Node 24); as
+// As a pipeline (`flatMap` to four bytes per place, one `match` per place), a
+// 320x180 screen took 16.5 ms per frame (Vite bundle, Node 24); as
 // `Uint32Array.from` over packed palette colors it still took 5.8 ms. This
 // loop takes 0.5 ms. Places the palette does not hold stay clear (all four
 // bytes 0). It only changes the typed array it creates itself, and the array

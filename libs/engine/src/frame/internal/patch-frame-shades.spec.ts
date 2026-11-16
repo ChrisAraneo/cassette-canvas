@@ -74,22 +74,39 @@ describe('patchFrameShades', () => {
     expect(pixels).toEqual(Int16Array.from([0x34, 0x94]));
   });
 
-  it('should return the very same overlays, width, and height when it patches the shades', () => {
-    const overlays = OVERLAYS;
-
+  it('should return the very same overlays when it patches the shades', () => {
     expect(
       patchFrameShades({
         pixels: Int16Array.from([0x34]),
         levels: Float64Array.from([0]),
-        overlays,
+        overlays: OVERLAYS,
         width: 1,
         height: 1,
-      }),
-    ).toEqual({
-      frame: [toExtendedPixel(3, 17)],
-      overlays,
-      width: 1,
-      height: 1,
-    });
+      }).overlays,
+    ).toBe(OVERLAYS);
+  });
+
+  it('should return the width it was given when it patches the shades', () => {
+    expect(
+      patchFrameShades({
+        pixels: Int16Array.from([0x34]),
+        levels: Float64Array.from([0]),
+        overlays: OVERLAYS,
+        width: 1,
+        height: 1,
+      }).width,
+    ).toBe(1);
+  });
+
+  it('should return the height it was given when it patches the shades', () => {
+    expect(
+      patchFrameShades({
+        pixels: Int16Array.from([0x34]),
+        levels: Float64Array.from([0]),
+        overlays: OVERLAYS,
+        width: 1,
+        height: 1,
+      }).height,
+    ).toBe(1);
   });
 });

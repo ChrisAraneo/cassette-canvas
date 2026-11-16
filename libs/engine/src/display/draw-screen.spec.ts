@@ -6,6 +6,7 @@ import { TRANSPARENT } from '../palette/consts';
 import { toLitPixel } from '../palette/to-lit-pixel';
 import type { Palette } from '../palette/types/palette';
 import type { Screen } from '../screen/types/screen';
+import { BYTES_PER_PIXEL } from './consts';
 import { drawScreen } from './draw-screen';
 import type { Display } from './types/display';
 
@@ -14,7 +15,11 @@ interface GlCall {
   readonly values: readonly unknown[];
 }
 
-const BYTES_PER_PIXEL = 4;
+const UPLOAD_WIDTH_INDEX = 3;
+
+const UPLOAD_HEIGHT_INDEX = 4;
+
+const UPLOAD_BYTES_INDEX = 8;
 
 const METHODS = Object.freeze([
   'bindTexture',
@@ -92,9 +97,9 @@ describe('drawScreen', () => {
 
     drawScreen(createStubDisplay(calls), createHeroScreen(), DUE_TIME);
 
-    expect(findUpload(calls)?.[3]).toBe(2);
-    expect(findUpload(calls)?.[4]).toBe(1);
-    expect(findUpload(calls)?.[8]).toEqual(
+    expect(findUpload(calls)?.[UPLOAD_WIDTH_INDEX]).toBe(2);
+    expect(findUpload(calls)?.[UPLOAD_HEIGHT_INDEX]).toBe(1);
+    expect(findUpload(calls)?.[UPLOAD_BYTES_INDEX]).toEqual(
       Uint8Array.from([20, 30, 90, 255, 200, 40, 40, 255]),
     );
   });
@@ -108,7 +113,7 @@ describe('drawScreen', () => {
       DUE_TIME,
     );
 
-    expect(findUpload(calls)?.[8]).toEqual(
+    expect(findUpload(calls)?.[UPLOAD_BYTES_INDEX]).toEqual(
       Uint8Array.from([15, 25, 70, 255, 160, 30, 30, 255]),
     );
   });
@@ -122,7 +127,9 @@ describe('drawScreen', () => {
       DUE_TIME,
     );
 
-    expect(findUpload(calls)?.[8]).toEqual(new Uint8Array(2 * BYTES_PER_PIXEL));
+    expect(findUpload(calls)?.[UPLOAD_BYTES_INDEX]).toEqual(
+      new Uint8Array(2 * BYTES_PER_PIXEL),
+    );
   });
 
   it('should pass the time to the monitor effect when it draws the screen, so the grain moves', () => {
@@ -185,6 +192,6 @@ describe('drawScreen', () => {
       0,
     );
 
-    expect(findUpload(calls)?.[3]).toBe(2);
+    expect(findUpload(calls)?.[UPLOAD_WIDTH_INDEX]).toBe(2);
   });
 });

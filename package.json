@@ -1,6 +1,6 @@
 {
   "name": "@chris.araneo/cassette-canvas",
-  "version": "0.4.1",
+  "version": "0.5.0",
   "description": "Retro rendering engine for the HTML canvas.",
   "keywords": [
     "canvas",
@@ -41,16 +41,13 @@
     "docs"
   ],
   "scripts": {
-    "build": "npm run build:lib && npm run build:demo",
-    "build:demo": "vite build",
+    "build": "npm run build:lib",
     "build:lib": "tsdown",
     "check": "npm run typecheck && npm run lint && npm run test",
-    "dev": "vite",
     "format": "sort-package-json && prettier --write .",
     "lint": "eslint .",
     "prepack": "npm run build:lib",
     "prepublishOnly": "npm run check",
-    "preview": "vite preview",
     "test": "vitest run",
     "test:watch": "vitest",
     "typecheck": "tsc --noEmit"

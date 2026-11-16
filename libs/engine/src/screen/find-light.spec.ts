@@ -39,6 +39,14 @@ describe('findLight', () => {
     expect(findLight(createLitScreen([TORCH, LANTERN]), 'sun')).toBeUndefined();
   });
 
+  it('should not change the screen it is given when it finds a light', () => {
+    const screen = createLitScreen([TORCH, LANTERN]);
+
+    findLight(screen, 'lantern');
+
+    expect(screen).toEqual(createLitScreen([TORCH, LANTERN]));
+  });
+
   it('should return no light when the screen has no lights', () => {
     expect(findLight(createLitScreen([]), 'torch')).toBeUndefined();
   });

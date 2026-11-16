@@ -1,24 +1,19 @@
 /* eslint-disable no-restricted-syntax -- Appendix B exception 1, measured below */
 import { floor, size } from 'lodash-es';
-import { match } from 'ts-pattern';
 import { TRANSPARENT } from '../../palette/consts';
 import { isPixel } from '../../palette/is-pixel';
 import type { Screen } from '../../screen/types/screen';
+import { getBackground } from './get-background';
 import type { FrameComposition } from './types/frame-composition';
 
 const SHADOW_CASTER = 1;
 
 // Style guide - Appendix B exception 1 (hot numeric kernel).
 // As a pipeline (one object per sprite pixel, a filter, edits keyed by place,
-// then a fill with the background), composing the demo screen (320x180, 182
-// sprites) took 4.9 ms per frame (Vite bundle, Node 24). This loop takes
-// 0.55 ms. It only changes typed arrays it creates itself, and they do not
-// change after it returns them.
-const getBackground = ({ background }: Screen): number =>
-  match(isPixel(background))
-    .with(true, () => background)
-    .otherwise(() => TRANSPARENT);
-
+// then a fill with the background), composing a 320x180 screen (182 sprites)
+// took 4.9 ms per frame (Vite bundle, Node 24). This loop takes 0.55 ms. It
+// only changes typed arrays it creates itself, and they do not change after
+// it returns them.
 export const computeFramePixels = ({
   screen,
   spriteSize,

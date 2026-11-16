@@ -37,6 +37,10 @@ const INSIDE_ARROW = 5;
 
 const INSIDE_PART = 2;
 
+const INSIDE_THUMB_COLUMN = 3;
+
+const SECOND_LINE_ROW = 14;
+
 const LAYOUT = computeListLayout(LIST);
 
 const SCROLLED: HudList = Object.freeze({ ...LIST, scroll: 1 });
@@ -219,14 +223,14 @@ describe('handleListPress', () => {
       handlePressAt(
         LIST,
         LAYOUT.thumb.row + INSIDE_PART,
-        LAYOUT.thumb.column + 3,
+        LAYOUT.thumb.column + INSIDE_THUMB_COLUMN,
       ).hud.grab,
     ).toEqual({
       kind: 'SCROLL',
       window: 'deck',
       widget: 'tracks',
-      row: 2,
-      column: 3,
+      row: INSIDE_PART,
+      column: INSIDE_THUMB_COLUMN,
     });
   });
 
@@ -324,7 +328,7 @@ describe('handleListPress', () => {
     expect(
       handlePressAt(
         tall,
-        (rect?.row ?? 0) + 14,
+        (rect?.row ?? 0) + SECOND_LINE_ROW,
         (rect?.column ?? 0) + INSIDE_PART,
       ).actions,
     ).toEqual([

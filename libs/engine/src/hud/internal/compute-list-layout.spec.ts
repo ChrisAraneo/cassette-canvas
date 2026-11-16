@@ -14,6 +14,18 @@ import type { HudList } from '../types/hud-list';
 import type { HudListItem } from '../types/hud-list-item';
 import { computeListLayout } from './compute-list-layout';
 
+const ITEM_WIDTH = 66;
+
+const BAR_COLUMN = 68;
+
+const DOWN_ARROW_ROW = 36;
+
+const TRACK_ROW = 12;
+
+const TRACK_HEIGHT = 24;
+
+const THUMB_HEIGHT = 16;
+
 const createItems = (count: number): readonly HudListItem[] =>
   map(times(count), (index) => ({
     id: `${index}`,
@@ -49,12 +61,12 @@ describe('computeListLayout', () => {
     expect(computeListLayout(LIST).items[0]?.rect).toEqual({
       row: HUD_CONTENT_TOP + HUD_PADDING,
       column: HUD_CONTENT_LEFT + HUD_PADDING,
-      width: 66,
+      width: ITEM_WIDTH,
       height: HUD_LIST_ITEM_HEIGHT,
     });
   });
 
-  it('should return the next item one item and one divider below the one before it', () => {
+  it('should return the next item one item and one divider below the one before it when it lays a list out', () => {
     expect(computeListLayout(LIST).items[1]?.rect.row).toBe(
       HUD_CONTENT_TOP + HUD_PADDING + HUD_LIST_ITEM_PITCH,
     );
@@ -76,28 +88,32 @@ describe('computeListLayout', () => {
   it('should return the up arrow inside the top right corner when it lays a list out', () => {
     expect(computeListLayout(LIST).up).toEqual({
       row: HUD_CONTENT_TOP + 1,
-      column: HUD_CONTENT_LEFT + 68,
+      column: HUD_CONTENT_LEFT + BAR_COLUMN,
       width: HUD_LIST_BAR_WIDTH,
       height: HUD_LIST_BAR_WIDTH,
     });
   });
 
   it('should return the down arrow inside the bottom right corner when it lays a list out', () => {
-    expect(computeListLayout(LIST).down).toMatchObject({
-      row: HUD_CONTENT_TOP + 36,
+    expect(computeListLayout(LIST).down).toEqual({
+      row: HUD_CONTENT_TOP + DOWN_ARROW_ROW,
+      column: HUD_CONTENT_LEFT + BAR_COLUMN,
+      width: HUD_LIST_BAR_WIDTH,
       height: HUD_LIST_BAR_WIDTH,
     });
   });
 
   it('should return the track between the two arrows when it lays a list out', () => {
-    expect(computeListLayout(LIST).track).toMatchObject({
-      row: HUD_CONTENT_TOP + 12,
-      height: 24,
+    expect(computeListLayout(LIST).track).toEqual({
+      row: HUD_CONTENT_TOP + TRACK_ROW,
+      column: HUD_CONTENT_LEFT + BAR_COLUMN,
+      width: HUD_LIST_BAR_WIDTH,
+      height: TRACK_HEIGHT,
     });
   });
 
-  it('should return a thumb as tall a part of the track as the items it shows are of the items it holds', () => {
-    expect(computeListLayout(LIST).thumb.height).toBe(16);
+  it('should return a thumb that fills as much of the track as the list shows of its items when it lays one out', () => {
+    expect(computeListLayout(LIST).thumb.height).toBe(THUMB_HEIGHT);
   });
 
   it('should return the thumb at the top of the track when the list is not scrolled', () => {

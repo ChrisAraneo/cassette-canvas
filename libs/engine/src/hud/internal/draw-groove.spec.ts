@@ -4,6 +4,10 @@ import { describe, expect, it } from 'vitest';
 import type { HudRect } from '../types/hud-rect';
 import { drawGroove } from './draw-groove';
 
+const SHADOW = 0x13;
+
+const HIGHLIGHT = 0x17;
+
 const LINE: HudRect = Object.freeze({
   row: 10,
   column: 4,
@@ -13,8 +17,8 @@ const LINE: HudRect = Object.freeze({
 
 describe('drawGroove', () => {
   it('should return the shadow along the first row when it paints a groove', () => {
-    expect(drawGroove(LINE, 0x13, 0x17)[0]).toEqual({
-      pixel: 0x13,
+    expect(drawGroove(LINE, HIGHLIGHT, SHADOW)[0]).toEqual({
+      pixel: SHADOW,
       row: 10,
       column: 4,
       width: 60,
@@ -23,8 +27,8 @@ describe('drawGroove', () => {
   });
 
   it('should return the light along the row below it when it paints a groove', () => {
-    expect(drawGroove(LINE, 0x13, 0x17)[1]).toEqual({
-      pixel: 0x17,
+    expect(drawGroove(LINE, HIGHLIGHT, SHADOW)[1]).toEqual({
+      pixel: HIGHLIGHT,
       row: 11,
       column: 4,
       width: 60,
@@ -33,6 +37,6 @@ describe('drawGroove', () => {
   });
 
   it('should return two lines when it paints a groove', () => {
-    expect(size(drawGroove(LINE, 0x13, 0x17))).toBe(2);
+    expect(size(drawGroove(LINE, HIGHLIGHT, SHADOW))).toBe(2);
   });
 });

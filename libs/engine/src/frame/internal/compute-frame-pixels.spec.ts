@@ -3,6 +3,7 @@ import { describe, expect, it } from 'vitest';
 
 import { TRANSPARENT } from '../../palette/consts';
 import type { Light } from '../../screen/types/light';
+import type { OverlayPlacement } from '../../screen/types/overlay-placement';
 import type { Screen } from '../../screen/types/screen';
 import type { SpritePlacement } from '../../screen/types/sprite-placement';
 import { computeFramePixels } from './compute-frame-pixels';
@@ -23,6 +24,8 @@ const SYMBOLS = invert(PIXELS);
 const LIGHTS: readonly Light[] = Object.freeze([
   { id: 'torch', row: 0, column: 0, radius: 6, intensity: 3 },
 ]);
+
+const OVERLAYS: readonly OverlayPlacement[] = Object.freeze([]);
 
 const createSpritePlacement = (
   sprite: readonly number[],
@@ -50,7 +53,7 @@ const createSpriteScreen = (sprites: readonly SpritePlacement[]): Screen => ({
   ambient: -2,
   sprites,
   lights: LIGHTS,
-  overlays: [],
+  overlays: OVERLAYS,
 });
 
 const computePixels = (
@@ -219,6 +222,17 @@ describe('computeFramePixels', () => {
     });
 
     expect(lighting.lights).toBe(LIGHTS);
+  });
+
+  it('should return the very same overlays of the screen when it composes the pixels', () => {
+    expect(
+      computeFramePixels({
+        screen: createSpriteScreen([]),
+        spriteSize: 1,
+        width: 1,
+        height: 1,
+      }).overlays,
+    ).toBe(OVERLAYS);
   });
 
   it('should return the width and the height for the lighting when it composes the pixels', () => {

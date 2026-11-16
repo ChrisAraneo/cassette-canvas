@@ -17,6 +17,10 @@ const PLAY_COLUMN = 40;
 
 const PLAY_WIDTH = 20;
 
+const SECOND_ITEM_INDEX = 1;
+
+const SECOND_ITEM_BUTTON_INDEX = 3;
+
 const toPlay = (id: string): HudItemWidget => ({
   kind: 'BUTTON',
   id: `play-${id}`,
@@ -104,10 +108,12 @@ describe('toWindowWidgets', () => {
   });
 
   it('should return a widget of an item where it sits when the list shows that item', () => {
-    const rect = computeListLayout(LIST).items[1]?.rect;
+    const rect = computeListLayout(LIST).items[SECOND_ITEM_INDEX]?.rect;
 
     expect(
-      computeWidgetRect(toWindowWidgets(WINDOW)[3]?.widget ?? LIST),
+      computeWidgetRect(
+        toWindowWidgets(WINDOW)[SECOND_ITEM_BUTTON_INDEX]?.widget ?? LIST,
+      ),
     ).toEqual({
       row: (rect?.row ?? 0) + PLAY_ROW,
       column: (rect?.column ?? 0) + PLAY_COLUMN,
@@ -124,6 +130,7 @@ describe('toWindowWidgets', () => {
       'b',
     ]);
   });
+
   it('should return no widgets when the window holds none', () => {
     expect(toIds({ ...WINDOW, widgets: [] })).toEqual([]);
   });

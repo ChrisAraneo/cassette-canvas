@@ -1,26 +1,12 @@
 import { match, P } from 'ts-pattern';
 import { findHudWidget } from '../find-hud-widget';
 import { findHudWindow } from '../find-hud-window';
-import { patchHudWidget } from '../patch-hud-widget';
 import type { Hud } from '../types/hud';
 import type { HudChange } from '../types/hud-change';
 import type { HudGrab } from '../types/hud-grab';
-import type { HudList } from '../types/hud-list';
-import { computeListThumbScroll } from './compute-list-thumb-scroll';
+import { toThumbScrolled } from './to-thumb-scrolled';
 
 const { nonNullable } = P;
-
-const toScrolled = (
-  hud: Hud,
-  grab: HudGrab,
-  widget: HudList,
-  top: number,
-): HudChange => ({
-  hud: patchHudWidget(hud, grab.window, grab.widget, {
-    scroll: computeListThumbScroll(widget, top),
-  }),
-  actions: [],
-});
 
 /**
  * Scrolls the list whose thumb the pointer is holding, so the spot the
@@ -41,6 +27,6 @@ export const patchListScroll = (
     .with(
       { window: nonNullable, widget: { kind: 'LIST' } },
       ({ window, widget }) =>
-        toScrolled(hud, grab, widget, row - window.row - grab.row),
+        toThumbScrolled(hud, grab, widget, row - window.row - grab.row),
     )
     .otherwise((): HudChange => ({ hud, actions: [] }));

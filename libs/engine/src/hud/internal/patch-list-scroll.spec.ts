@@ -40,6 +40,8 @@ const THUMB_ROOM = LAYOUT.track.height - LAYOUT.thumb.height;
 
 const WINDOW_ROW = 10;
 
+const FAR_PAST_TRACK = 400;
+
 const GRAB_ROW = 4;
 
 const GRAB: HudGrab = Object.freeze({
@@ -102,7 +104,7 @@ describe('patchListScroll', () => {
   it('should return the last page when the thumb is dragged past the end of the track', () => {
     expect(
       findHudWidget(
-        patchScrollTo(LAYOUT.track.row + 400).hud,
+        patchScrollTo(LAYOUT.track.row + FAR_PAST_TRACK).hud,
         'tape',
         'tracks',
       ),
@@ -112,7 +114,8 @@ describe('patchListScroll', () => {
   it('should return the first item when the thumb is dragged above the track', () => {
     expect(
       findHudWidget(
-        patchScrollTo(LAYOUT.track.row - 400, { ...LIST, scroll: 2 }).hud,
+        patchScrollTo(LAYOUT.track.row - FAR_PAST_TRACK, { ...LIST, scroll: 2 })
+          .hud,
         'tape',
         'tracks',
       ),
@@ -125,6 +128,14 @@ describe('patchListScroll', () => {
 
   it('should return no actions when the thumb is dragged', () => {
     expect(patchScrollTo(LAYOUT.track.row + THUMB_ROOM).actions).toEqual([]);
+  });
+
+  it('should not change the old HUD when it scrolls a list', () => {
+    const hud = createTapeHud();
+
+    patchListScroll(hud, GRAB, toPointerRow(LAYOUT.track.row + THUMB_ROOM));
+
+    expect(hud).toEqual(createTapeHud());
   });
 
   it('should return the very same HUD when the grab names a window that is gone', () => {

@@ -3,7 +3,7 @@ import { describe, expect, it } from 'vitest';
 import type { HudWindow } from '../types/hud-window';
 import { patchMatchingWindow } from './patch-matching-window';
 
-const WINDOW: HudWindow = Object.freeze({
+const createWindow = (): HudWindow => ({
   id: 'street',
   title: 'STREET',
   row: 10,
@@ -15,6 +15,8 @@ const WINDOW: HudWindow = Object.freeze({
   page: 'scene',
   widgets: [],
 });
+
+const WINDOW: HudWindow = Object.freeze(createWindow());
 
 describe('patchMatchingWindow', () => {
   it('should return every change when the window carries the id', () => {
@@ -52,20 +54,11 @@ describe('patchMatchingWindow', () => {
   });
 
   it('should not change the old window when it changes one', () => {
-    patchMatchingWindow(WINDOW, 'street', { row: 1, title: 'NOTES' });
+    const window = createWindow();
 
-    expect(WINDOW).toEqual({
-      id: 'street',
-      title: 'STREET',
-      row: 10,
-      column: 20,
-      width: 90,
-      height: 76,
-      color: 15,
-      closable: true,
-      page: 'scene',
-      widgets: [],
-    });
+    patchMatchingWindow(window, 'street', { row: 1, title: 'NOTES' });
+
+    expect(window).toEqual(createWindow());
   });
 
   it('should return the very same window when the id does not match', () => {

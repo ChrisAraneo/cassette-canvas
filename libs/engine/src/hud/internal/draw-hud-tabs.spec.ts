@@ -4,7 +4,12 @@ import { describe, expect, it } from 'vitest';
 
 import type { OverlayPaint } from '../../overlay/types/overlay-paint';
 import { toPixel } from '../../palette/to-pixel';
-import { HUD_CONTENT_LEFT, HUD_TAB_DROP } from '../consts';
+import {
+  DEFAULT_HUD_COLOR,
+  HUD_CONTENT_LEFT,
+  HUD_EDGE,
+  HUD_TAB_DROP,
+} from '../consts';
 import { createHud } from '../create-hud';
 import type { HudTabs } from '../types/hud-tabs';
 import type { HudWindow } from '../types/hud-window';
@@ -33,7 +38,7 @@ const createWindow = (page: string): HudWindow => ({
   column: 0,
   width: 90,
   height: 76,
-  color: 15,
+  color: DEFAULT_HUD_COLOR,
   closable: true,
   page,
   widgets: [TABS],
@@ -56,7 +61,7 @@ describe('drawHudTabs', () => {
     expect(
       filterFills(
         drawHudTabs(createHud(), createWindow('scene'), TABS),
-        toPixel(15, THEME.face),
+        toPixel(DEFAULT_HUD_COLOR, THEME.face),
       )[0],
     ).toMatchObject(computeTabRects(TABS)[0] ?? {});
   });
@@ -65,7 +70,7 @@ describe('drawHudTabs', () => {
     expect(
       filterFills(
         drawHudTabs(createHud(), createWindow('scene'), TABS),
-        toPixel(15, THEME.body),
+        toPixel(DEFAULT_HUD_COLOR, THEME.body),
       )[0],
     ).toMatchObject({
       row: (computeTabRects(TABS)[1]?.row ?? 0) + HUD_TAB_DROP,
@@ -76,17 +81,17 @@ describe('drawHudTabs', () => {
     expect(
       filterFills(
         drawHudTabs(createHud(), createWindow('scene'), TABS),
-        toPixel(15, THEME.highlight),
+        toPixel(DEFAULT_HUD_COLOR, THEME.highlight),
       ),
     ).toContainEqual({
-      pixel: toPixel(15, THEME.highlight),
+      pixel: toPixel(DEFAULT_HUD_COLOR, THEME.highlight),
       row:
         (computeTabRects(TABS)[0]?.height ?? 0) -
-        1 +
+        HUD_EDGE +
         (computeTabRects(TABS)[0]?.row ?? 0),
       column: HUD_CONTENT_LEFT,
       width: computeContentWidth(createWindow('scene')),
-      height: 1,
+      height: HUD_EDGE,
     });
   });
 
@@ -94,7 +99,7 @@ describe('drawHudTabs', () => {
     expect(
       filterFills(
         drawHudTabs(createHud(), createWindow(''), TABS),
-        toPixel(15, THEME.face),
+        toPixel(DEFAULT_HUD_COLOR, THEME.face),
       ),
     ).toEqual([]);
   });
@@ -105,7 +110,7 @@ describe('drawHudTabs', () => {
     expect(
       findIndex(paints, (paint) =>
         match(paint)
-          .with({ pixel: toPixel(15, THEME.face) }, () => true)
+          .with({ pixel: toPixel(DEFAULT_HUD_COLOR, THEME.face) }, () => true)
           .otherwise(() => false),
       ),
     ).toBeGreaterThan(
@@ -113,7 +118,7 @@ describe('drawHudTabs', () => {
         match(paint)
           .with(
             {
-              pixel: toPixel(15, THEME.highlight),
+              pixel: toPixel(DEFAULT_HUD_COLOR, THEME.highlight),
               width: computeContentWidth(createWindow('light')),
             },
             () => true,
@@ -122,6 +127,7 @@ describe('drawHudTabs', () => {
       ),
     );
   });
+
   it('should return only the line under the tabs when the strip holds none', () => {
     expect(
       size(

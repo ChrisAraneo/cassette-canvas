@@ -6,15 +6,18 @@ import { drawOverlay } from './draw-overlay';
 import { toOverlay } from './to-overlay';
 import type { OverlayPaint } from './types/overlay-paint';
 
-const BLANK = TRANSPARENT;
-
 const createPaints = (): OverlayPaint[] => [
   { pixel: 0x35, row: 0, column: 0, width: 2, height: 1 },
 ];
 
 describe('drawOverlay', () => {
   it('should return transparent pixels when no step reaches a place', () => {
-    expect(drawOverlay(2, 2, []).pixels).toEqual([BLANK, BLANK, BLANK, BLANK]);
+    expect(drawOverlay(2, 2, []).pixels).toEqual([
+      TRANSPARENT,
+      TRANSPARENT,
+      TRANSPARENT,
+      TRANSPARENT,
+    ]);
   });
 
   it('should return the rectangle a fill step asks for when it draws an overlay', () => {
@@ -22,7 +25,7 @@ describe('drawOverlay', () => {
       drawOverlay(3, 2, [
         { pixel: 0x35, row: 0, column: 1, width: 2, height: 1 },
       ]).pixels,
-    ).toEqual([BLANK, 0x35, 0x35, BLANK, BLANK, BLANK]);
+    ).toEqual([TRANSPARENT, 0x35, 0x35, TRANSPARENT, TRANSPARENT, TRANSPARENT]);
   });
 
   it('should return an image at its row and column when a step holds one', () => {
@@ -30,7 +33,7 @@ describe('drawOverlay', () => {
       drawOverlay(3, 2, [
         { image: toOverlay(['ox'], { o: 0x35, x: 0x17 }), row: 1, column: 1 },
       ]).pixels,
-    ).toEqual([BLANK, BLANK, BLANK, BLANK, 0x35, 0x17]);
+    ).toEqual([TRANSPARENT, TRANSPARENT, TRANSPARENT, TRANSPARENT, 0x35, 0x17]);
   });
 
   it('should return a later step over an earlier one when they overlap', () => {
@@ -65,7 +68,7 @@ describe('drawOverlay', () => {
       drawOverlay(2, 2, [
         { pixel: 0x35, row: -1, column: 1, width: 4, height: 2 },
       ]).pixels,
-    ).toEqual([BLANK, 0x35, BLANK, BLANK]);
+    ).toEqual([TRANSPARENT, 0x35, TRANSPARENT, TRANSPARENT]);
   });
 
   it('should return no parts of an image when they fall outside', () => {

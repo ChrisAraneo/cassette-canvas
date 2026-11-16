@@ -1,23 +1,10 @@
 import { reduce } from 'lodash-es';
-import { match } from 'ts-pattern';
 import type { HudListItem } from '../types/hud-list-item';
+import { computeFitWithItem } from './compute-fit-with-item';
 import { computeItemPitch } from './compute-item-pitch';
-import type { ItemFit } from './types/item-fit';
+import type { HudListItemFit } from './types/hud-list-item-fit';
 
-const START: ItemFit = Object.freeze({ count: 0, used: 0, full: false });
-
-const computeFitWithItem = (
-  fit: ItemFit,
-  pitch: number,
-  room: number,
-): ItemFit =>
-  match(!fit.full && fit.used + pitch <= room)
-    .with(true, () => ({
-      count: fit.count + 1,
-      used: fit.used + pitch,
-      full: false,
-    }))
-    .otherwise(() => ({ ...fit, full: true }));
+const START: HudListItemFit = Object.freeze({ count: 0, used: 0, full: false });
 
 /**
  * Returns how many of the items it is given fit in `room` rows, counting
@@ -31,7 +18,7 @@ export const countFittingItems = (
 ): number =>
   reduce(
     items,
-    (fit: ItemFit, item: HudListItem) =>
+    (fit: HudListItemFit, item: HudListItem) =>
       computeFitWithItem(fit, computeItemPitch(item), room),
     START,
   ).count;

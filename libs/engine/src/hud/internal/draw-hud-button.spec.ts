@@ -10,13 +10,15 @@ import { computeTextWidth } from './compute-text-width';
 import { computeWidgetRect } from './compute-widget-rect';
 import { drawHudButton } from './draw-hud-button';
 
+const BUTTON_WIDTH = 40;
+
 const BUTTON: HudButton = Object.freeze({
   kind: 'BUTTON',
   id: 'skip',
   page: '',
   row: 0,
   column: 0,
-  width: 40,
+  width: BUTTON_WIDTH,
   text: 'SKIP',
 });
 
@@ -64,7 +66,7 @@ describe('drawHudButton', () => {
     expect(last(drawHudButton(createHud(), WINDOW, BUTTON))).toMatchObject({
       column:
         computeWidgetRect(BUTTON).column +
-        floor((40 - computeTextWidth('SKIP')) / 2),
+        floor((BUTTON_WIDTH - computeTextWidth('SKIP')) / 2),
     });
   });
 

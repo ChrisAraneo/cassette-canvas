@@ -7,6 +7,7 @@ import { COLOR_COUNT, EXTENDED_SHADE_COUNT } from '../palette/consts';
 import type { PaletteColors } from '../palette/types/palette-colors';
 import { DEFAULT_MAX_FPS } from './consts';
 import { tryCreateDisplay } from './try-create-display';
+import type { DisplaySettings } from './types/display-settings';
 
 const COLORS: PaletteColors = [
   '#7f7f7f',
@@ -27,7 +28,17 @@ const COLORS: PaletteColors = [
   '#d4a373',
 ];
 
-const SETTINGS = Object.freeze({ colors: COLORS, pixelSize: 4, spriteSize: 8 });
+const PIXEL_SIZE = 4;
+
+const SPRITE_SIZE = 8;
+
+const createSettings = (): DisplaySettings => ({
+  colors: COLORS,
+  pixelSize: PIXEL_SIZE,
+  spriteSize: SPRITE_SIZE,
+});
+
+const SETTINGS = Object.freeze(createSettings());
 
 const createContext = (compiles: boolean): WebGLRenderingContext =>
   ({
@@ -163,8 +174,10 @@ describe('tryCreateDisplay', () => {
   });
 
   it('should not change the settings it was given when it creates a display', () => {
-    tryCreateDisplay(createCanvas(createContext(true)), SETTINGS);
+    const settings = createSettings();
 
-    expect(SETTINGS).toEqual({ colors: COLORS, pixelSize: 4, spriteSize: 8 });
+    tryCreateDisplay(createCanvas(createContext(true)), settings);
+
+    expect(settings).toEqual(createSettings());
   });
 });

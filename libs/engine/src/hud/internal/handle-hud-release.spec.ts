@@ -97,6 +97,7 @@ describe('handleHudRelease', () => {
 
     expect([change.hud.grab, change.actions]).toEqual([undefined, []]);
   });
+
   it('should return no grab and no actions when the pointer lets a thumb go', () => {
     const change = handleHudRelease(
       {

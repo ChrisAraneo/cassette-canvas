@@ -1,8 +1,8 @@
 import { TEXT_HEIGHT } from '../text/consts';
 
 /**
- * The base color of a HUD, as a palette color index. In the palette the demo
- * builds, color 15 is the sand color, the closest one to beige.
+ * The base color of a HUD, as a palette color index. In the example palette
+ * in the docs, color 15 is the sand color, the closest one to beige.
  */
 export const DEFAULT_HUD_COLOR = 15;
 

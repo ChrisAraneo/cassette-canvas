@@ -10,6 +10,18 @@ interface UniformCall {
   readonly values: readonly unknown[];
 }
 
+const PICTURE_WIDTH = 192;
+
+const PICTURE_HEIGHT = 128;
+
+const PIXEL_SIZE = 4;
+
+const CANVAS_WIDTH = 768;
+
+const CANVAS_HEIGHT = 512;
+
+const FIRST_TEXTURE_UNIT = 0;
+
 const PROGRAM = Object.freeze({ name: 'program' });
 
 const UNIFORMS = Object.freeze({
@@ -20,24 +32,26 @@ const UNIFORMS = Object.freeze({
   time: 'time',
 });
 
-const CRT = {
-  program: PROGRAM,
-  uniforms: UNIFORMS,
-} as unknown as Crt;
+const createCrt = (): Crt =>
+  ({ program: PROGRAM, uniforms: UNIFORMS }) as unknown as Crt;
 
-const PICTURE: CrtPicture = Object.freeze({
+const CRT = Object.freeze(createCrt());
+
+const createPicture = (): CrtPicture => ({
   bytes: new Uint8ClampedArray(0),
-  width: 192,
-  height: 128,
-  pixelSize: 4,
+  width: PICTURE_WIDTH,
+  height: PICTURE_HEIGHT,
+  pixelSize: PIXEL_SIZE,
 });
+
+const PICTURE: CrtPicture = Object.freeze(createPicture());
 
 const TIME = 1500;
 
 const createContext = (calls: UniformCall[]): WebGLRenderingContext =>
   ({
-    drawingBufferWidth: 768,
-    drawingBufferHeight: 512,
+    drawingBufferWidth: CANVAS_WIDTH,
+    drawingBufferHeight: CANVAS_HEIGHT,
     useProgram: (...values: unknown[]) =>
       calls.push({ name: 'useProgram', values }),
     uniform1i: (...values: unknown[]) =>
@@ -73,10 +87,16 @@ describe('patchCrtUniforms', () => {
     });
 
     expect(tail(calls)).toEqual([
-      { name: 'uniform1i', values: ['frame', 0] },
-      { name: 'uniform2f', values: ['frameSize', 192, 128] },
-      { name: 'uniform2f', values: ['canvasSize', 768, 512] },
-      { name: 'uniform1f', values: ['pixelSize', 4] },
+      { name: 'uniform1i', values: ['frame', FIRST_TEXTURE_UNIT] },
+      {
+        name: 'uniform2f',
+        values: ['frameSize', PICTURE_WIDTH, PICTURE_HEIGHT],
+      },
+      {
+        name: 'uniform2f',
+        values: ['canvasSize', CANVAS_WIDTH, CANVAS_HEIGHT],
+      },
+      { name: 'uniform1f', values: ['pixelSize', PIXEL_SIZE] },
       { name: 'uniform1f', values: ['time', TIME] },
     ]);
   });
@@ -102,21 +122,11 @@ describe('patchCrtUniforms', () => {
   });
 
   it('should not change the monitor or the picture it was given when it patches the uniforms', () => {
-    patchCrtUniforms({
-      context: createContext([]),
-      crt: CRT,
-      picture: PICTURE,
-      time: TIME,
-    });
+    const crt = createCrt();
+    const picture = createPicture();
 
-    expect([CRT, PICTURE]).toEqual([
-      { program: PROGRAM, uniforms: UNIFORMS },
-      {
-        bytes: new Uint8ClampedArray(0),
-        width: 192,
-        height: 128,
-        pixelSize: 4,
-      },
-    ]);
+    patchCrtUniforms({ context: createContext([]), crt, picture, time: TIME });
+
+    expect([crt, picture]).toEqual([createCrt(), createPicture()]);
   });
 });

@@ -2,53 +2,12 @@ import { match, P } from 'ts-pattern';
 import { findHudWindow } from '../find-hud-window';
 import type { Hud } from '../types/hud';
 import type { HudChange } from '../types/hud-change';
-import type { HudWindow } from '../types/hud-window';
 import { findHudHit } from './find-hud-hit';
-import { handleWidgetPress } from './handle-widget-press';
+import { handleWindowPart } from './handle-window-part';
 import { patchTopWindow } from './patch-top-window';
 import { toIdleChange } from './to-idle-change';
-import type { HudHit } from './types/hud-hit';
 
 const { nonNullable } = P;
-
-const handleWindowPart = (
-  hud: Hud,
-  window: HudWindow,
-  hit: HudHit,
-  row: number,
-  column: number,
-): HudChange =>
-  match(hit.part)
-    .with('CLOSE', (): HudChange => ({
-      hud: {
-        ...hud,
-        focus: undefined,
-        grab: {
-          kind: 'CLOSE',
-          window: window.id,
-          widget: '',
-          row,
-          column,
-        },
-      },
-      actions: [],
-    }))
-    .with('TITLE', (): HudChange => ({
-      hud: {
-        ...hud,
-        focus: undefined,
-        grab: {
-          kind: 'DRAG',
-          window: window.id,
-          widget: '',
-          row,
-          column,
-        },
-      },
-      actions: [],
-    }))
-    .with('WIDGET', () => handleWidgetPress(hud, hit, row, column))
-    .otherwise(() => toIdleChange(hud));
 
 /**
  * Handles a pointer press at a logical pixel. The window it finds comes to

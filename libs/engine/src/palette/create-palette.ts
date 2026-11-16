@@ -16,7 +16,8 @@ import type { PaletteColors } from './types/palette-colors';
  */
 export const createPalette = (colors: PaletteColors): Palette =>
   pipe(
-    map(colors, toRgb),
+    colors,
+    (given) => map(given, toRgb),
     (bases) => flatMap(bases, createPaletteEntries),
-    (entries) => fromPairs(entries),
+    fromPairs,
   );

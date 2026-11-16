@@ -1,18 +1,8 @@
-import { flatMap, map, max, size, times } from 'lodash-es';
-import { TRANSPARENT } from '../palette/consts';
+import { size } from 'lodash-es';
 import type { SpriteLegend } from '../palette/types/sprite-legend';
+import { toOverlayPixels } from './internal/to-overlay-pixels';
+import { toOverlayWidth } from './internal/to-overlay-width';
 import type { Overlay } from './types/overlay';
-
-const toWidth = (rows: readonly string[]): number => max(map(rows, size)) ?? 0;
-
-const toPixels = (
-  rows: readonly string[],
-  width: number,
-  legend: SpriteLegend,
-): number[] =>
-  flatMap(rows, (row) =>
-    times(width, (column) => legend[row[column] ?? ''] ?? TRANSPARENT),
-  );
 
 /**
  * Builds an overlay from text art: one string per row, one character per
@@ -24,7 +14,7 @@ export const toOverlay = (
   rows: readonly string[],
   legend: SpriteLegend,
 ): Overlay => ({
-  width: toWidth(rows),
+  width: toOverlayWidth(rows),
   height: size(rows),
-  pixels: toPixels(rows, toWidth(rows), legend),
+  pixels: toOverlayPixels(rows, toOverlayWidth(rows), legend),
 });

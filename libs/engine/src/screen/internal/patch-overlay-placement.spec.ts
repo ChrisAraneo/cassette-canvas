@@ -6,12 +6,14 @@ import { patchOverlayPlacement } from './patch-overlay-placement';
 
 const BADGE = createOverlay(1, 1, 0x17);
 
-const PANEL: OverlayPlacement = Object.freeze({
+const createPanel = (): OverlayPlacement => ({
   id: 'panel',
   overlay: createOverlay(2, 1, 0x35),
   row: 1,
   column: 2,
 });
+
+const PANEL: OverlayPlacement = Object.freeze(createPanel());
 
 describe('patchOverlayPlacement', () => {
   it('should return every change applied when the overlay carries the id', () => {
@@ -32,14 +34,11 @@ describe('patchOverlayPlacement', () => {
   });
 
   it('should not change the old placement when it changes one', () => {
-    patchOverlayPlacement(PANEL, 'panel', { row: 7, column: 8 });
+    const panel = createPanel();
 
-    expect(PANEL).toEqual({
-      id: 'panel',
-      overlay: createOverlay(2, 1, 0x35),
-      row: 1,
-      column: 2,
-    });
+    patchOverlayPlacement(panel, 'panel', { row: 7, column: 8 });
+
+    expect(panel).toEqual(createPanel());
   });
 
   it('should return the very same placement when the id does not match', () => {

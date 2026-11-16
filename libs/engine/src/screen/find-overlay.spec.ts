@@ -14,6 +14,14 @@ const createHudScreen = (): Screen => ({
   overlays: [{ id: 'panel', overlay: PANEL, row: 1, column: 2 }],
 });
 
+const createBareScreen = (): Screen => ({
+  background: 0x91,
+  ambient: 0,
+  sprites: [],
+  lights: [],
+  overlays: [],
+});
+
 describe('findOverlay', () => {
   it('should return the overlay when the screen holds the id', () => {
     expect(findOverlay(createHudScreen(), 'panel')).toEqual({
@@ -26,6 +34,10 @@ describe('findOverlay', () => {
 
   it('should return no overlay when no overlay has the id', () => {
     expect(findOverlay(createHudScreen(), 'ghost')).toBeUndefined();
+  });
+
+  it('should return no overlay when the screen holds no overlay', () => {
+    expect(findOverlay(createBareScreen(), 'panel')).toBeUndefined();
   });
 
   it('should not change the screen it is given when it finds an overlay', () => {

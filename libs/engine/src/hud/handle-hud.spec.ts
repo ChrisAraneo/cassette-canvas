@@ -31,12 +31,16 @@ const WIDGETS: readonly HudWidget[] = Object.freeze([
   },
 ]);
 
+const STREET_ROW = 10;
+
+const STREET_COLUMN = 20;
+
 const createStreetHud = (): Hud =>
   addHudWindow(createHud(), {
     id: 'street',
     title: 'STREET',
-    row: 10,
-    column: 20,
+    row: STREET_ROW,
+    column: STREET_COLUMN,
     width: 90,
     height: 76,
     widgets: WIDGETS,
@@ -89,11 +93,32 @@ const PLAY_ROW = 20;
 
 const PLAY_COLUMN = 50;
 
+const TITLE_BAR_ROW = 16;
+
+const TITLE_BAR_COLUMN = 30;
+
+const CLOSE_BOX_COLUMN = 101;
+
+const DRAG_DISTANCE = 10;
+
+const SKIP_ROW = 30;
+
+const SKIP_COLUMN = 30;
+
+const NOTE_ROW = 48;
+
+const NOTE_COLUMN = 30;
+
+const ITEM_COLUMN = 10;
+
 describe('handleHud', () => {
   it('should return a grab on the window when a press lands on its title bar', () => {
     expect(
-      handleHud(createStreetHud(), { kind: 'PRESS', row: 16, column: 30 }).hud
-        .grab,
+      handleHud(createStreetHud(), {
+        kind: 'PRESS',
+        row: TITLE_BAR_ROW,
+        column: TITLE_BAR_COLUMN,
+      }).hud.grab,
     ).toMatchObject({ kind: 'DRAG', window: 'street' });
   });
 
@@ -101,21 +126,34 @@ describe('handleHud', () => {
     expect(
       findHudWindow(
         handleHud(
-          handleHud(createStreetHud(), { kind: 'PRESS', row: 16, column: 30 })
-            .hud,
-          { kind: 'MOVE', row: 26, column: 40 },
+          handleHud(createStreetHud(), {
+            kind: 'PRESS',
+            row: TITLE_BAR_ROW,
+            column: TITLE_BAR_COLUMN,
+          }).hud,
+          {
+            kind: 'MOVE',
+            row: TITLE_BAR_ROW + DRAG_DISTANCE,
+            column: TITLE_BAR_COLUMN + DRAG_DISTANCE,
+          },
         ).hud,
         'street',
       ),
-    ).toMatchObject({ row: 20, column: 30 });
+    ).toMatchObject({
+      row: STREET_ROW + DRAG_DISTANCE,
+      column: STREET_COLUMN + DRAG_DISTANCE,
+    });
   });
 
   it('should return a click action when a press and a release land on a button', () => {
     expect(
       handleHud(
-        handleHud(createStreetHud(), { kind: 'PRESS', row: 30, column: 30 })
-          .hud,
-        { kind: 'RELEASE', row: 30, column: 30 },
+        handleHud(createStreetHud(), {
+          kind: 'PRESS',
+          row: SKIP_ROW,
+          column: SKIP_COLUMN,
+        }).hud,
+        { kind: 'RELEASE', row: SKIP_ROW, column: SKIP_COLUMN },
       ).actions,
     ).toEqual([{ kind: 'CLICK', window: 'street', widget: 'skip', value: '' }]);
   });
@@ -152,8 +190,11 @@ describe('handleHud', () => {
 
   it('should return the item selected when a press lands on it beside the button on it', () => {
     expect(
-      handleHud(createTapeHud(), { kind: 'PRESS', row: PLAY_ROW, column: 10 })
-        .actions,
+      handleHud(createTapeHud(), {
+        kind: 'PRESS',
+        row: PLAY_ROW,
+        column: ITEM_COLUMN,
+      }).actions,
     ).toEqual([
       { kind: 'SELECT', window: 'tape', widget: 'tracks', value: 'a' },
     ]);
@@ -162,8 +203,11 @@ describe('handleHud', () => {
   it('should return the typed character in the field when a press set the focus on it', () => {
     expect(
       handleHud(
-        handleHud(createStreetHud(), { kind: 'PRESS', row: 48, column: 30 })
-          .hud,
+        handleHud(createStreetHud(), {
+          kind: 'PRESS',
+          row: NOTE_ROW,
+          column: NOTE_COLUMN,
+        }).hud,
         { kind: 'KEY', key: 'A' },
       ).actions,
     ).toEqual([{ kind: 'TYPE', window: 'street', widget: 'note', value: 'A' }]);
@@ -172,16 +216,23 @@ describe('handleHud', () => {
   it('should return the HUD without the window when a press and a release land on its close box', () => {
     expect(
       handleHud(
-        handleHud(createStreetHud(), { kind: 'PRESS', row: 16, column: 101 })
-          .hud,
-        { kind: 'RELEASE', row: 16, column: 101 },
+        handleHud(createStreetHud(), {
+          kind: 'PRESS',
+          row: TITLE_BAR_ROW,
+          column: CLOSE_BOX_COLUMN,
+        }).hud,
+        { kind: 'RELEASE', row: TITLE_BAR_ROW, column: CLOSE_BOX_COLUMN },
       ).hud.windows,
     ).toEqual([]);
   });
 
   it('should return the HUD as it was when it holds no windows', () => {
     expect(
-      handleHud(createHud(), { kind: 'PRESS', row: 16, column: 30 }).hud,
+      handleHud(createHud(), {
+        kind: 'PRESS',
+        row: TITLE_BAR_ROW,
+        column: TITLE_BAR_COLUMN,
+      }).hud,
     ).toEqual(createHud());
   });
 
@@ -194,7 +245,11 @@ describe('handleHud', () => {
   it('should not change the HUD it is given when it handles an event', () => {
     const hud = createStreetHud();
 
-    handleHud(hud, { kind: 'PRESS', row: 16, column: 30 });
+    handleHud(hud, {
+      kind: 'PRESS',
+      row: TITLE_BAR_ROW,
+      column: TITLE_BAR_COLUMN,
+    });
 
     expect(hud).toEqual(createStreetHud());
   });

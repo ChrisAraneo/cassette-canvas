@@ -128,6 +128,7 @@ describe('drawHudWindow', () => {
 
   it('should return an overlay of the size of the window when it draws one', () => {
     const hud = createStreetHud();
+
     const { overlay } = drawHudWindow(hud, toWindow(hud));
 
     expect([overlay.width, overlay.height, size(overlay.pixels)]).toEqual([
@@ -186,6 +187,7 @@ describe('drawHudWindow', () => {
 
   it('should return only the widgets of the open page when it draws a window', () => {
     const hud = createStreetHud();
+
     const scene = drawHudWindow(hud, toWindow(hud)).overlay.pixels;
     const light = drawHudWindow(hud, {
       ...toWindow(hud),
@@ -194,6 +196,7 @@ describe('drawHudWindow', () => {
 
     expect(scene).not.toEqual(light);
   });
+
   it('should return the frame of the window alone when it holds no widgets', () => {
     const hud = createTapeHud([]);
     const bare = toWindow(hud);

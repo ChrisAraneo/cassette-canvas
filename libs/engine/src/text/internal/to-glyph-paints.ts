@@ -1,49 +1,10 @@
 import { reduce, split } from 'lodash-es';
-import { match, P } from 'ts-pattern';
 import type { OverlayPaint } from '../../overlay/types/overlay-paint';
-import { TEXT_ASCENT, TEXT_UNKNOWN_ADVANCE } from '../consts';
 import type { TextPixels } from '../types/text-pixels';
-import { GLYPHS } from './glyphs';
-import { toGlyphOverlay } from './to-glyph-overlay';
-import { toTextPixel } from './to-text-pixel';
-import type { Glyph } from './types/glyph';
+import { addGlyph } from './add-glyph';
 import type { GlyphRun } from './types/glyph-run';
 
-const { nonNullable } = P;
-
 const START: GlyphRun = Object.freeze({ column: 0, paints: [] });
-
-const toDrawnRun = (
-  run: GlyphRun,
-  glyph: Glyph,
-  pixels: TextPixels,
-  index: number,
-): GlyphRun => ({
-  column: run.column + glyph.advance,
-  paints: [
-    ...run.paints,
-    {
-      image: toGlyphOverlay(glyph, toTextPixel(pixels, index)),
-      row: TEXT_ASCENT + glyph.top,
-      column: run.column,
-    },
-  ],
-});
-
-const toSkippedRun = (run: GlyphRun): GlyphRun => ({
-  column: run.column + TEXT_UNKNOWN_ADVANCE,
-  paints: run.paints,
-});
-
-const addGlyph = (
-  run: GlyphRun,
-  character: string,
-  pixels: TextPixels,
-  index: number,
-): GlyphRun =>
-  match(GLYPHS[character])
-    .with(nonNullable, (glyph) => toDrawnRun(run, glyph, pixels, index))
-    .otherwise(() => toSkippedRun(run));
 
 /**
  * Lays a line of text out as paint steps, one per character the font knows,

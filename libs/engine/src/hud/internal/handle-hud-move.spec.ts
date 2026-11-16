@@ -11,14 +11,28 @@ import type { HudListItem } from '../types/hud-list-item';
 import { computeListLayout } from './compute-list-layout';
 import { handleHudMove } from './handle-hud-move';
 
+const WINDOW_ROW = 10;
+
+const WINDOW_COLUMN = 20;
+
+const WINDOW_WIDTH = 90;
+
+const WINDOW_HEIGHT = 76;
+
+const SCREEN_WIDTH = 160;
+
+const SCREEN_HEIGHT = 90;
+
+const THUMB_DRAG = 4;
+
 const createStreetHud = (hud: Hud = createHud()): Hud =>
   addHudWindow(hud, {
     id: 'street',
     title: 'STREET',
-    row: 10,
-    column: 20,
-    width: 90,
-    height: 76,
+    row: WINDOW_ROW,
+    column: WINDOW_COLUMN,
+    width: WINDOW_WIDTH,
+    height: WINDOW_HEIGHT,
   });
 
 const createDraggingHud = (hud: Hud = createHud()): Hud => ({
@@ -52,8 +66,8 @@ const createScrollingHud = (): Hud => ({
   ...addHudWindow(createHud(), {
     id: 'tape',
     title: 'TAPE',
-    row: 10,
-    column: 20,
+    row: WINDOW_ROW,
+    column: WINDOW_COLUMN,
     width: 90,
     height: 80,
     widgets: [TRACKS],
@@ -62,7 +76,9 @@ const createScrollingHud = (): Hud => ({
 });
 
 const createScreenHud = (): Hud =>
-  createDraggingHud(createHud(undefined, { width: 160, height: 90 }));
+  createDraggingHud(
+    createHud(undefined, { width: SCREEN_WIDTH, height: SCREEN_HEIGHT }),
+  );
 
 describe('handleHudMove', () => {
   it('should return the window moved when the pointer drags it, so the grabbed spot stays under the pointer', () => {
@@ -86,7 +102,10 @@ describe('handleHudMove', () => {
   it('should return the window stopped at the bottom right when the pointer drags it off that corner', () => {
     expect(
       findHudWindow(handleHudMove(createScreenHud(), 200, 400).hud, 'street'),
-    ).toMatchObject({ row: 90 - 76, column: 160 - 90 });
+    ).toMatchObject({
+      row: SCREEN_HEIGHT - WINDOW_HEIGHT,
+      column: SCREEN_WIDTH - WINDOW_WIDTH,
+    });
   });
 
   it('should return the window moved as asked when the screen has room for it', () => {
@@ -104,7 +123,11 @@ describe('handleHudMove', () => {
 
     expect(
       findHudWidget(
-        handleHudMove(createScrollingHud(), 10 + track.row + 4, 0).hud,
+        handleHudMove(
+          createScrollingHud(),
+          WINDOW_ROW + track.row + THUMB_DRAG,
+          0,
+        ).hud,
         'tape',
         'tracks',
       ),

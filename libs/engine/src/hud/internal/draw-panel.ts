@@ -5,6 +5,7 @@ import type { HudRect } from '../types/hud-rect';
 import type { HudTheme } from '../types/hud-theme';
 import { computeInsetRect } from './compute-inset-rect';
 import { drawBevel } from './draw-bevel';
+import { drawEdge } from './draw-edge';
 
 /**
  * Returns the paint steps for a panel: the body shade under a dark line,
@@ -14,16 +15,12 @@ import { drawBevel } from './draw-bevel';
 export const drawPanel = (
   rect: HudRect,
   theme: HudTheme,
-): readonly OverlayPaint[] => {
-  const edge = toPixel(theme.color, theme.edge);
-
-  return [
-    { pixel: toPixel(theme.color, theme.body), ...rect },
-    ...drawBevel(rect, edge, edge),
-    ...drawBevel(
-      computeInsetRect(rect, HUD_EDGE),
-      toPixel(theme.color, theme.highlight),
-      toPixel(theme.color, theme.shadow),
-    ),
-  ];
-};
+): readonly OverlayPaint[] => [
+  { pixel: toPixel(theme.color, theme.body), ...rect },
+  ...drawEdge(rect, theme),
+  ...drawBevel(
+    computeInsetRect(rect, HUD_EDGE),
+    toPixel(theme.color, theme.highlight),
+    toPixel(theme.color, theme.shadow),
+  ),
+];

@@ -10,6 +10,8 @@ const NIGHT = -16;
 
 const BARELY_LIT = 1;
 
+const DIM_LAMP_EXPOSURE = 0.1 * REFERENCE_EXPOSURE;
+
 const createLighting = (ambient: number, width: number): Lighting => ({
   ambient,
   lights: [],
@@ -66,10 +68,10 @@ describe('computeShadeOffsets', () => {
   });
 
   it('should return barely any lift when daylight already lights the place', () => {
-    const lamp = 0.1 * REFERENCE_EXPOSURE;
-
-    expect(computeOffsetAt(0, [lamp]) ?? 0).toBeLessThan(BARELY_LIT);
-    expect(computeOffsetAt(NIGHT, [lamp]) ?? 0).toBeGreaterThan(
+    expect(computeOffsetAt(0, [DIM_LAMP_EXPOSURE]) ?? 0).toBeLessThan(
+      BARELY_LIT,
+    );
+    expect(computeOffsetAt(NIGHT, [DIM_LAMP_EXPOSURE]) ?? 0).toBeGreaterThan(
       NIGHT + BARELY_LIT,
     );
   });

@@ -21,5 +21,5 @@
       "@cassette-canvas/engine": ["./libs/engine/src/index.ts"]
     }
   },
-  "include": ["libs/**/*.ts", "apps/**/*.ts"]
+  "include": ["libs/**/*.ts"]
 }

@@ -9,7 +9,7 @@ two glyphs of its own, a heart (`TEXT_HEART`) and a lightning bolt
 A HUD is windows over the scene. It is monochrome: every window is drawn in
 shades of one palette color, so it looks like one surface whatever happens
 below it. The default color is `DEFAULT_HUD_COLOR` (15), the sand color in
-the demo palette and the closest one to beige. Text is the darkest shade,
+the example palette and the closest one to beige. Text is the darkest shade,
 buttons and tabs are lighter than the window they sit on, and every edge is a
 one-pixel bevel: light on the top and left, shadow on the bottom and right,
 swapped while a button is held.

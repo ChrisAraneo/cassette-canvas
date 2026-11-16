@@ -61,7 +61,7 @@ describe('toLitPixels', () => {
     ).toEqual([TRANSPARENT, TRANSPARENT, TRANSPARENT]);
   });
 
-  it('should return the same pixel as toLitPixel when it lights every value by every offset', () => {
+  it('should return every place lit the same way as a single pixel when it lights every value by every offset', () => {
     expect(
       toLitPixels(
         Int16Array.from(map(LIT_CASES, ({ pixel }) => pixel)),

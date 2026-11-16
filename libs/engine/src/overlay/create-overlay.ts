@@ -1,8 +1,7 @@
-import { constant, floor, times } from 'lodash-es';
+import { constant, times } from 'lodash-es';
 import { TRANSPARENT } from '../palette/consts';
+import { toCount } from './internal/to-count';
 import type { Overlay } from './types/overlay';
-
-const toCount = (value: number): number => Math.max(0, floor(value));
 
 /**
  * Creates an overlay of `width` by `height` logical pixels, filled with one

@@ -3,7 +3,13 @@ import { describe, expect, it } from 'vitest';
 
 import { runEffect } from './run-effect';
 
-const SCENE = Object.freeze({ name: 'scene' });
+interface Scene {
+  readonly name: string;
+}
+
+const createScene = (): Scene => ({ name: 'scene' });
+
+const SCENE = Object.freeze(createScene());
 
 describe('runEffect', () => {
   it('should return the very same value when it runs the effect', () => {
@@ -13,9 +19,11 @@ describe('runEffect', () => {
   });
 
   it('should leave the value it was given unchanged when it runs the effect', () => {
-    runEffect(SCENE, noop);
+    const scene = createScene();
 
-    expect(SCENE).toEqual({ name: 'scene' });
+    runEffect(scene, noop);
+
+    expect(scene).toEqual(createScene());
   });
 
   it('should pass the value to the effect when it runs', () => {

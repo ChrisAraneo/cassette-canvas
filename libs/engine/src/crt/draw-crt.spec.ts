@@ -3,6 +3,7 @@ import { describe, expect, it } from 'vitest';
 
 import { drawCrt } from './draw-crt';
 import type { Crt } from './types/crt';
+import type { CrtPicture } from './types/crt-picture';
 
 interface CrtCall {
   readonly name: string;
@@ -23,29 +24,34 @@ const METHODS = Object.freeze([
   'drawArrays',
 ]);
 
-const CRT = {
-  program: { name: 'program' },
-  texture: { name: 'texture' },
-  vertices: { name: 'buffer' },
-  uniforms: {
-    frame: 'frame',
-    frameSize: 'frameSize',
-    canvasSize: 'canvasSize',
-    pixelSize: 'pixelSize',
-    time: 'time',
-  },
-} as unknown as Crt;
+const createCrt = (): Crt =>
+  ({
+    program: { name: 'program' },
+    texture: { name: 'texture' },
+    vertices: { name: 'buffer' },
+    uniforms: {
+      frame: 'frame',
+      frameSize: 'frameSize',
+      canvasSize: 'canvasSize',
+      pixelSize: 'pixelSize',
+      time: 'time',
+    },
+  }) as unknown as Crt;
+
+const CRT = createCrt();
 
 const TIME = 1500;
 
 const TIME_CALL_INDEX = 7;
 
-const PICTURE = Object.freeze({
+const createPicture = (): CrtPicture => ({
   bytes: Uint8ClampedArray.from([10, 20, 30, 255]),
   width: 1,
   height: 1,
   pixelSize: 4,
 });
+
+const PICTURE = Object.freeze(createPicture());
 
 const createContext = (calls: CrtCall[]): WebGLRenderingContext =>
   ({
@@ -99,16 +105,11 @@ describe('drawCrt', () => {
   });
 
   it('should not change the monitor or the picture it was given when it shows a frame', () => {
-    drawCrt(createContext([]), CRT, PICTURE, TIME);
+    const crt = createCrt();
+    const picture = createPicture();
 
-    expect([CRT.uniforms.time, PICTURE]).toEqual([
-      'time',
-      {
-        bytes: Uint8ClampedArray.from([10, 20, 30, 255]),
-        width: 1,
-        height: 1,
-        pixelSize: 4,
-      },
-    ]);
+    drawCrt(createContext([]), crt, picture, TIME);
+
+    expect([crt, picture]).toEqual([createCrt(), createPicture()]);
   });
 });

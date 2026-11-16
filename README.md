@@ -1,30 +1,28 @@
 <h1 align="center">Cassette Canvas</h1>
 
 <p align="center">
-  <img src="screenshot.png" width="640px" height="360px" alt="The demo at night: a city street lit by street lamps and headlights, with two HUD windows over it"/>
+  <img src="screenshot.png" width="640px" height="360px" alt="City street lit by street lamps and headlights with two HUD windows over it"/>
   <br>
-  <a href="https://github.com/ChrisAraneo/cassette-canvas/blob/master/package.json"><img src="https://img.shields.io/badge/version-v0.4.1-blue" alt="version"></a>
+  <a href="https://github.com/ChrisAraneo/cassette-canvas/blob/master/package.json"><img src="https://img.shields.io/badge/version-v0.5.0-blue" alt="version"></a>
   <a href="https://github.com/ChrisAraneo/cassette-canvas/blob/master/LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="@chris.araneo/cassette-canvas is released under the MIT license."></a>
   <a href="https://github.com/ChrisAraneo/cassette-canvas/actions/workflows/ci.yml"><img alt="GitHub CI Status" src="https://img.shields.io/github/actions/workflow/status/ChrisAraneo/cassette-canvas/ci.yml?label=CI&logo=GitHub"></a>
   <br>
   <br>
-  <em>Retro rendering engine for the HTML canvas.</em>
+  <em>Retro rendering engine for HTML canvas.</em>
   <br>
   <br>
 </p>
 
 - Sprites use 16 colors with 8 shades each (128 colors).
-- Pixels are large, and every sprite has the same size.
-- Ambient light and point lights. Sprites can cast shadows.
-- Text, windows, buttons, text fields, tabs, panels, dividers, and scrolling
-  lists are built in. A list item holds more than one line and widgets of its
-  own, and its scroll bar drags.
-- Retro monitor effect: a soft glow around bright pixels, scanlines, film grain, and a surface texture.
+- Large retro pixels.
+- Dynamic lighting and shadows.
+- HUD: Text, windows, buttons, text fields, tabs, panels, dividers, scrolling lists.
+- Retro monitor effect: soft glow, scanlines, film grain, surface texture.
 
 ## Installation
 
 ```sh
-npm install @chris.araneo/cassette-canvas
+npm install "@chris.araneo/cassette-canvas"
 ```
 
 The package is an ES module with TypeScript types included. It runs in the
@@ -230,13 +228,6 @@ if (display) {
 Full documentation is in [docs/](docs/README.md). The published package ships
 it as well, so after an install the same pages are in
 `node_modules/@chris.araneo/cassette-canvas/docs`, next to `dist/lib`.
-
-## Demo
-
-The repository holds an example app in [`apps/demo`](apps/demo): a city street
-with a day and night cycle, street lamps, shadows, and a HUD of movable windows
-over it. Clone the repository, run `npm install` and `npm run dev`, and open
-the page Vite prints.
 
 ## License
 

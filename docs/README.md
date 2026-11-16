@@ -9,7 +9,6 @@
 - [API](API.md): every function the package exports.
 - [How drawing works](HOW-DRAWING-WORKS.md): the steps from a screen to the
   canvas, and what the monitor shader does.
-- [Demo](DEMO.md): what the demo shows and how to run it.
 - [Project layout](PROJECT-LAYOUT.md): where everything lives in the repo.
-- [Performance](PERFORMANCE.md): what a frame costs, measured on the demo.
+- [Performance](PERFORMANCE.md): what a frame costs, step by step.
 - [Publishing](PUBLISHING.md): how a release goes out to npm.

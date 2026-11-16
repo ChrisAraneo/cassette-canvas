@@ -13,5 +13,5 @@ export const toSprite = (
   legend: SpriteLegend,
 ): Sprite =>
   flatMap(rows, (row) =>
-    map(split(row, ''), (symbol) => legend[symbol] ?? TRANSPARENT),
+    map(split(row, ''), (character) => legend[character] ?? TRANSPARENT),
   );

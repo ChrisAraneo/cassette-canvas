@@ -1,8 +1,8 @@
 # Performance
 
-Measured on the demo street at 1280×720 (320×180 logical pixels), in a
-Rolldown bundle run with Node 24. By day the street has 856 sprites and 1
-light; at night it has 1,013 sprites and 11 lights:
+Measured on a city street scene at 1280×720 (320×180 logical pixels), in a
+Rolldown bundle run with Node 24. By day the scene has 856 sprites and 1 light;
+at night it has 1,013 sprites and 11 lights:
 
 | Step           | By day  | At night |
 | -------------- | ------- | -------- |
@@ -19,7 +19,7 @@ it costs a subtraction and a comparison. Lowering `fps` is the cheapest way to
 spend less time drawing, as long as the display `drawScreen` returns is the one
 the next frame uses.
 
-The HUD costs about 1.1 ms a frame on top of that, for the demo's two windows
-(71 paint steps, 14,860 overlay pixels): ~0.5 ms to paint the windows into
-overlays and ~0.6 ms to paint those overlays over the lit frame. A screen with
-no overlays skips the last step.
+The HUD costs about 1.1 ms a frame on top of that, for two windows (71 paint
+steps, 14,860 overlay pixels): ~0.5 ms to paint the windows into overlays and
+~0.6 ms to paint those overlays over the lit frame. A screen with no overlays
+skips the last step.

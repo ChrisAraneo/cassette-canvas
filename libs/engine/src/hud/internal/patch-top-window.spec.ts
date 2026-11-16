@@ -44,4 +44,12 @@ describe('patchTopWindow', () => {
   it('should return the same windows when no window has the id', () => {
     expect(patchTopWindow(createStack(), 'ghost')).toEqual(createStack());
   });
+
+  it('should not change the old HUD when it raises a window', () => {
+    const hud = createStack();
+
+    patchTopWindow(hud, 'street');
+
+    expect(hud).toEqual(createStack());
+  });
 });

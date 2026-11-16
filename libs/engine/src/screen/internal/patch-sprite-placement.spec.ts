@@ -7,13 +7,15 @@ const HERO_STANDING = Object.freeze([0x14, 0x15]);
 
 const HERO_WALKING = Object.freeze([0x16, 0x17]);
 
-const HERO: SpritePlacement = Object.freeze({
+const createHero = (): SpritePlacement => ({
   id: 'hero',
   sprite: HERO_STANDING,
   row: 3,
   column: 4,
   castsShadow: false,
 });
+
+const HERO: SpritePlacement = Object.freeze(createHero());
 
 describe('patchSpritePlacement', () => {
   it('should return every change when the sprite carries the id', () => {
@@ -41,15 +43,11 @@ describe('patchSpritePlacement', () => {
   });
 
   it('should not change the old sprite when it changes one', () => {
-    patchSpritePlacement(HERO, 'hero', { column: 20 });
+    const hero = createHero();
 
-    expect(HERO).toEqual({
-      id: 'hero',
-      sprite: HERO_STANDING,
-      row: 3,
-      column: 4,
-      castsShadow: false,
-    });
+    patchSpritePlacement(hero, 'hero', { column: 20 });
+
+    expect(hero).toEqual(createHero());
   });
 
   it('should return the very same sprite when it carries another id', () => {

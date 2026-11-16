@@ -2,9 +2,12 @@ import { size, toArray } from 'lodash-es';
 import { describe, expect, it } from 'vitest';
 
 import type { Lighting } from '../../lighting/types/lighting';
+import type { OverlayPlacement } from '../../screen/types/overlay-placement';
 import { computeFrameLight } from './compute-frame-light';
 
 const PIXELS = Int16Array.from([0x04, 0x04, 0x04, 0x04]);
+
+const OVERLAYS: readonly OverlayPlacement[] = Object.freeze([]);
 
 const createLighting = (ambient: number, occluders: Uint8Array): Lighting => ({
   ambient,
@@ -19,7 +22,7 @@ const computeLevels = (ambient: number, occluders: Uint8Array): number[] =>
     computeFrameLight({
       pixels: PIXELS,
       lighting: createLighting(ambient, occluders),
-      overlays: [],
+      overlays: OVERLAYS,
     }).levels,
   );
 
@@ -60,7 +63,7 @@ describe('computeFrameLight', () => {
             width: 0,
             height: 0,
           },
-          overlays: [],
+          overlays: OVERLAYS,
         }).levels,
       ),
     ).toBe(0);
@@ -71,8 +74,18 @@ describe('computeFrameLight', () => {
       computeFrameLight({
         pixels: PIXELS,
         lighting: createLighting(0, new Uint8Array(4)),
-        overlays: [],
+        overlays: OVERLAYS,
       }).pixels,
     ).toBe(PIXELS);
+  });
+
+  it('should return the very same overlays when it lights the frame', () => {
+    expect(
+      computeFrameLight({
+        pixels: PIXELS,
+        lighting: createLighting(0, new Uint8Array(4)),
+        overlays: OVERLAYS,
+      }).overlays,
+    ).toBe(OVERLAYS);
   });
 });

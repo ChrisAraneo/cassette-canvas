@@ -1,7 +1,5 @@
 import { LIGHT_CORE_SHARPNESS } from '../consts';
-
-const computeWindow = (squaredReach: number): number =>
-  1 - squaredReach * squaredReach;
+import { computeWindow } from './compute-window';
 
 /**
  * Returns the share of a light that reaches a point: 1 at its center, 0 at

@@ -9,6 +9,12 @@ import { toExposure } from './to-exposure';
 const SHARE_AHEAD = 1 - 2 * SHADOW_SOFTNESS;
 
 /**
+ * The first ring around a light that has a ring between it and the light, so
+ * the first ring whose places can stand in a shadow.
+ */
+const FIRST_SHADOWED_RING = 2;
+
+/**
  * Returns how much light one light adds to every pixel. The values are
  * amounts of light, not extended shades, because that is what adds up:
  * `computeShadeOffsets` sums the amounts and reads the shades off them.
@@ -19,17 +25,16 @@ const SHARE_AHEAD = 1 - 2 * SHADOW_SOFTNESS;
  * stepping down in one. A negative intensity takes light away instead.
  */
 // Style guide - Appendix B exception 1 (hot numeric kernel).
-// As a pipeline, this ring sweep took 8.84 ms per frame for two lights
-// (7,919 cells) on a 192x128 screen (Vite bundle, Node 24); as a loop,
-// 0.43 ms. Reading the shadow casters from a `Uint8Array` instead of a
-// record cut it further. It compares squared distances, so it needs no square
-// root and the falloff costs nothing: on the demo screen at night (320x180, 11
-// lights) it takes 1.4 ms per frame, where the straight-line falloff and the
-// hard shadow edges it replaces took 1.26 ms. Reading the two pixels beside
-// the one ahead, rather than carrying a soft share outward from the light,
-// keeps that to 0.14 ms and keeps a shadow from fading out as it lengthens.
-// It only changes typed arrays it creates itself, and they do not change
-// after it returns them.
+// As a pipeline, this ring sweep took 8.84 ms per frame for two lights (7,919
+// cells) on a 192x128 screen (Vite bundle, Node 24); as a loop, 0.43 ms.
+// Reading the shadow casters from a `Uint8Array` instead of a record cut it
+// further. It compares squared distances, so it needs no square root and the
+// falloff costs nothing: on a 320x180 night scene (11 lights) it takes 1.4 ms
+// per frame, where the straight-line falloff and the hard shadow edges it
+// replaces took 1.26 ms. Reading the two pixels beside the one ahead, rather
+// than carrying a soft share outward from the light, keeps that to 0.14 ms
+// and keeps a shadow from fading out as it lengthens. It only changes typed
+// arrays it creates itself, and they do not change after it returns them.
 export const computeLightExposure = (
   { width, height, occluders }: Lighting,
   light: Light,
@@ -79,7 +84,7 @@ export const computeLightExposure = (
         const parentColumn = lightColumn + parentColumnOffset;
         const parentIndex = parentRow * width + parentColumn;
         const hasParent =
-          ring >= 2 &&
+          ring >= FIRST_SHADOWED_RING &&
           parentRow >= 0 &&
           parentRow < height &&
           parentColumn >= 0 &&

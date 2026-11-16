@@ -1,23 +1,16 @@
 import { sumBy } from 'lodash-es';
 import { match, P } from 'ts-pattern';
 import { TEXT_HEIGHT } from '../../text/consts';
-import {
-  HUD_CONTENT_LEFT,
-  HUD_CONTENT_TOP,
-  HUD_CONTROL_HEIGHT,
-  HUD_DIVIDER_HEIGHT,
-} from '../consts';
+import { HUD_CONTROL_HEIGHT, HUD_DIVIDER_HEIGHT } from '../consts';
 import type { HudRect } from '../types/hud-rect';
 import type { HudWidget } from '../types/hud-widget';
 import { computeControlWidth } from './compute-control-width';
 import { computeTabRects } from './compute-tab-rects';
 import { computeTextWidth } from './compute-text-width';
+import { toLeft } from './to-left';
+import { toTop } from './to-top';
 
 const { number, union } = P;
-
-const toTop = (widget: HudWidget): number => HUD_CONTENT_TOP + widget.row;
-
-const toLeft = (widget: HudWidget): number => HUD_CONTENT_LEFT + widget.column;
 
 /**
  * Returns where a widget sits, measured from the window's top-left pixel. A
@@ -54,7 +47,7 @@ export const computeWidgetRect = (widget: HudWidget): HudRect =>
     .with({ kind: 'TABS' }, (tabs) => ({
       row: toTop(tabs),
       column: toLeft(tabs),
-      width: sumBy(computeTabRects(tabs), 'width'),
+      width: sumBy(computeTabRects(tabs), (rect) => rect.width),
       height: HUD_CONTROL_HEIGHT,
     }))
     .with({ kind: 'DIVIDER' }, (divider) => ({

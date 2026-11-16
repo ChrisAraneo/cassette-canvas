@@ -1,3 +1,4 @@
+import { pipe } from 'remeda';
 import { computeLightExposures } from './internal/compute-light-exposures';
 import { computeShadeOffsets } from './internal/compute-shade-offsets';
 import type { Lighting } from './types/lighting';
@@ -15,4 +16,6 @@ import type { Lighting } from './types/lighting';
  * bright daylight barely shows. Nothing adds up to flat white.
  */
 export const computeLightLevels = (lighting: Lighting): Float64Array =>
-  computeShadeOffsets(lighting, computeLightExposures(lighting));
+  pipe(lighting, computeLightExposures, (exposures) =>
+    computeShadeOffsets(lighting, exposures),
+  );

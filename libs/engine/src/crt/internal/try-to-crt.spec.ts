@@ -7,7 +7,7 @@ const PROGRAM = Object.freeze({ name: 'program' });
 
 const TEXTURE = Object.freeze({ name: 'texture' });
 
-const BUFFER = Object.freeze({ name: 'buffer' });
+const VERTICES = Object.freeze({ name: 'vertices' });
 
 const UNIFORMS = Object.freeze({
   frame: { name: 'u_frame' },
@@ -20,13 +20,29 @@ const UNIFORMS = Object.freeze({
 const DRAFT = Object.freeze({
   program: PROGRAM,
   texture: TEXTURE,
-  vertices: BUFFER,
+  vertices: VERTICES,
   uniforms: UNIFORMS,
 });
 
 describe('tryToCrt', () => {
   it('should return the monitor when every part is there', () => {
     expect(tryToCrt(DRAFT)).toEqual(DRAFT);
+  });
+
+  it('should pass on the very same shader program when every part is there', () => {
+    expect(tryToCrt(DRAFT)?.program).toBe(PROGRAM);
+  });
+
+  it('should pass on the very same texture when every part is there', () => {
+    expect(tryToCrt(DRAFT)?.texture).toBe(TEXTURE);
+  });
+
+  it('should pass on the very same vertices when every part is there', () => {
+    expect(tryToCrt(DRAFT)?.vertices).toBe(VERTICES);
+  });
+
+  it('should pass on the very same uniforms when every part is there', () => {
+    expect(tryToCrt(DRAFT)?.uniforms).toBe(UNIFORMS);
   });
 
   it('should return no monitor when the program is missing', () => {

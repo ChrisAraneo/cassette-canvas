@@ -3,13 +3,15 @@ import { describe, expect, it } from 'vitest';
 import type { Light } from '../types/light';
 import { patchMatchingLight } from './patch-matching-light';
 
-const TORCH: Light = Object.freeze({
+const createTorch = (): Light => ({
   id: 'torch',
   row: 4,
   column: 4,
   radius: 10,
   intensity: 3,
 });
+
+const TORCH: Light = Object.freeze(createTorch());
 
 describe('patchMatchingLight', () => {
   it('should return every change when the light carries the id', () => {
@@ -31,15 +33,11 @@ describe('patchMatchingLight', () => {
   });
 
   it('should not change the old light when it changes one', () => {
-    patchMatchingLight(TORCH, 'torch', { row: 8 });
+    const torch = createTorch();
 
-    expect(TORCH).toEqual({
-      id: 'torch',
-      row: 4,
-      column: 4,
-      radius: 10,
-      intensity: 3,
-    });
+    patchMatchingLight(torch, 'torch', { row: 8 });
+
+    expect(torch).toEqual(createTorch());
   });
 
   it('should return the very same light when it carries another id', () => {

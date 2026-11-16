@@ -98,8 +98,8 @@ match(display)
 - `fps` is not a positive number,
 - the canvas is smaller than one logical pixel.
 
-See [`apps/demo/src/main.ts`](https://github.com/ChrisAraneo/cassette-canvas/blob/master/apps/demo/src/main.ts)
-for a full animation loop.
+See the [quick example](../README.md#quick-example) for a full animation loop,
+from the display to a HUD over a lit scene.
 
 For lights, shadows, and the shade scale, see
 [Lights and shadows](LIGHTS-AND-SHADOWS.md). For text, windows, and widgets,

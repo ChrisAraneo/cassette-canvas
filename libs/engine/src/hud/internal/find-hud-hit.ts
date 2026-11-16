@@ -1,55 +1,12 @@
 import { constant, findLast } from 'lodash-es';
 import { match, P } from 'ts-pattern';
 import type { Hud } from '../types/hud';
-import type { HudWindow } from '../types/hud-window';
-import { computeCloseRect } from './compute-close-rect';
-import { computeTitleRect } from './compute-title-rect';
-import { computeWidgetRect } from './compute-widget-rect';
 import { computeWindowRect } from './compute-window-rect';
 import { isInside } from './is-inside';
-import { toWindowWidgets } from './to-window-widgets';
+import { toWindowHit } from './to-window-hit';
 import type { HudHit } from './types/hud-hit';
-import type { HudPlacedWidget } from './types/hud-placed-widget';
 
 const { nonNullable } = P;
-
-const isPressable = ({ widget, item }: HudPlacedWidget): boolean =>
-  item === '' || widget.kind === 'BUTTON';
-
-const findPressedWidget = (
-  window: HudWindow,
-  row: number,
-  column: number,
-): HudPlacedWidget | undefined =>
-  findLast(
-    toWindowWidgets(window),
-    (placed) =>
-      isPressable(placed) &&
-      isInside(computeWidgetRect(placed.widget), row, column),
-  );
-
-const toWindowHit = (window: HudWindow, row: number, column: number): HudHit =>
-  match({
-    close: window.closable && isInside(computeCloseRect(window), row, column),
-    title: isInside(computeTitleRect(window), row, column),
-    widget: findPressedWidget(window, row, column),
-  })
-    .with({ close: true }, (): HudHit => ({
-      window: window.id,
-      part: 'CLOSE',
-      widget: '',
-    }))
-    .with({ widget: nonNullable }, ({ widget }): HudHit => ({
-      window: window.id,
-      part: 'WIDGET',
-      widget: widget.widget.id,
-    }))
-    .with({ title: true }, (): HudHit => ({
-      window: window.id,
-      part: 'TITLE',
-      widget: '',
-    }))
-    .otherwise((): HudHit => ({ window: window.id, part: 'BODY', widget: '' }));
 
 /**
  * Returns what the logical pixel at `row` and `column` is over, or

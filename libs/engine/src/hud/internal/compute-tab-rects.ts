@@ -1,35 +1,11 @@
-import { last, reduce } from 'lodash-es';
-import { match, P } from 'ts-pattern';
-import {
-  HUD_CONTENT_LEFT,
-  HUD_CONTENT_TOP,
-  HUD_CONTROL_HEIGHT,
-} from '../consts';
+import { reduce } from 'lodash-es';
+import { HUD_CONTENT_LEFT, HUD_CONTENT_TOP } from '../consts';
 import type { HudRect } from '../types/hud-rect';
 import type { HudTab } from '../types/hud-tab';
 import type { HudTabs } from '../types/hud-tabs';
-import { computeControlWidth } from './compute-control-width';
-
-const { nonNullable } = P;
+import { addTabRect } from './add-tab-rect';
 
 const START: readonly HudRect[] = Object.freeze([]);
-
-const addTabRect = (
-  rects: readonly HudRect[],
-  tab: HudTab,
-  row: number,
-  column: number,
-): readonly HudRect[] => [
-  ...rects,
-  {
-    row,
-    column: match(last(rects))
-      .with(nonNullable, (rect) => rect.column + rect.width)
-      .otherwise(() => column),
-    width: computeControlWidth(tab.text),
-    height: HUD_CONTROL_HEIGHT,
-  },
-];
 
 /**
  * Returns where each tab of a strip sits, measured from the window's

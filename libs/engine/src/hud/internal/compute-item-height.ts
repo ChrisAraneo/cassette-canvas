@@ -1,15 +1,8 @@
-import { map, max, size } from 'lodash-es';
+import { map, max } from 'lodash-es';
 import { match } from 'ts-pattern';
-import { HUD_LIST_ITEM_HEIGHT } from '../consts';
-import type { HudItemWidget } from '../types/hud-item-widget';
 import type { HudListItem } from '../types/hud-list-item';
-import { computeWidgetRect } from './compute-widget-rect';
-
-const toLinesHeight = (item: HudListItem): number =>
-  Math.max(1, size(item.lines)) * HUD_LIST_ITEM_HEIGHT;
-
-const toWidgetBottom = (widget: HudItemWidget): number =>
-  widget.row + computeWidgetRect(widget).height;
+import { toLinesHeight } from './to-lines-height';
+import { toWidgetBottom } from './to-widget-bottom';
 
 /**
  * Returns how many rows one item of a list takes: the height it asks for,

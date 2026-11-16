@@ -37,6 +37,14 @@ describe('findSprite', () => {
     expect(findSprite(createGameScreen([HERO, COIN]), 'ghost')).toBeUndefined();
   });
 
+  it('should not change the screen it is given when it finds a sprite', () => {
+    const screen = createGameScreen([HERO, COIN]);
+
+    findSprite(screen, 'coin');
+
+    expect(screen).toEqual(createGameScreen([HERO, COIN]));
+  });
+
   it('should return no sprite when the screen is empty', () => {
     expect(findSprite(createGameScreen([]), 'hero')).toBeUndefined();
   });
