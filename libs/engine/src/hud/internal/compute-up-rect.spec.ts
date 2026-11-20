@@ -21,7 +21,7 @@ describe('computeUpRect', () => {
     });
   });
 
-  it('should put the arrow at the top of the bar wherever the bar sits', () => {
+  it('should put the arrow at the top of the bar when the bar moves up the window', () => {
     expect(computeUpRect({ ...BAR, row: 0 }).row).toBe(0);
   });
 });

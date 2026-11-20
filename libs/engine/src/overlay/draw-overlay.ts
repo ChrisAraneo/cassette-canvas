@@ -1,8 +1,6 @@
-import { constant, reduce, times } from 'lodash-es';
 import { pipe } from 'remeda';
-import { TRANSPARENT } from '../palette/consts';
-import { drawPaint } from './internal/draw-paint';
-import { toCount } from './internal/to-count';
+import { createOverlayPixels } from './internal/create-overlay-pixels';
+import { patchOverlayPixels } from './internal/patch-overlay-pixels';
 import type { Overlay } from './types/overlay';
 import type { OverlayPaint } from './types/overlay-paint';
 
@@ -25,20 +23,4 @@ export const drawOverlay = (
   height: number,
   paints: readonly OverlayPaint[],
 ): Overlay =>
-  pipe(
-    { columns: toCount(width), rows: toCount(height) },
-    ({ columns, rows }) => ({
-      columns,
-      rows,
-      pixels: times(columns * rows, constant(TRANSPARENT)),
-    }),
-    ({ columns, rows, pixels }) => ({
-      width: columns,
-      height: rows,
-      pixels: reduce(
-        paints,
-        (drawn, paint) => drawPaint(drawn, columns, rows, paint),
-        pixels,
-      ),
-    }),
-  );
+  pipe({ width, height, paints }, createOverlayPixels, patchOverlayPixels);

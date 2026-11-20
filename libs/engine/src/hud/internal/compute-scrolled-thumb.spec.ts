@@ -12,9 +12,11 @@ const TRACK: HudRect = Object.freeze({
 
 const THUMB_HEIGHT = 12;
 
+const LAST_PAGE = 3;
+
 describe('computeScrolledThumb', () => {
   it('should put the thumb at the top of the track when the list shows its first page', () => {
-    expect(computeScrolledThumb(TRACK, THUMB_HEIGHT, 0, 3)).toEqual({
+    expect(computeScrolledThumb(TRACK, THUMB_HEIGHT, 0, LAST_PAGE)).toEqual({
       row: 32,
       column: 67,
       width: 11,
@@ -23,17 +25,19 @@ describe('computeScrolledThumb', () => {
   });
 
   it('should put the thumb at the bottom of the track when the list shows its last page', () => {
-    expect(computeScrolledThumb(TRACK, THUMB_HEIGHT, 3, 3).row).toBe(
-      32 + 24 - THUMB_HEIGHT,
-    );
+    expect(
+      computeScrolledThumb(TRACK, THUMB_HEIGHT, LAST_PAGE, LAST_PAGE).row,
+    ).toBe(32 + 24 - THUMB_HEIGHT);
   });
 
   it('should put the thumb partway down the track when the list is scrolled partway', () => {
-    expect(computeScrolledThumb(TRACK, THUMB_HEIGHT, 1, 3).row).toBe(36);
+    expect(computeScrolledThumb(TRACK, THUMB_HEIGHT, 1, LAST_PAGE).row).toBe(
+      TRACK.row + (TRACK.height - THUMB_HEIGHT) / LAST_PAGE,
+    );
   });
 
   it('should keep the height it was given when it places the thumb', () => {
-    expect(computeScrolledThumb(TRACK, THUMB_HEIGHT, 1, 3).height).toBe(
+    expect(computeScrolledThumb(TRACK, THUMB_HEIGHT, 1, LAST_PAGE).height).toBe(
       THUMB_HEIGHT,
     );
   });

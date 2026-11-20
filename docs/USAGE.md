@@ -102,6 +102,6 @@ See the [quick example](../README.md#quick-example) for a full animation loop,
 from the display to a HUD over a lit scene.
 
 For lights, shadows, and the shade scale, see
-[Lights and shadows](LIGHTS-AND-SHADOWS.md). For text, windows, and widgets,
-see [Text, windows, and a HUD](TEXT-AND-HUD.md). Every exported function is
+[Lights and shadows](LIGHTS_AND_SHADOWS.md). For text, windows, and widgets,
+see [Text, windows, and a HUD](TEXT_AND_HUD.md). Every exported function is
 listed in the [API](API.md).

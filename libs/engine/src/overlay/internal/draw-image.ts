@@ -3,6 +3,11 @@ import { floor } from 'lodash-es';
 import { isPixel } from '../../palette/is-pixel';
 import type { OverlayImage } from '../types/overlay-image';
 
+// Style guide - Appendix B exception 1 (hot numeric kernel). The guard below
+// is part of the licensed kernel, not just the loop: as a `match` on the same
+// condition it measured 0.78 ms per frame against 0.035 ms for the `if` (two
+// HUD windows of 110x68 over a 320x180 frame, Node 24), so one closure call
+// per overlay pixel dominates the loop it guards.
 export const drawImage = (
   pixels: number[],
   width: number,

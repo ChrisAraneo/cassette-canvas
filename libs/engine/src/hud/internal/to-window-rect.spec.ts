@@ -26,7 +26,7 @@ describe('toWindowRect', () => {
     });
   });
 
-  it('should leave the rectangle at the top-left wherever the window sits on the screen', () => {
+  it('should leave the rectangle at the top-left when the window sits elsewhere on the screen', () => {
     expect(toWindowRect({ ...WINDOW, row: 0, column: 0 })).toEqual(
       toWindowRect(WINDOW),
     );

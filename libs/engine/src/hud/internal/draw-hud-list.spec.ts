@@ -109,20 +109,16 @@ const toDividerLine = (rect: HudRect): OverlayPaint => ({
   height: 1,
 });
 
-const toItemText = (
-  index: number,
-  text: string,
-  shade: number,
-): OverlayPaint => {
-  const rect = computeListLayout(LIST).items[index]?.rect;
+const toItemRect = (index: number): HudRect | undefined =>
+  computeListLayout(LIST).items[index]?.rect;
 
-  return toTextPaint(
+const toItemText = (index: number, text: string, shade: number): OverlayPaint =>
+  toTextPaint(
     text,
     toPixel(THEME.color, shade),
-    (rect?.row ?? 0) + HUD_LIST_TEXT_TOP,
-    (rect?.column ?? 0) + HUD_LIST_TEXT_LEFT,
+    (toItemRect(index)?.row ?? 0) + HUD_LIST_TEXT_TOP,
+    (toItemRect(index)?.column ?? 0) + HUD_LIST_TEXT_LEFT,
   );
-};
 
 const ITEM_WIDTH = 66;
 

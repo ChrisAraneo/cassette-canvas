@@ -1,22 +1,21 @@
 import { tryCreateCrt } from '../../crt/try-create-crt';
 import { createPalette } from '../../palette/create-palette';
 import { DEFAULT_MAX_FPS } from '../consts';
-import type { DisplaySettings } from '../types/display-settings';
+import { computeDisplaySize } from './compute-display-size';
+import type { DisplayContext } from './types/display-context';
 import type { DisplayDraft } from './types/display-draft';
-import type { DisplaySize } from './types/display-size';
 
-export const toDisplayDraft = (
-  context: WebGLRenderingContext | undefined,
-  size: DisplaySize,
-  { colors, pixelSize, spriteSize, fps = DEFAULT_MAX_FPS }: DisplaySettings,
-): DisplayDraft => ({
+export const toDisplayDraft = ({
+  canvas,
+  settings,
+  context,
+}: DisplayContext): DisplayDraft => ({
   context,
   crt: tryCreateCrt(context),
-  palette: createPalette(colors),
-  pixelSize,
-  spriteSize,
-  width: size.width,
-  height: size.height,
-  fps,
+  palette: createPalette(settings.colors),
+  pixelSize: settings.pixelSize,
+  spriteSize: settings.spriteSize,
+  ...computeDisplaySize(canvas, settings.pixelSize),
+  fps: settings.fps ?? DEFAULT_MAX_FPS,
   drawnAt: Number.NEGATIVE_INFINITY,
 });

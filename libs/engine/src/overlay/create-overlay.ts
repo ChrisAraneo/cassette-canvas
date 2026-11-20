@@ -1,6 +1,6 @@
 import { constant, times } from 'lodash-es';
 import { TRANSPARENT } from '../palette/consts';
-import { toCount } from './internal/to-count';
+import { toCount } from './to-count';
 import type { Overlay } from './types/overlay';
 
 /**

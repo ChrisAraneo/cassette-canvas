@@ -8,10 +8,6 @@ import { toExposure } from './to-exposure';
 
 const SHARE_AHEAD = 1 - 2 * SHADOW_SOFTNESS;
 
-/**
- * The first ring around a light that has a ring between it and the light, so
- * the first ring whose places can stand in a shadow.
- */
 const FIRST_SHADOWED_RING = 2;
 
 /**

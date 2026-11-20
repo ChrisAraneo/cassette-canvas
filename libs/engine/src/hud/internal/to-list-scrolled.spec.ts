@@ -10,6 +10,10 @@ import type { HudList } from '../types/hud-list';
 import type { HudListItem } from '../types/hud-list-item';
 import { toListScrolled } from './to-list-scrolled';
 
+const SCROLL_ABOVE_FIRST_ITEM = -3;
+
+const SCROLL_PAST_LAST_PAGE = 99;
+
 const createItems = (count: number): readonly HudListItem[] =>
   map(times(count), (index) => ({
     id: `${index}`,
@@ -60,13 +64,19 @@ describe('toListScrolled', () => {
 
   it('should stop at the first item when it is asked to scroll above it', () => {
     expect(
-      toScroll(toListScrolled(createDeckHud(), 'deck', LIST, -3).hud),
+      toScroll(
+        toListScrolled(createDeckHud(), 'deck', LIST, SCROLL_ABOVE_FIRST_ITEM)
+          .hud,
+      ),
     ).toBe(0);
   });
 
   it('should stop at the last page when it is asked to scroll past it', () => {
     expect(
-      toScroll(toListScrolled(createDeckHud(), 'deck', LIST, 99).hud),
+      toScroll(
+        toListScrolled(createDeckHud(), 'deck', LIST, SCROLL_PAST_LAST_PAGE)
+          .hud,
+      ),
     ).toBe(2);
   });
 

@@ -21,7 +21,7 @@ export const drawCrt = (
   crt: Crt,
   picture: CrtPicture,
   time: number,
-): void =>
+): WebGLRenderingContext =>
   pipe(
     { context, crt, picture, time },
     patchCrtTexture,

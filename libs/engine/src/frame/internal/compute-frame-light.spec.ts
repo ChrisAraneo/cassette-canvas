@@ -88,4 +88,21 @@ describe('computeFrameLight', () => {
       }).overlays,
     ).toBe(OVERLAYS);
   });
+
+  it('should return the width of the lighting when it lights the frame', () => {
+    const lighting = createLighting(0, new Uint8Array(4));
+
+    expect(
+      computeFrameLight({ pixels: PIXELS, lighting, overlays: OVERLAYS }).width,
+    ).toBe(lighting.width);
+  });
+
+  it('should return the height of the lighting when it lights the frame', () => {
+    const lighting = createLighting(0, new Uint8Array(4));
+
+    expect(
+      computeFrameLight({ pixels: PIXELS, lighting, overlays: OVERLAYS })
+        .height,
+    ).toBe(lighting.height);
+  });
 });

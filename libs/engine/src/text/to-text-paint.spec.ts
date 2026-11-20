@@ -6,7 +6,9 @@ import { toTextPaint } from './to-text-paint';
 
 const INK = 0x15;
 
-const createInks = (): number[] => [0x15, 0x16];
+const OTHER_INK = 0x16;
+
+const createInks = (): number[] => [INK, OTHER_INK];
 
 const TEXT_ROW = 10;
 

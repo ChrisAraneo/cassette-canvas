@@ -1,6 +1,5 @@
 import { pipe } from 'remeda';
-import { CRT_CONTEXT_ATTRIBUTES } from '../crt/consts';
-import { computeDisplaySize } from './internal/compute-display-size';
+import { initializeDisplayContext } from './internal/initialize-display-context';
 import { toDisplayDraft } from './internal/to-display-draft';
 import { tryToDisplay } from './internal/try-to-display';
 import type { Display } from './types/display';
@@ -30,10 +29,8 @@ export const tryCreateDisplay = (
   settings: DisplaySettings,
 ): Display | undefined =>
   pipe(
-    {
-      context: canvas.getContext('webgl', CRT_CONTEXT_ATTRIBUTES) ?? undefined,
-      size: computeDisplaySize(canvas, settings.pixelSize),
-    },
-    ({ context, size }) => toDisplayDraft(context, size, settings),
+    { canvas, settings },
+    initializeDisplayContext,
+    toDisplayDraft,
     tryToDisplay,
   );

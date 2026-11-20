@@ -8,31 +8,31 @@ const COMPILE_STATUS = 2;
 const SHADER = Object.freeze({ name: 'shader' }) as unknown as WebGLShader;
 
 const createContext = (
+  calls: unknown[][],
   compiles: boolean,
-  asked: unknown[][],
 ): WebGLRenderingContext =>
   ({
     COMPILE_STATUS,
     getShaderParameter: (...values: unknown[]) =>
-      runEffect(compiles, () => asked.push(values)),
+      runEffect(compiles, () => calls.push(values)),
   }) as unknown as WebGLRenderingContext;
 
 describe('tryGetCompiledShader', () => {
   it('should return the shader when the source compiled', () => {
-    expect(tryGetCompiledShader(createContext(true, []), SHADER)).toBe(SHADER);
+    expect(tryGetCompiledShader(createContext([], true), SHADER)).toBe(SHADER);
   });
 
   it('should return nothing when the source did not compile', () => {
     expect(
-      tryGetCompiledShader(createContext(false, []), SHADER),
+      tryGetCompiledShader(createContext([], false), SHADER),
     ).toBeUndefined();
   });
 
   it('should ask the shader whether it compiled when it reads the shader', () => {
-    const asked: unknown[][] = [];
+    const calls: unknown[][] = [];
 
-    tryGetCompiledShader(createContext(true, asked), SHADER);
+    tryGetCompiledShader(createContext(calls, true), SHADER);
 
-    expect(asked).toEqual([[SHADER, COMPILE_STATUS]]);
+    expect(calls).toEqual([[SHADER, COMPILE_STATUS]]);
   });
 });

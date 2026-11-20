@@ -63,8 +63,9 @@ const toSelection = (hud: Hud): string | undefined =>
 
 describe('toSelected', () => {
   it('should select the item in the list when it selects one', () => {
-    expect(toSelection(toSelected(createDeckHud(), 'deck', LIST, ITEM).hud)) //
-      .toBe('1');
+    expect(
+      toSelection(toSelected(createDeckHud(), 'deck', LIST, ITEM).hud),
+    ).toBe('1');
   });
 
   it('should return a SELECT action naming the item when it selects one', () => {

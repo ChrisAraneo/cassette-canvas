@@ -1,6 +1,6 @@
 import { find } from 'lodash-es';
 import type { HudListItem } from '../types/hud-list-item';
-import { isInside } from './is-inside';
+import { containsPixel } from './contains-pixel';
 import type { HudListLayout } from './types/hud-list-layout';
 
 export const findItem = (
@@ -11,5 +11,5 @@ export const findItem = (
   find(
     layout.items,
     (placement) =>
-      placement.item.selectable && isInside(placement.rect, row, column),
+      placement.item.selectable && containsPixel(placement.rect, row, column),
   )?.item;

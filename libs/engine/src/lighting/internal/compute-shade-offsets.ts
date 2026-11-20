@@ -1,8 +1,8 @@
 /* eslint-disable no-restricted-syntax -- Appendix B exception 1, measured below */
 import { size } from 'lodash-es';
-import type { Lighting } from '../types/lighting';
 import { toExposure } from './to-exposure';
 import { toShadeOffset } from './to-shade-offset';
+import type { LightExposures } from './types/light-exposures';
 
 /**
  * Adds up the ambient light and every light that reaches a pixel, then reads
@@ -22,10 +22,12 @@ import { toShadeOffset } from './to-shade-offset';
 // skipping it saves 0.4 ms a frame at night and keeps the value exact. It
 // only changes the typed array it creates itself, and the array does not
 // change after it returns it.
-export const computeShadeOffsets = (
-  { ambient, width, height }: Lighting,
-  exposures: readonly Float32Array[],
-): Float64Array => {
+export const computeShadeOffsets = ({
+  ambient,
+  width,
+  height,
+  exposures,
+}: LightExposures): Float64Array => {
   const offsets = new Float64Array(Math.max(0, width * height));
   const count = size(offsets);
   const ambientExposure = toExposure(ambient);
@@ -37,10 +39,10 @@ export const computeShadeOffsets = (
   }
 
   for (let index = 0; index < count; index += 1) {
-    const light = offsets[index] ?? 0;
+    const exposure = offsets[index] ?? 0;
 
     offsets[index] =
-      light === 0 ? ambient : toShadeOffset(ambientExposure + light);
+      exposure === 0 ? ambient : toShadeOffset(ambientExposure + exposure);
   }
 
   return offsets;

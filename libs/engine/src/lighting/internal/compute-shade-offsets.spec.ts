@@ -3,8 +3,8 @@ import { describe, expect, it } from 'vitest';
 
 import { EXTENDED_SHADES_PER_SHADE } from '../../palette/consts';
 import { MIN_SHADE_OFFSET, REFERENCE_EXPOSURE } from '../consts';
-import type { Lighting } from '../types/lighting';
 import { computeShadeOffsets } from './compute-shade-offsets';
+import type { LightExposures } from './types/light-exposures';
 
 const NIGHT = -16;
 
@@ -12,12 +12,15 @@ const BARELY_LIT = 1;
 
 const DIM_LAMP_EXPOSURE = 0.1 * REFERENCE_EXPOSURE;
 
-const createLighting = (ambient: number, width: number): Lighting => ({
+const createExposed = (
+  ambient: number,
+  width: number,
+  exposures: readonly Float32Array[],
+): LightExposures => ({
   ambient,
-  lights: [],
   width,
   height: 1,
-  occluders: new Uint8Array(width),
+  exposures,
 });
 
 const createExposures = (): Float32Array => Float32Array.from([4, 2]);
@@ -26,13 +29,13 @@ const computeOffsetAt = (
   ambient: number,
   exposures: readonly number[],
 ): number | undefined =>
-  computeShadeOffsets(createLighting(ambient, 1), [
-    Float32Array.from(exposures),
-  ])[0];
+  computeShadeOffsets(
+    createExposed(ambient, 1, [Float32Array.from(exposures)]),
+  )[0];
 
 describe('computeShadeOffsets', () => {
   it('should return the ambient light for every place when no light reaches it', () => {
-    expect(computeShadeOffsets(createLighting(-3, 3), [])).toEqual(
+    expect(computeShadeOffsets(createExposed(-3, 3, []))).toEqual(
       Float64Array.from([-3, -3, -3]),
     );
   });
@@ -58,10 +61,12 @@ describe('computeShadeOffsets', () => {
   it('should return the added light, not the added shades, when two lights overlap', () => {
     const one = computeOffsetAt(0, [REFERENCE_EXPOSURE]) ?? 0;
     const both =
-      computeShadeOffsets(createLighting(0, 1), [
-        Float32Array.from([REFERENCE_EXPOSURE]),
-        Float32Array.from([REFERENCE_EXPOSURE]),
-      ])[0] ?? 0;
+      computeShadeOffsets(
+        createExposed(0, 1, [
+          Float32Array.from([REFERENCE_EXPOSURE]),
+          Float32Array.from([REFERENCE_EXPOSURE]),
+        ]),
+      )[0] ?? 0;
 
     expect(both).toBeGreaterThan(one);
     expect(both).toBeLessThan(2 * one);
@@ -89,13 +94,13 @@ describe('computeShadeOffsets', () => {
   });
 
   it('should return no offsets when the screen has no places', () => {
-    expect(size(computeShadeOffsets(createLighting(2, 0), []))).toBe(0);
+    expect(size(computeShadeOffsets(createExposed(2, 0, [])))).toBe(0);
   });
 
   it('should not change the exposures it adds up when it computes the offsets', () => {
     const exposures = createExposures();
 
-    computeShadeOffsets(createLighting(-1, 2), [exposures]);
+    computeShadeOffsets(createExposed(-1, 2, [exposures]));
 
     expect(exposures).toEqual(createExposures());
   });

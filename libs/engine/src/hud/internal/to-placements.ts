@@ -7,8 +7,8 @@ import type { HudListPlacement } from './types/hud-list-placement';
 const NO_PLACEMENTS: readonly HudListPlacement[] = Object.freeze([]);
 
 export const toPlacements = (
-  rect: HudRect,
   items: readonly HudListItem[],
+  rect: HudRect,
 ): readonly HudListPlacement[] =>
   reduce(
     items,

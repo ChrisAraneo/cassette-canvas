@@ -3,6 +3,8 @@ import { describe, expect, it } from 'vitest';
 import { computeTextAdvance } from '../../text/compute-text-advance';
 import { sliceFieldText } from './slice-field-text';
 
+const ROOM_BELOW_ZERO = -5;
+
 describe('sliceFieldText', () => {
   it('should return the whole text when it fits', () => {
     expect(sliceFieldText('HI', computeTextAdvance('HI'))).toBe('HI');
@@ -21,6 +23,6 @@ describe('sliceFieldText', () => {
   });
 
   it('should return an empty text when the text is empty, whatever the room', () => {
-    expect(sliceFieldText('', -5)).toBe('');
+    expect(sliceFieldText('', ROOM_BELOW_ZERO)).toBe('');
   });
 });

@@ -23,11 +23,11 @@ const VALUES_PER_CORNER = 2;
 
 const PACKED_STRIDE = 0;
 
-const NO_OFFSET = 0;
+const FIRST_VALUE_OFFSET = 0;
 
 const FIRST_CORNER = 0;
 
-const TRIANGLE_CORNERS = 3;
+const CORNER_COUNT = 3;
 
 const VERTICES = Object.freeze({ name: 'vertices' });
 
@@ -70,12 +70,12 @@ describe('drawCrtTriangle', () => {
           FLOAT,
           false,
           PACKED_STRIDE,
-          NO_OFFSET,
+          FIRST_VALUE_OFFSET,
         ],
       },
       {
         name: 'drawArrays',
-        values: [TRIANGLES, FIRST_CORNER, TRIANGLE_CORNERS],
+        values: [TRIANGLES, FIRST_CORNER, CORNER_COUNT],
       },
     ]);
   });

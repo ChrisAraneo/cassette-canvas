@@ -28,16 +28,42 @@ const TORCH_EMISSION = toExposure(TORCH.intensity) - REFERENCE_EXPOSURE;
 
 const WIDE_SUN: Light = Object.freeze({ ...SUN, row: 3 });
 
+const WIDE_WIDTH = 9;
+
+const WIDE_HEIGHT = 7;
+
+const TALL_WIDTH = 7;
+
+const TALL_HEIGHT = 3;
+
+const WALL_COLUMN = 3;
+
+const EXPOSURE_PRECISION = 6;
+
+const toWidePlace = (row: number, column: number): number =>
+  row * WIDE_WIDTH + column;
+
+const toTallPlace = (row: number, column: number): number =>
+  row * TALL_WIDTH + column;
+
 const WALL: readonly number[] = Object.freeze([
-  2 * 9 + 3,
-  3 * 9 + 3,
-  4 * 9 + 3,
+  toWidePlace(2, WALL_COLUMN),
+  toWidePlace(3, WALL_COLUMN),
+  toWidePlace(4, WALL_COLUMN),
 ]);
 
 const TALL_WALL: readonly number[] = Object.freeze([
-  0 * 7 + 3,
-  1 * 7 + 3,
-  2 * 7 + 3,
+  toTallPlace(0, WALL_COLUMN),
+  toTallPlace(1, WALL_COLUMN),
+  toTallPlace(2, WALL_COLUMN),
+]);
+
+const STEP_EXPOSURES: readonly number[] = Object.freeze([
+  TORCH_EMISSION,
+  0.661468505859375,
+  0.29296875,
+  0.08496370911598206,
+  0,
 ]);
 
 const createLighting = (
@@ -82,13 +108,12 @@ describe('computeLightExposure', () => {
       computeLightExposure(createLighting(5, 1, []), { ...TORCH, radius: 4 }),
     );
 
-    expect(exposures).toEqual([
-      TORCH_EMISSION,
-      0.661468505859375,
-      0.29296875,
-      0.08496370911598206,
-      0,
-    ]);
+    times(size(STEP_EXPOSURES), (step) =>
+      expect(exposures[step], `step ${step}`).toBeCloseTo(
+        STEP_EXPOSURES[step] ?? 0,
+        EXPOSURE_PRECISION,
+      ),
+    );
   });
 
   it('should return more than half the light when the place is in the core, and less than half past halfway', () => {
@@ -141,18 +166,21 @@ describe('computeLightExposure', () => {
 
   it('should return no light when a place sits in the middle of a shadow', () => {
     expect(
-      computeLightExposure(createLighting(9, 7, WALL), WIDE_SUN)[3 * 9 + 6],
+      computeLightExposure(
+        createLighting(WIDE_WIDTH, WIDE_HEIGHT, WALL),
+        WIDE_SUN,
+      )[toWidePlace(3, 6)],
     ).toBe(0);
   });
 
   it('should return a ramp rather than a step when a place crosses the edge of a shadow', () => {
     const exposures = computeLightExposure(
-      createLighting(9, 7, WALL),
+      createLighting(WIDE_WIDTH, WIDE_HEIGHT, WALL),
       WIDE_SUN,
     );
-    const open = exposures[6 * 9 + 6] ?? 0;
-    const edge = exposures[5 * 9 + 6] ?? 0;
-    const deeper = exposures[4 * 9 + 6] ?? 0;
+    const open = exposures[toWidePlace(6, 6)] ?? 0;
+    const edge = exposures[toWidePlace(5, 6)] ?? 0;
+    const deeper = exposures[toWidePlace(4, 6)] ?? 0;
 
     expect(edge).toBeLessThan(open);
     expect(deeper).toBeLessThan(edge);
@@ -161,12 +189,12 @@ describe('computeLightExposure', () => {
 
   it('should return the same penumbra width when the shadow runs longer', () => {
     const exposures = computeLightExposure(
-      createLighting(9, 7, WALL),
+      createLighting(WIDE_WIDTH, WIDE_HEIGHT, WALL),
       WIDE_SUN,
     );
 
-    const near = exposures[4 * 9 + 5] ?? 0;
-    const far = exposures[4 * 9 + 8] ?? 0;
+    const near = exposures[toWidePlace(4, 5)] ?? 0;
+    const far = exposures[toWidePlace(4, 8)] ?? 0;
 
     expect(near).toBeGreaterThan(0);
     expect(far).toBeCloseTo(near, 2);
@@ -174,7 +202,7 @@ describe('computeLightExposure', () => {
 
   it('should return a wedge of shadow behind a wall when the light shines across the screen', () => {
     const exposures = computeLightExposure(
-      createLighting(7, 3, TALL_WALL),
+      createLighting(TALL_WIDTH, TALL_HEIGHT, TALL_WALL),
       SUN,
     );
 

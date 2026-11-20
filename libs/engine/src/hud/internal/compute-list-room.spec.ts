@@ -1,7 +1,10 @@
 import { describe, expect, it } from 'vitest';
 
+import { HUD_DIVIDER_HEIGHT, HUD_PADDING } from '../consts';
 import type { HudList } from '../types/hud-list';
 import { computeListRoom } from './compute-list-room';
+
+const LIST_HEIGHT = 48;
 
 const createList = (height: number): HudList => ({
   kind: 'LIST',
@@ -18,7 +21,9 @@ const createList = (height: number): HudList => ({
 
 describe('computeListRoom', () => {
   it('should return the height without the padding and with one divider back when it measures a list', () => {
-    expect(computeListRoom(createList(48))).toBe(46);
+    expect(computeListRoom(createList(LIST_HEIGHT))).toBe(
+      LIST_HEIGHT - 2 * HUD_PADDING + HUD_DIVIDER_HEIGHT,
+    );
   });
 
   it('should return no room at all when the list is as short as its padding', () => {

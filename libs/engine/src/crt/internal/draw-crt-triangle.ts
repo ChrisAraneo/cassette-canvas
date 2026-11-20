@@ -6,7 +6,10 @@ import { patchCrtVertexBuffer } from './patch-crt-vertex-buffer';
 import { patchCrtViewport } from './patch-crt-viewport';
 import type { CrtTriangle } from './types/crt-triangle';
 
-export const drawCrtTriangle = ({ context, crt }: CrtTriangle): void =>
+export const drawCrtTriangle = ({
+  context,
+  crt,
+}: CrtTriangle): WebGLRenderingContext =>
   pipe(
     context,
     patchCrtViewport,

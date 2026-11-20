@@ -7,7 +7,7 @@ const TRIANGLES = 3;
 
 const FIRST_CORNER = 0;
 
-const TRIANGLE_CORNERS = 3;
+const CORNER_COUNT = 3;
 
 const createContext = (calls: unknown[][]): WebGLRenderingContext =>
   ({
@@ -21,7 +21,7 @@ describe('drawCrtCorners', () => {
 
     drawCrtCorners(createContext(calls));
 
-    expect(calls).toEqual([[TRIANGLES, FIRST_CORNER, TRIANGLE_CORNERS]]);
+    expect(calls).toEqual([[TRIANGLES, FIRST_CORNER, CORNER_COUNT]]);
   });
 
   it('should draw only once when it draws the corners', () => {

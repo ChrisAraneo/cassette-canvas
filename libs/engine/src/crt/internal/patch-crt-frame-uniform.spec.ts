@@ -3,7 +3,7 @@ import { describe, expect, it } from 'vitest';
 import type { Crt } from '../types/crt';
 import { patchCrtFrameUniform } from './patch-crt-frame-uniform';
 
-const FIRST_TEXTURE_UNIT = 0;
+const FRAME_TEXTURE_UNIT = 0;
 
 const createCrt = (): Crt =>
   ({ uniforms: { frame: 'frame' } }) as unknown as Crt;
@@ -19,7 +19,7 @@ describe('patchCrtFrameUniform', () => {
 
     patchCrtFrameUniform(createContext(calls), createCrt());
 
-    expect(calls).toEqual([['frame', FIRST_TEXTURE_UNIT]]);
+    expect(calls).toEqual([['frame', FRAME_TEXTURE_UNIT]]);
   });
 
   it('should return the very same context when it patches the frame', () => {

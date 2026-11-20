@@ -16,6 +16,4 @@ import type { Lighting } from './types/lighting';
  * bright daylight barely shows. Nothing adds up to flat white.
  */
 export const computeLightLevels = (lighting: Lighting): Float64Array =>
-  pipe(lighting, computeLightExposures, (exposures) =>
-    computeShadeOffsets(lighting, exposures),
-  );
+  pipe(lighting, computeLightExposures, computeShadeOffsets);

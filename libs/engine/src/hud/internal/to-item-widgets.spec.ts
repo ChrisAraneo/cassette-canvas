@@ -32,8 +32,9 @@ describe('toItemWidgets', () => {
   });
 
   it('should name the item each widget sits on when it reads them', () => {
-    expect(map(toItemWidgets(createPlacement()), (placed) => placed.item)) //
-      .toEqual(['track-1', 'track-1']);
+    expect(
+      map(toItemWidgets(createPlacement()), (placed) => placed.item),
+    ).toEqual(['track-1', 'track-1']);
   });
 
   it('should move each widget to where the item sits in the window when it reads them', () => {

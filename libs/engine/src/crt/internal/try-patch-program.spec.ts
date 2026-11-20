@@ -9,6 +9,8 @@ interface ProgramCall {
   readonly values: readonly unknown[];
 }
 
+const BIND_ATTRIBUTE_CALL_INDEX = 2;
+
 const PROGRAM = Object.freeze({ name: 'program' });
 
 const VERTEX_SHADER = Object.freeze({ name: 'vertex shader' });
@@ -64,7 +66,7 @@ describe('tryPatchProgram', () => {
 
     tryPatchTestProgram(calls, true);
 
-    expect(calls[2]?.values).toEqual([
+    expect(calls[BIND_ATTRIBUTE_CALL_INDEX]?.values).toEqual([
       PROGRAM,
       POSITION_LOCATION,
       POSITION_ATTRIBUTE,

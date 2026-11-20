@@ -4,7 +4,6 @@ import { AUTHORED_PIXELS } from '../../palette/authored-pixels';
 import type { OverlayPlacement } from '../../screen/types/overlay-placement';
 import type { Frame } from '../types/frame';
 
-/** The pixel value looked up where an overlay holds no pixel at all. */
 const MISSING_OVERLAY_PIXEL = 0;
 
 // Style guide - Appendix B exception 1 (hot numeric kernel).

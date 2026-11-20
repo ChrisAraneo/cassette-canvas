@@ -2,6 +2,7 @@ import { size } from 'lodash-es';
 import { describe, expect, it } from 'vitest';
 
 import { toPixel } from '../../palette/to-pixel';
+import { HUD_EDGE } from '../consts';
 import { createHudTheme } from '../create-hud-theme';
 import type { HudRect } from '../types/hud-rect';
 import { drawBevel } from './draw-bevel';
@@ -37,10 +38,10 @@ describe('drawSunken', () => {
   it('should return a shadow line inside the top edge when it paints a sunken surface', () => {
     expect(drawSunken(WELL, THEME)[SHADOW_STEP]).toEqual({
       pixel: toPixel(THEME.color, THEME.shadow),
-      row: 5,
-      column: 7,
-      width: 38,
-      height: 1,
+      row: WELL.row + HUD_EDGE,
+      column: WELL.column + HUD_EDGE,
+      width: WELL.width - 2 * HUD_EDGE,
+      height: HUD_EDGE,
     });
   });
 

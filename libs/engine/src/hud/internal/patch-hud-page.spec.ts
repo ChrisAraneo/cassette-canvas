@@ -8,6 +8,8 @@ import type { HudTabs } from '../types/hud-tabs';
 import { computeTabRects } from './compute-tab-rects';
 import { patchHudPage } from './patch-hud-page';
 
+const COLUMN_PAST_TABS = 999;
+
 const TABS: HudTabs = Object.freeze({
   kind: 'TABS',
   id: 'pages',
@@ -87,7 +89,7 @@ describe('patchHudPage', () => {
   it('should do nothing at all when the pointer sits on no tab', () => {
     const hud = createDeckHud();
 
-    expect(patchHudPage(hud, 'deck', TABS, 0, 999)).toEqual({
+    expect(patchHudPage(hud, 'deck', TABS, 0, COLUMN_PAST_TABS)).toEqual({
       hud,
       actions: [],
     });

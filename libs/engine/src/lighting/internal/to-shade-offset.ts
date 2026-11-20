@@ -1,3 +1,4 @@
+import { clamp } from 'lodash-es';
 import { EXTENDED_SHADES_PER_SHADE } from '../../palette/consts';
 import { MAX_EXPOSURE, MIN_EXPOSURE } from '../consts';
 
@@ -12,10 +13,7 @@ import { MAX_EXPOSURE, MIN_EXPOSURE } from '../consts';
  * already bright barely shows one more lamp, while the same lamp in the dark
  * shows in full. That is how the eye reads brightness, and it is why lights
  * do not add up to white.
- *
- * It clamps with `Math.min` and `Math.max` rather than `clamp`, because it
- * runs once per lit pixel.
  */
 export const toShadeOffset = (exposure: number): number =>
   EXTENDED_SHADES_PER_SHADE *
-  Math.log2(Math.min(MAX_EXPOSURE, Math.max(MIN_EXPOSURE, exposure)));
+  Math.log2(clamp(exposure, MIN_EXPOSURE, MAX_EXPOSURE));

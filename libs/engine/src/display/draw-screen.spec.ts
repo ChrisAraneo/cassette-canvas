@@ -78,6 +78,8 @@ const createStubDisplay = (calls: GlCall[], drawnAt = 0): Display => ({
 
 const DUE_TIME = 20;
 
+const TOO_SOON_TIME = DUE_TIME - 1;
+
 const createHeroScreen = (): Screen => ({
   background: 0x94,
   ambient: 0,
@@ -172,7 +174,7 @@ describe('drawScreen', () => {
   it('should draw nothing when the frame comes sooner than the display rate allows', () => {
     const calls: GlCall[] = [];
 
-    drawScreen(createStubDisplay(calls), createHeroScreen(), 19);
+    drawScreen(createStubDisplay(calls), createHeroScreen(), TOO_SOON_TIME);
 
     expect(calls).toEqual([]);
   });
@@ -180,7 +182,9 @@ describe('drawScreen', () => {
   it('should return the very same display when it skips a frame', () => {
     const display = createStubDisplay([]);
 
-    expect(drawScreen(display, createHeroScreen(), 19)).toBe(display);
+    expect(drawScreen(display, createHeroScreen(), TOO_SOON_TIME)).toBe(
+      display,
+    );
   });
 
   it('should draw the frame when the display has drawn nothing yet', () => {

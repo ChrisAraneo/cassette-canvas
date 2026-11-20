@@ -2,7 +2,7 @@ import { constant, findLast } from 'lodash-es';
 import { match, P } from 'ts-pattern';
 import type { Hud } from '../types/hud';
 import { computeWindowRect } from './compute-window-rect';
-import { isInside } from './is-inside';
+import { containsPixel } from './contains-pixel';
 import { toWindowHit } from './to-window-hit';
 import type { HudHit } from './types/hud-hit';
 
@@ -22,7 +22,7 @@ export const findHudHit = (
 ): HudHit | undefined =>
   match(
     findLast(hud.windows, (window) =>
-      isInside(computeWindowRect(window), row, column),
+      containsPixel(computeWindowRect(window), row, column),
     ),
   )
     .with(nonNullable, (window) =>

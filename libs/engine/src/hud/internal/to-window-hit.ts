@@ -2,8 +2,8 @@ import { match, P } from 'ts-pattern';
 import type { HudWindow } from '../types/hud-window';
 import { computeCloseRect } from './compute-close-rect';
 import { computeTitleRect } from './compute-title-rect';
+import { containsPixel } from './contains-pixel';
 import { findPressedWidget } from './find-pressed-widget';
-import { isInside } from './is-inside';
 import type { HudHit } from './types/hud-hit';
 
 const { nonNullable } = P;
@@ -14,8 +14,9 @@ export const toWindowHit = (
   column: number,
 ): HudHit =>
   match({
-    close: window.closable && isInside(computeCloseRect(window), row, column),
-    title: isInside(computeTitleRect(window), row, column),
+    close:
+      window.closable && containsPixel(computeCloseRect(window), row, column),
+    title: containsPixel(computeTitleRect(window), row, column),
     widget: findPressedWidget(window, row, column),
   })
     .with({ close: true }, (): HudHit => ({

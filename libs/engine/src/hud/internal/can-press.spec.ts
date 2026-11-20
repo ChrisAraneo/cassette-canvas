@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 
 import type { HudButton } from '../types/hud-button';
 import type { HudLabel } from '../types/hud-label';
-import { isPressable } from './is-pressable';
+import { canPress } from './can-press';
 
 const BUTTON: HudButton = Object.freeze({
   kind: 'BUTTON',
@@ -23,16 +23,16 @@ const LABEL: HudLabel = Object.freeze({
   text: 'FPS 60',
 });
 
-describe('isPressable', () => {
+describe('canPress', () => {
   it('should hold when the widget sits in the window itself', () => {
-    expect(isPressable({ widget: LABEL, item: '' })).toBe(true);
+    expect(canPress({ widget: LABEL, item: '' })).toBe(true);
   });
 
   it('should hold when the widget is a button on an item of a list', () => {
-    expect(isPressable({ widget: BUTTON, item: 'track-1' })).toBe(true);
+    expect(canPress({ widget: BUTTON, item: 'track-1' })).toBe(true);
   });
 
   it('should not hold when the widget sits on an item and is not a button', () => {
-    expect(isPressable({ widget: LABEL, item: 'track-1' })).toBe(false);
+    expect(canPress({ widget: LABEL, item: 'track-1' })).toBe(false);
   });
 });

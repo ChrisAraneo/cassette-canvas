@@ -11,6 +11,10 @@ import { createHud } from './create-hud';
 import { drawHud } from './draw-hud';
 import type { Hud } from './types/hud';
 
+const BADGE_PIXEL = toPixel(3, 5);
+
+const AMBIENT_SHIFT = -16;
+
 const createStreetHud = (): Hud =>
   addHudWindow(createHud(), {
     id: 'street',
@@ -37,7 +41,7 @@ describe('addHud', () => {
             overlays: [
               {
                 id: 'badge',
-                overlay: createOverlay(1, 1, 0x35),
+                overlay: createOverlay(1, 1, BADGE_PIXEL),
                 row: 0,
                 column: 0,
               },
@@ -51,11 +55,11 @@ describe('addHud', () => {
   });
 
   it('should return the same background, sprites, and lights when it adds the HUD', () => {
-    const screen = createScreen(toPixel(8, 5), -16);
+    const screen = createScreen(toPixel(8, 5), AMBIENT_SHIFT);
 
     expect(addHud(screen, createStreetHud())).toMatchObject({
       background: toPixel(8, 5),
-      ambient: -16,
+      ambient: AMBIENT_SHIFT,
       sprites: [],
       lights: [],
     });

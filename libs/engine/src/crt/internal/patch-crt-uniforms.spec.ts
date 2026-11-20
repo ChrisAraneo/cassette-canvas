@@ -20,7 +20,7 @@ const CANVAS_WIDTH = 768;
 
 const CANVAS_HEIGHT = 512;
 
-const FIRST_TEXTURE_UNIT = 0;
+const FRAME_TEXTURE_UNIT = 0;
 
 const PROGRAM = Object.freeze({ name: 'program' });
 
@@ -87,7 +87,7 @@ describe('patchCrtUniforms', () => {
     });
 
     expect(tail(calls)).toEqual([
-      { name: 'uniform1i', values: ['frame', FIRST_TEXTURE_UNIT] },
+      { name: 'uniform1i', values: ['frame', FRAME_TEXTURE_UNIT] },
       {
         name: 'uniform2f',
         values: ['frameSize', PICTURE_WIDTH, PICTURE_HEIGHT],

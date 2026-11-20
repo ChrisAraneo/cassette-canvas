@@ -32,19 +32,19 @@ const createLighting = (lights: readonly Light[]): Lighting => ({
 
 describe('computeLightExposures', () => {
   it('should return one field for every light of the scene when it computes them', () => {
-    expect(size(computeLightExposures(createLighting([TORCH, LANTERN])))).toBe(
-      2,
-    );
+    expect(
+      size(computeLightExposures(createLighting([TORCH, LANTERN])).exposures),
+    ).toBe(2);
   });
 
   it('should return no fields at all when the scene holds no lights', () => {
-    expect(computeLightExposures(createLighting([]))).toEqual([]);
+    expect(computeLightExposures(createLighting([])).exposures).toEqual([]);
   });
 
   it('should return the field of one light when the scene holds only it', () => {
     const lighting = createLighting([TORCH]);
 
-    expect(toArray(computeLightExposures(lighting)[0] ?? [])).toEqual(
+    expect(toArray(computeLightExposures(lighting).exposures[0] ?? [])).toEqual(
       toArray(computeLightExposure(lighting, TORCH)),
     );
   });
@@ -52,15 +52,15 @@ describe('computeLightExposures', () => {
   it('should return the fields in the order the scene holds its lights', () => {
     const lighting = createLighting([TORCH, LANTERN]);
 
-    expect(toArray(computeLightExposures(lighting)[1] ?? [])).toEqual(
+    expect(toArray(computeLightExposures(lighting).exposures[1] ?? [])).toEqual(
       toArray(computeLightExposure(lighting, LANTERN)),
     );
   });
 
   it('should return a field of a place for every pixel of the scene when it computes one', () => {
-    expect(size(computeLightExposures(createLighting([TORCH]))[0] ?? [])).toBe(
-      4,
-    );
+    expect(
+      size(computeLightExposures(createLighting([TORCH])).exposures[0] ?? []),
+    ).toBe(4);
   });
 
   it('should leave the scene it was given unchanged when it computes the fields', () => {
@@ -69,5 +69,16 @@ describe('computeLightExposures', () => {
     computeLightExposures(lighting);
 
     expect(lighting.lights).toEqual([TORCH]);
+  });
+
+  it('should pass the ambient light, the width and the height on when it computes the fields', () => {
+    const lighting = createLighting([TORCH]);
+    const exposed = computeLightExposures(lighting);
+
+    expect([exposed.ambient, exposed.width, exposed.height]).toEqual([
+      lighting.ambient,
+      lighting.width,
+      lighting.height,
+    ]);
   });
 });

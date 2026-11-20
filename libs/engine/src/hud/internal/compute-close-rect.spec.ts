@@ -4,7 +4,9 @@ import { HUD_CLOSE_SIZE, HUD_FRAME, HUD_TITLE_HEIGHT } from '../consts';
 import type { HudWindow } from '../types/hud-window';
 import { computeCloseRect } from './compute-close-rect';
 import { computeTitleRect } from './compute-title-rect';
-import { isInside } from './is-inside';
+import { containsPixel } from './contains-pixel';
+
+const WIDER_WIDTH = 120;
 
 const WINDOW: HudWindow = Object.freeze({
   id: 'street',
@@ -21,10 +23,12 @@ const WINDOW: HudWindow = Object.freeze({
 
 describe('computeCloseRect', () => {
   it('should return a square rectangle when it measures the close box', () => {
-    expect(computeCloseRect(WINDOW)).toMatchObject({
-      width: HUD_CLOSE_SIZE,
-      height: HUD_CLOSE_SIZE,
-    });
+    const close = computeCloseRect(WINDOW);
+
+    expect([close.width, close.height]).toEqual([
+      HUD_CLOSE_SIZE,
+      HUD_CLOSE_SIZE,
+    ]);
   });
 
   it('should return a rectangle at the right end of the title bar when it measures the close box', () => {
@@ -40,14 +44,14 @@ describe('computeCloseRect', () => {
     const title = computeTitleRect(WINDOW);
 
     expect(
-      isInside(title, close.row, close.column) &&
-        isInside(title, close.row + close.height - 1, close.column),
+      containsPixel(title, close.row, close.column) &&
+        containsPixel(title, close.row + close.height - 1, close.column),
     ).toBe(true);
   });
 
   it('should return a rectangle that moves with the right edge when the window is wider', () => {
-    expect(computeCloseRect({ ...WINDOW, width: 120 }).column).toBe(
-      computeCloseRect(WINDOW).column + 30,
+    expect(computeCloseRect({ ...WINDOW, width: WIDER_WIDTH }).column).toBe(
+      computeCloseRect(WINDOW).column + (WIDER_WIDTH - WINDOW.width),
     );
   });
 });

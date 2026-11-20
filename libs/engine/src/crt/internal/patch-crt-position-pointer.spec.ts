@@ -9,7 +9,7 @@ const VALUES_PER_CORNER = 2;
 
 const PACKED_STRIDE = 0;
 
-const NO_OFFSET = 0;
+const FIRST_VALUE_OFFSET = 0;
 
 const createContext = (calls: unknown[][]): WebGLRenderingContext =>
   ({
@@ -30,7 +30,7 @@ describe('patchCrtPositionPointer', () => {
         FLOAT,
         false,
         PACKED_STRIDE,
-        NO_OFFSET,
+        FIRST_VALUE_OFFSET,
       ],
     ]);
   });

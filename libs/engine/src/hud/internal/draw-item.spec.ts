@@ -59,8 +59,9 @@ describe('drawItem', () => {
   });
 
   it('should paint no divider when this is the last item the list shows', () => {
-    expect(size(drawItem(PLACEMENT, ITEM_COUNT - 1, ITEM_COUNT, LIST, THEME))) //
-      .toBe(1);
+    expect(
+      size(drawItem(PLACEMENT, ITEM_COUNT - 1, ITEM_COUNT, LIST, THEME)),
+    ).toBe(1);
   });
 
   it('should paint nothing at all when the item holds no lines and takes no selection', () => {

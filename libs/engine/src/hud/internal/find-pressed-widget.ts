@@ -1,8 +1,8 @@
 import { findLast } from 'lodash-es';
 import type { HudWindow } from '../types/hud-window';
+import { canPress } from './can-press';
 import { computeWidgetRect } from './compute-widget-rect';
-import { isInside } from './is-inside';
-import { isPressable } from './is-pressable';
+import { containsPixel } from './contains-pixel';
 import { toWindowWidgets } from './to-window-widgets';
 import type { HudPlacedWidget } from './types/hud-placed-widget';
 
@@ -14,6 +14,6 @@ export const findPressedWidget = (
   findLast(
     toWindowWidgets(window),
     (placed) =>
-      isPressable(placed) &&
-      isInside(computeWidgetRect(placed.widget), row, column),
+      canPress(placed) &&
+      containsPixel(computeWidgetRect(placed.widget), row, column),
   );

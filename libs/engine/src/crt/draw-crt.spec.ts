@@ -53,6 +53,13 @@ const createPicture = (): CrtPicture => ({
 
 const PICTURE = Object.freeze(createPicture());
 
+const EMPTY_PICTURE: CrtPicture = Object.freeze({
+  bytes: Uint8ClampedArray.from([]),
+  width: 0,
+  height: 0,
+  pixelSize: 4,
+});
+
 const createContext = (calls: CrtCall[]): WebGLRenderingContext =>
   ({
     drawingBufferWidth: 4,
@@ -100,6 +107,14 @@ describe('drawCrt', () => {
     const calls: CrtCall[] = [];
 
     drawCrt(createContext(calls), CRT, PICTURE, TIME);
+
+    expect(last(calls)?.name).toBe('drawArrays');
+  });
+
+  it('should still set the shader up and draw when the picture holds no pixels', () => {
+    const calls: CrtCall[] = [];
+
+    drawCrt(createContext(calls), CRT, EMPTY_PICTURE, TIME);
 
     expect(last(calls)?.name).toBe('drawArrays');
   });

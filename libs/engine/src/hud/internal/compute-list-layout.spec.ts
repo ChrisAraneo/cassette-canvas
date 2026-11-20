@@ -5,6 +5,7 @@ import {
   HUD_CONTENT_LEFT,
   HUD_CONTENT_TOP,
   HUD_DIVIDER_HEIGHT,
+  HUD_EDGE,
   HUD_LIST_BAR_WIDTH,
   HUD_LIST_ITEM_HEIGHT,
   HUD_LIST_ITEM_PITCH,
@@ -87,7 +88,7 @@ describe('computeListLayout', () => {
 
   it('should return the up arrow inside the top right corner when it lays a list out', () => {
     expect(computeListLayout(LIST).up).toEqual({
-      row: HUD_CONTENT_TOP + 1,
+      row: HUD_CONTENT_TOP + HUD_EDGE,
       column: HUD_CONTENT_LEFT + BAR_COLUMN,
       width: HUD_LIST_BAR_WIDTH,
       height: HUD_LIST_BAR_WIDTH,

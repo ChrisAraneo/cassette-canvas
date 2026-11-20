@@ -4,12 +4,12 @@ import { describe, expect, it } from 'vitest';
 import { toPixel } from '../../palette/to-pixel';
 import { TEXT_ASCENT } from '../../text/consts';
 import { toTextPaint } from '../../text/to-text-paint';
-import { createHudTheme } from '../create-hud-theme';
 import {
   HUD_LIST_ITEM_HEIGHT,
   HUD_LIST_TEXT_LEFT,
   HUD_LIST_TEXT_TOP,
 } from '../consts';
+import { createHudTheme } from '../create-hud-theme';
 import type { HudList } from '../types/hud-list';
 import { drawItemLines } from './draw-item-lines';
 import type { HudListPlacement } from './types/hud-list-placement';
@@ -44,8 +44,7 @@ describe('drawItemLines', () => {
   it('should return one line of text for each line the item holds when it paints one', () => {
     expect(
       size(drawItemLines(createPlacement(['TRACK 1', '3:42']), LIST, THEME)),
-    ) //
-      .toBe(2);
+    ).toBe(2);
   });
 
   it('should put the first line inside the top-left of the item when it paints one', () => {
@@ -59,7 +58,7 @@ describe('drawItemLines', () => {
     );
   });
 
-  it('should put each later line one row of text below the one before it', () => {
+  it('should put each later line one row of text below the one before it when the item holds several lines', () => {
     expect(
       map(
         drawItemLines(createPlacement(['TRACK 1', '3:42']), LIST, THEME),

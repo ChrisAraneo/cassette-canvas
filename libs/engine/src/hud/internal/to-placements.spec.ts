@@ -29,11 +29,11 @@ const ITEMS: readonly HudListItem[] = Object.freeze([
 
 describe('toPlacements', () => {
   it('should place every item it is given when it lays them out', () => {
-    expect(size(toPlacements(RECT, ITEMS))).toBe(3);
+    expect(size(toPlacements(ITEMS, RECT))).toBe(3);
   });
 
   it('should place the items one under the other when it lays them out', () => {
-    const rows = map(toPlacements(RECT, ITEMS), (placed) => placed.rect.row);
+    const rows = map(toPlacements(ITEMS, RECT), (placed) => placed.rect.row);
 
     expect(rows[0]).toBe(20 + HUD_PADDING);
     expect(rows[1]).toBeGreaterThan(rows[0] ?? 0);
@@ -41,7 +41,7 @@ describe('toPlacements', () => {
   });
 
   it('should carry each item on its own placement when it lays them out', () => {
-    expect(map(toPlacements(RECT, ITEMS), (placed) => placed.item.id)).toEqual([
+    expect(map(toPlacements(ITEMS, RECT), (placed) => placed.item.id)).toEqual([
       '1',
       '2',
       '3',
@@ -49,6 +49,6 @@ describe('toPlacements', () => {
   });
 
   it('should place nothing when there are no items at all', () => {
-    expect(toPlacements(RECT, [])).toEqual([]);
+    expect(toPlacements([], RECT)).toEqual([]);
   });
 });

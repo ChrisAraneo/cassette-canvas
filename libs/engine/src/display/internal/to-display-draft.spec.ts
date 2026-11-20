@@ -30,11 +30,17 @@ const PIXEL_SIZE = 4;
 
 const SPRITE_SIZE = 8;
 
+const FRAME_RATE = 30;
+
 const SCREEN_WIDTH = 192;
 
 const SCREEN_HEIGHT = 128;
 
-const SIZE = Object.freeze({ width: SCREEN_WIDTH, height: SCREEN_HEIGHT });
+const createCanvas = (): HTMLCanvasElement =>
+  ({
+    width: SCREEN_WIDTH * PIXEL_SIZE,
+    height: SCREEN_HEIGHT * PIXEL_SIZE,
+  }) as unknown as HTMLCanvasElement;
 
 const createSettings = (): DisplaySettings => ({
   colors: COLORS,
@@ -64,7 +70,11 @@ const createContext = (): WebGLRenderingContext =>
 
 describe('toDisplayDraft', () => {
   it('should carry the size, the pixel size and the sprite size when it drafts a display', () => {
-    const draft = toDisplayDraft(createContext(), SIZE, createSettings());
+    const draft = toDisplayDraft({
+      canvas: createCanvas(),
+      settings: createSettings(),
+      context: createContext(),
+    });
 
     expect([
       draft.width,
@@ -77,54 +87,87 @@ describe('toDisplayDraft', () => {
   it('should carry the very same context when it drafts a display', () => {
     const context = createContext();
 
-    expect(toDisplayDraft(context, SIZE, createSettings()).context).toBe(
-      context,
-    );
+    expect(
+      toDisplayDraft({
+        canvas: createCanvas(),
+        settings: createSettings(),
+        context,
+      }).context,
+    ).toBe(context);
   });
 
   it('should carry the monitor effect when the context can set one up', () => {
     expect(
-      toDisplayDraft(createContext(), SIZE, createSettings()).crt,
+      toDisplayDraft({
+        canvas: createCanvas(),
+        settings: createSettings(),
+        context: createContext(),
+      }).crt,
     ).toBeDefined();
   });
 
   it('should carry no monitor effect when there is no context at all', () => {
     expect(
-      toDisplayDraft(undefined, SIZE, createSettings()).crt,
+      toDisplayDraft({
+        canvas: createCanvas(),
+        settings: createSettings(),
+        context: undefined,
+      }).crt,
     ).toBeUndefined();
   });
 
   it('should carry the palette expanded from the base colors when it drafts a display', () => {
     expect(
       size(
-        keys(toDisplayDraft(createContext(), SIZE, createSettings()).palette),
+        keys(
+          toDisplayDraft({
+            canvas: createCanvas(),
+            settings: createSettings(),
+            context: createContext(),
+          }).palette,
+        ),
       ),
     ).toBe(COLOR_COUNT * EXTENDED_SHADE_COUNT);
   });
 
   it('should carry the default frame rate when the settings name no limit', () => {
-    expect(toDisplayDraft(createContext(), SIZE, createSettings()).fps).toBe(
-      DEFAULT_MAX_FPS,
-    );
+    expect(
+      toDisplayDraft({
+        canvas: createCanvas(),
+        settings: createSettings(),
+        context: createContext(),
+      }).fps,
+    ).toBe(DEFAULT_MAX_FPS);
   });
 
   it('should carry the frame rate the settings name when they name one', () => {
     expect(
-      toDisplayDraft(createContext(), SIZE, { ...createSettings(), fps: 30 })
-        .fps,
-    ).toBe(30);
+      toDisplayDraft({
+        canvas: createCanvas(),
+        settings: { ...createSettings(), fps: FRAME_RATE },
+        context: createContext(),
+      }).fps,
+    ).toBe(FRAME_RATE);
   });
 
   it('should have drawn nothing yet when it drafts a display', () => {
     expect(
-      toDisplayDraft(createContext(), SIZE, createSettings()).drawnAt,
+      toDisplayDraft({
+        canvas: createCanvas(),
+        settings: createSettings(),
+        context: createContext(),
+      }).drawnAt,
     ).toBe(Number.NEGATIVE_INFINITY);
   });
 
   it('should not change the settings it was given when it drafts a display', () => {
     const settings = createSettings();
 
-    toDisplayDraft(createContext(), SIZE, settings);
+    toDisplayDraft({
+      canvas: createCanvas(),
+      settings,
+      context: createContext(),
+    });
 
     expect(settings).toEqual(createSettings());
   });

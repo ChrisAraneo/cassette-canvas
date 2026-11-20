@@ -29,7 +29,7 @@ export const computeListLayout = (widget: HudList): HudListLayout => {
     capacity,
     scroll,
     lastPage,
-    items: toPlacements(rect, slice(widget.items, scroll, scroll + capacity)),
+    items: toPlacements(slice(widget.items, scroll, scroll + capacity), rect),
     up: computeUpRect(bar),
     down: computeDownRect(bar),
     track,

@@ -12,7 +12,7 @@ const TRACK: HudRect = Object.freeze({
 });
 
 describe('computeThumbHeight', () => {
-  it('should make the thumb the share of the track the page takes of the list', () => {
+  it('should make the thumb the share of the track the page takes of the list when the list holds more than the page shows', () => {
     expect(computeThumbHeight(TRACK, 3, 6)).toBe(12);
   });
 
